@@ -7,7 +7,7 @@ static unsigned long get_current_time(void)
 	struct timeval	time;
 
 	gettimeofday(&time, NULL);	// check failure here
-	return ((unsigned long)((time.tv_sec * 1000) + time.tv_usec));
+	return ((unsigned long)((time.tv_sec * 1000000) + time.tv_usec));
 }
 
 static void			put_status(int philo_id, const char *message)
@@ -16,8 +16,7 @@ static void			put_status(int philo_id, const char *message)
 	write(STDERR_FILENO, " ", 1);
 	ft_putnbr((unsigned int)philo_id);
 	write(STDERR_FILENO, " ", 1);
-	ft_put_str_fd(STDOUT_FILENO, message);
-	write(STDERR_FILENO, "\r", 1);
+	ft_put_str_fd(STDERR_FILENO, message);
 }
 static void	ft_writenbr(unsigned int c)
 {
@@ -54,18 +53,14 @@ static void			set_time(unsigned long *time_mem)
 	*time_mem = get_current_time();
 }
 
-static t_state		wake_up_action_handler(t_data *data, const int philo_id)
+static t_state		wake_up_action_handler(const int philo_id)
 {
-	(void)philo_id;
 	put_status(philo_id, MESSAGE_IS_THINKING);
-	usleep(data->param[T_TO_SLEEP]);
 	return (thinking_state);
 }
 
 static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 {
-	(void)data;
-	(void)philo_id;
 	put_status(philo_id, MESSAGE_HAS_TAKEN_FORK);
 	set_time(&data->last_meal[philo_id]);
 	put_status(philo_id, MESSAGE_IS_EATING);
@@ -75,9 +70,8 @@ static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 
 static t_state		drop_fork_action_handler(t_data *data, const int philo_id)
 {
-	(void)data;
-	(void)philo_id;
 	put_status(philo_id, MESSAGE_IS_SLEEPING);
+	usleep(data->param[T_TO_SLEEP]);
 	return (sleeping_state);
 }
 
@@ -92,7 +86,6 @@ static void			*philo(void *i_arg)
 	philo_id = *(int *)i_arg;
 	state = startup_state;
 	set_time(&data->last_meal[philo_id]);
-	usleep(1);
 	// printf("time = [%d], last meal = [%d]\n", get_current_time(), data->last_meal[philo_id]);
 	while(state != dead_state)
 	{
@@ -102,7 +95,7 @@ static void			*philo(void *i_arg)
 		else if (state ==  eating_state)
 			state = drop_fork_action_handler(data, philo_id);
 		else if (state == sleeping_state)
-			state = wake_up_action_handler(data, philo_id);
+			state = wake_up_action_handler(philo_id);
 	}
 	return (NULL);
 	// pthread_exit(NULL);
@@ -110,8 +103,8 @@ static void			*philo(void *i_arg)
 
 void				process_philo(t_data *data)
 {
-	pthread_t	thread;
-	int			i;
+	pthread_t		thread;
+	unsigned int	i;
 
 	i = 0;
 	philo(&i);

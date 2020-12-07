@@ -11,7 +11,7 @@ ifneq ($(no_error), 1)
 	CFLAGS += -Werror
 endif
 
-CFLAGS += -fPIC
+# CFLAGS += -fPIC
 
 ifeq ($(debug), 1)
 	CFLAGS += -g3

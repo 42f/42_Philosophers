@@ -63,7 +63,7 @@ typedef struct	s_data
 	// pthread_mutex_t	mutex;
 	// pthread_mutex_t	stdout_mutex;
 	int				nb_dead_philo;
-	int				param[NB_OF_USEC_ARGS];
+	unsigned int	param[NB_OF_USEC_ARGS];
 	unsigned long	*last_meal;
 	unsigned int	*nb_meals_eaten;
 }				t_data;
