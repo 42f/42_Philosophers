@@ -1,18 +1,18 @@
 #include "philo_one.h"
 
-static void	debug_struct(void)			// TODO: REMOVE
-{
-	t_data	*data;
+// static void	debug_struct(void)			// TODO: REMOVE
+// {
+// 	t_data	*data;
 
-	data = get_data(GET);
-	printf("data:\n");
-	printf("->nb_dead_philo    = %d\n", data->nb_dead_philo);
-	printf("->nb_philo         = %d \n", data->param[NB_PHILO]);
-	printf("->usec[T_TO_DIE]   = %d \n", data->param[T_TO_DIE]);
-	printf("->usec[T_TO_EAT]   = %d \n", data->param[T_TO_EAT]);
-	printf("->usec[T_TO_SLEEP] = %d \n", data->param[T_TO_SLEEP]);
-	printf("->usec[NB_MEALS] = %d \n", data->param[NB_MEALS]);
-}
+// 	data = get_data(GET);
+// 	printf("data:\n");
+// 	printf("->nb_dead_philo    = %d\n", data->nb_dead_philo);
+// 	printf("->nb_philo         = %d \n", data->param[NB_PHILO]);
+// 	printf("->usec[T_TO_DIE]   = %d \n", data->param[T_TO_DIE]);
+// 	printf("->usec[T_TO_EAT]   = %d \n", data->param[T_TO_EAT]);
+// 	printf("->usec[T_TO_SLEEP] = %d \n", data->param[T_TO_SLEEP]);
+// 	printf("->usec[NB_MEALS] = %d \n", data->param[NB_MEALS]);
+// }
 
 static bool	init_last_eat_time_storage(t_data *data)
 {
@@ -42,7 +42,7 @@ int			main(const int ac, const char **av)
 		put_usage();
 		return (1);
 	}
-debug_struct();			// TODO: remove
+// debug_struct();			// TODO: remove
 	if (init_last_eat_time_storage(&data) == true)
 		process_philo(&data);
 	return (0);

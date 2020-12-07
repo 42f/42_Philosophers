@@ -14,13 +14,15 @@ void	ft_put_str_fd(int fd, const char *s)
 {
 	if (!s)
 		return ;
-	write(fd, s, ft_strlen(s));
+	// write(fd, s, ft_strlen(s));
+	write(STDERR_FILENO, s, ft_strlen(s));
+	(void)fd;
 }
 
 static void	ft_writenbr(unsigned int c)
 {
 	c += '0';
-	write(1, &c, 1);
+	write(STDERR_FILENO, &c, 1);
 }
 
 void		ft_putnbr(unsigned int n)
