@@ -34,20 +34,20 @@ void		ft_putnbr_err(unsigned int n)
 	write(STDERR_FILENO, "\n", 1);
 }
 
-// static t_state		check_aliveness(t_data *data, int philo_id,
-// 													const t_state current_state)
-// {
-// 	t_delta = get_current_time() - data->last_meal[philo_id];
-// 	if (t_delta > (unsigned long)data->param[T_TO_DIE])
-// 	{
-// 		put_status(philo_id, MESSAGE_IS_DEAD);
-// 		ft_putnbr_err(t_delta);
-// 		ft_putnbr_err(data->last_meal[philo_id]);
-// 		return (dead_state);
-// 	}
-// 	else
-// 		return (current_state);
-// }
+static t_state		check_aliveness(t_data *data, int philo_id,
+													const t_state current_state)
+{
+	t_delta = get_current_time() - data->last_meal[philo_id];
+	if (t_delta > (unsigned long)data->param[T_TO_DIE])
+	{
+		put_status(philo_id, MESSAGE_IS_DEAD);
+		ft_putnbr_err(t_delta);
+		ft_putnbr_err(data->last_meal[philo_id]);
+		return (dead_state);
+	}
+	else
+		return (current_state);
+}
 
 static void			set_time(unsigned long *time_mem)
 {
@@ -96,7 +96,7 @@ static void			*philo(void *i_arg)
 	// printf("time = [%d], last meal = [%d]\n", get_current_time(), data->last_meal[philo_id]);
 	while(state != dead_state)
 	{
-		// state = check_aliveness(data, philo_id, state);
+		state = check_aliveness(data, philo_id, state);
 		if (state == startup_state || state == thinking_state)
 			state = take_fork_action_handler(data, philo_id);
 		else if (state ==  eating_state)
