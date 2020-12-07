@@ -30,11 +30,12 @@ int				process_arguments(t_data *data, const char **av)
 	data->nb_philo = ft_atoi(av[1]);
 	if (data->nb_philo <= 0)
 		return (FAILURE);
+	data->nb_forks = data->nb_philo;
 	arg_i = 2;
 	i = 0;
 	while (av != NULL && av[arg_i] != NULL && i < NB_OF_USEC_ARGS)
 	{
-		data->usec[i] = ft_atoi(av[arg_i]);
+		data->param[i] = ft_atoi(av[arg_i]);
 		i++;
 		arg_i++;
 	}
