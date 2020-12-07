@@ -14,21 +14,12 @@ static int		is_digit_only(const char *av)
 	return (true);
 }
 
-static size_t		ft_strlen(const char *str)
-{
-	size_t		len;
-
-	len = 0;
-	while (str != NULL && str[len] != '\0')
-		len++;
-	return (len);
-}
-
 void				put_usage(void)
 {
-	write(STDERR_FILENO, USAGE0, ft_strlen(USAGE0));
-	write(STDERR_FILENO, USAGE1, ft_strlen(USAGE1));
-	write(STDERR_FILENO, USAGE2, ft_strlen(USAGE2));
+	ft_put_str_fd(STDERR_FILENO, USAGE0);
+	ft_put_str_fd(STDERR_FILENO, USAGE1);
+	ft_put_str_fd(STDERR_FILENO, USAGE2);
+	ft_put_str_fd(STDERR_FILENO, USAGE3);
 }
 
 int					check_arguments(const int ac, const char **av)

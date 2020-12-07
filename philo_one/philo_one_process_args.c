@@ -27,21 +27,15 @@ int				process_arguments(t_data *data, const char **av)
 	int			arg_i;
 	int			i;
 
-	data->nb_philo = ft_atoi(av[1]);
-	if (data->nb_philo <= 0)
-		return (FAILURE);
-	data->nb_forks = data->nb_philo;
-	arg_i = 2;
+	memset(data->param, 0, sizeof(data->param));
 	i = 0;
+	arg_i = i + 1;
+	data->param[NB_MEALS] = UNSET;
 	while (av != NULL && av[arg_i] != NULL && i < NB_OF_USEC_ARGS)
 	{
 		data->param[i] = ft_atoi(av[arg_i]);
 		i++;
 		arg_i++;
 	}
-	if (av[arg_i] != NULL)
-		data->nb_eat_turns = ft_atoi(av[arg_i]);
-	else
-		data->nb_eat_turns = UNSET;
 	return (SUCCESS);
 }
