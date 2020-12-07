@@ -1,0 +1,6 @@
+a.out*
+*.bmp
+*.swp
+*.o
+*.a
+Session.vim

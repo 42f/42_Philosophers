@@ -1,9 +1,18 @@
 NAME := $(lastword $(subst /, ,$(dir $(realpath $(lastword $(MAKEFILE_LIST))))))
+INCLUDES = ./
+CC = gcc
+OBJ_DIR = ../objs/
 
+CFLAGS += -pthread
 CFLAGS += -Wall
 CFLAGS += -Wextra
-CFLAGS += -pthread
+
+ifneq ($(no_error), 1)
+	CFLAGS += -Werror
+endif
+
 CFLAGS += -fPIC
+
 ifeq ($(debug), 1)
 	CFLAGS += -g3
 else ifeq ($(debug), 2)
@@ -22,12 +31,10 @@ else ifeq ($(debug), 4)
 	endif
 endif
 
-ifeq ($(err), 0)
+ifeq ($(db), 1)
 	CFLAGS += -g3
-else
-	CFLAGS += -Werror
 endif
-ifneq ($(opti), 0)
+ifeq ($(opti), 1)
 	CFLAGS += -O3
 endif
 
@@ -37,20 +44,13 @@ else
 	DEBUG_MODE = 0
 endif
 
-CC = gcc
-
-INCLUDES = ./
-
-HEADER += $(INCLUDES)$(NAME).h
+HEADER += $(INCLUDES)*.h
 
 # SRCS += $(NAME).c
 # SRCS += $(NAME)_utils.c
+SRCS += $(wildcard *.c)
 
-SRCS += ./*.c
-
-OBJ_DIR = ../objs/
-
-vpath %.c ./
+# vpath %.c ./
 
 OBJS = $(patsubst %.c, $(OBJ_DIR)%.o, $(SRCS))
 

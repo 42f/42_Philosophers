@@ -41,7 +41,7 @@ CC = gcc
 
 INCLUDES = ./
 
-HEADER += $(INCLUDES)$(NAME).h
+HEADER += $(INCLUDES)*.h
 
 # SRCS += $(NAME).c
 # SRCS += $(NAME)_utils.c

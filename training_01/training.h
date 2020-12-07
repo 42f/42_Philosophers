@@ -1,3 +1,4 @@
+#include <sys/time.h>
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -14,14 +15,10 @@
 #define		WHITE 	"\033[0;37m"
 #define		RESET 	"\033[0m"
 
-
-
-
-
-
 typedef struct	s_data
 {
-	long int	*nbr;
+	pthread_mutex_t	mutex;
+	long int		*nbr;
 }				t_data;
 
 void			*function_00(void *i);

@@ -1,6 +1,10 @@
 #include "philo_one.h"
 
-void	function(void)
+t_data	*get_data(t_data *mem)
 {
-	printf("Hello World!\n");
+	static t_data	*mem_backup = NULL;
+
+	if (mem != GET)
+		mem_backup = mem;
+	return (mem_backup);
 }
