@@ -25,8 +25,12 @@ static t_state		check_aliveness(t_data *data, int philo_id,
 	if (t_delta > (unsigned long)data->param[T_TO_DIE])
 	{
 		put_status(philo_id, MESSAGE_IS_DEAD);
+		ft_put_str_fd(STDOUT_FILENO, "t_delta @ =");
 		ft_putnbr(t_delta);
+		ft_put_str_fd(STDOUT_FILENO, "Last meal @ =");
 		ft_putnbr(data->last_meal[philo_id]);
+		ft_put_str_fd(STDOUT_FILENO, "Meals eaten =");
+		ft_putnbr(data->nb_meals_eaten[philo_id]);
 		return (dead_state);
 	}
 	else
@@ -50,6 +54,7 @@ static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 	set_time(&data->last_meal[philo_id]);
 	put_status(philo_id, MESSAGE_IS_EATING);
 	usleep(data->param[T_TO_EAT]);
+	data->nb_meals_eaten[philo_id]++;
 	return (eating_state);
 }
 
