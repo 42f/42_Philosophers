@@ -86,7 +86,7 @@ void process_philo(t_data *data);
 
 t_data			*get_data(t_data *mem);
 void			ft_put_str_fd(int fd, const char *s);
-void			ft_putnbr(unsigned int n);
+void			ft_putnbr(unsigned long n);
 
 /*
 **	ARGUMENTS

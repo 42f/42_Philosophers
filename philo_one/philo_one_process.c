@@ -13,7 +13,7 @@ static void			put_status(int philo_id, const char *message)
 {
 	ft_putnbr(get_current_time());
 	ft_putnbr((unsigned int)philo_id);
-	ft_put_str_fd(STDERR_FILENO, message);
+	ft_put_str_fd(STDOUT_FILENO, message);
 }
 
 static t_state		check_aliveness(t_data *data, int philo_id,

@@ -55,7 +55,7 @@ char		*ft_itoa(unsigned long nb)
 	return (ft_fill(ret, nb, len));
 }
 
-void		ft_putnbr(unsigned int n)
+void		ft_putnbr(unsigned long n)
 {
 	char	*nb;
 
