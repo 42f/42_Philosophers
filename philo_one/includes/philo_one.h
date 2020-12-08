@@ -80,9 +80,16 @@ typedef struct	s_data
 }				t_data;
 
 /*
+**	MONITOR
+*/
+
+void			*philo_monitor(void *i_arg);
+
+/*
 **	STATE_MACHINE
 */
 
+void			*philo_state_machine(void *i_arg);
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 													const t_state current_state);

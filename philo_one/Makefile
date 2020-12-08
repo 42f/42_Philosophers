@@ -1,5 +1,5 @@
 NAME := $(lastword $(subst /, ,$(dir $(realpath $(lastword $(MAKEFILE_LIST))))))
-INCLUDES = ./
+INCLUDES = ./includes/
 CC = gcc
 OBJ_DIR = ../objs/
 
@@ -43,11 +43,18 @@ endif
 
 HEADER += $(INCLUDES)*.h
 
-# SRCS += $(NAME).c
-# SRCS += $(NAME)_utils.c
-SRCS += $(wildcard *.c)
+SRCS += philo_one_main.c
+SRCS += philo_one_process_threads.c
+SRCS += philo_one_general_utils.c
+SRCS += philo_one_state_machine.c
+SRCS += philo_one_state_machine_utils.c
+SRCS += philo_one_monitor.c
+SRCS += philo_one_arguments_process.c
 
-# vpath %.c ./
+vpath %.c ./
+vpath %.c ./srcs
+vpath %.c ./srcs/monitor
+vpath %.c ./srcs/state_machine
 
 OBJS = $(patsubst %.c, $(OBJ_DIR)%.o, $(SRCS))
 

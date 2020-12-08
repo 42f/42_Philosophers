@@ -2,10 +2,15 @@
 
 unsigned long get_current_time(void)
 {
+	static long				origin_time;
+	static long				current_time;
 	static struct timeval	time;
 
 	gettimeofday(&time, NULL);	// check failure here
-	return ((time.tv_sec * 1000000) + time.tv_usec);
+	current_time = ((time.tv_sec * 10) + time.tv_usec) / 10;
+	if (origin_time == 0)
+		origin_time = current_time;
+	return (current_time - origin_time);
 }
 
 void			put_status(t_data *data, const int philo_id, const char *message)
