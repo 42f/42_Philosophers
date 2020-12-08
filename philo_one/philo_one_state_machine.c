@@ -28,6 +28,17 @@ static t_state		drop_fork_action_handler(t_data *data, const int philo_id)
 	return (sleeping_state);
 }
 
+static bool			check_loop_conditions(const t_state state,
+										const t_data *data, const int philo_id)
+{
+	if (data->param[NB_MEALS] == UNSET)
+		return (state != dead_state && data->death_report_flag == false);
+	else
+		return (state != dead_state
+			&& data->death_report_flag == false
+			&& data->nb_meals_eaten[philo_id] < data->param[NB_MEALS]);
+}
+
 static void			*philo(void *i_arg)
 {
 	int				philo_id;
@@ -38,7 +49,7 @@ static void			*philo(void *i_arg)
 	philo_id = *((int *)i_arg);
 	state = startup_state;
 	set_time(&data->last_meal[philo_id]);
-	while(state != dead_state && data->death_report_flag == false)
+	while(check_loop_conditions(state, data, philo_id) == true)
 	{
 		state = check_aliveness(data, philo_id, state);
 		if (state == thinking_state || state == startup_state )
@@ -57,17 +68,19 @@ static void			*philo(void *i_arg)
 static void			destroy_mutex(t_data *data)
 {
 	pthread_mutex_destroy(&data->mutex_stdout);
+	pthread_mutex_destroy(&data->mutex_death_report);
 }
 
 static void			init_mutex(t_data *data)
 {
 	pthread_mutex_init(&data->mutex_stdout, NULL);
+	pthread_mutex_init(&data->mutex_death_report, NULL);
 }
 
 void				process_philo(t_data *data)
 {
 	pthread_t		*thread;
-	unsigned int	i;
+	int				i;
 	int				*philo_id;
 
 	init_mutex(data);

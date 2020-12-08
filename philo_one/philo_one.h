@@ -38,17 +38,17 @@
 
 # define	NB_OF_USEC_ARGS	5
 
-# define	MESSAGE_HAS_TAKEN_FORK	RED" has taken a fork\n"RESET
-# define	MESSAGE_IS_EATING		GREEN" is eating\n"RESET
-# define	MESSAGE_IS_SLEEPING		BLUE" is sleeping\n"RESET
-# define	MESSAGE_IS_THINKING		YELLOW" is thinking\n"RESET
-# define	MESSAGE_IS_DEAD			PURPLE" died\n"RESET
+// # define	MESSAGE_HAS_TAKEN_FORK	RED"has taken a fork\n"RESET
+// # define	MESSAGE_IS_EATING		GREEN"is eating\n"RESET
+// # define	MESSAGE_IS_SLEEPING		BLUE"is sleeping\n"RESET
+// # define	MESSAGE_IS_THINKING		YELLOW"is thinking\n"RESET
+// # define	MESSAGE_IS_DEAD			PURPLE"died\n"RESET
 
-// # define	MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
-// # define	MESSAGE_IS_EATING		"is eating\n"
-// # define	MESSAGE_IS_SLEEPING		"is sleeping\n"
-// # define	MESSAGE_IS_THINKING		"is thinking\n"
-// # define	MESSAGE_IS_DEAD			"died\n"
+# define	MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
+# define	MESSAGE_IS_EATING		"is eating\n"
+# define	MESSAGE_IS_SLEEPING		"is sleeping\n"
+# define	MESSAGE_IS_THINKING		"is thinking\n"
+# define	MESSAGE_IS_DEAD			"died\n"
 
 enum	e_times_arguments
 {
@@ -72,11 +72,11 @@ typedef struct	s_data
 {
 	// pthread_mutex_t	mutex_fork;
 	pthread_mutex_t	mutex_stdout;
-	pthread_mutex_t	mutex_death_report_flag;
+	pthread_mutex_t	mutex_death_report;
 	bool			death_report_flag;
-	unsigned int	param[NB_OF_USEC_ARGS];
+	int				param[NB_OF_USEC_ARGS];
 	unsigned long	*last_meal;
-	unsigned int	*nb_meals_eaten;
+	int				*nb_meals_eaten;
 }				t_data;
 
 /*
