@@ -9,6 +9,10 @@
 # include <stdbool.h>
 # include <string.h>
 
+# ifndef DEBUG_MODE
+#  define DEBUG_MODE	false
+# endif
+
 # define	BLACK 	"\033[0;30m"
 # define	RED 	"\033[0;31m"
 # define	GREEN 	"\033[0;32m"
@@ -66,9 +70,10 @@ typedef enum	e_state
 
 typedef struct	s_data
 {
-	// pthread_mutex_t	mutex;
-	// pthread_mutex_t	stdout_mutex;
-	int				nb_dead_philo;
+	// pthread_mutex_t	mutex_fork;
+	pthread_mutex_t	mutex_stdout;
+	pthread_mutex_t	mutex_death_report_flag;
+	bool			death_report_flag;
 	unsigned int	param[NB_OF_USEC_ARGS];
 	unsigned long	*last_meal;
 	unsigned int	*nb_meals_eaten;
@@ -81,7 +86,7 @@ typedef struct	s_data
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 													const t_state current_state);
-void			put_status(int philo_id, const char *message);
+void			put_status(t_data *data, const int philo_id, const char *message);
 unsigned long	get_current_time(void);
 
 /*

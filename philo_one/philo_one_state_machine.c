@@ -5,17 +5,17 @@ static void			set_time(unsigned long *time_mem)
 	*time_mem = get_current_time();
 }
 
-static t_state		wake_up_action_handler(const int philo_id)
+static t_state		wake_up_action_handler(t_data *data, const int philo_id)
 {
-	put_status(philo_id, MESSAGE_IS_THINKING);
+	put_status(data, philo_id, MESSAGE_IS_THINKING);
 	return (thinking_state);
 }
 
 static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 {
-	put_status(philo_id, MESSAGE_HAS_TAKEN_FORK);
+	put_status(data, philo_id, MESSAGE_HAS_TAKEN_FORK);
 	set_time(&data->last_meal[philo_id]);
-	put_status(philo_id, MESSAGE_IS_EATING);
+	put_status(data, philo_id, MESSAGE_IS_EATING);
 	usleep(data->param[T_TO_EAT]);
 	data->nb_meals_eaten[philo_id]++;
 	return (eating_state);
@@ -23,7 +23,7 @@ static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 
 static t_state		drop_fork_action_handler(t_data *data, const int philo_id)
 {
-	put_status(philo_id, MESSAGE_IS_SLEEPING);
+	put_status(data, philo_id, MESSAGE_IS_SLEEPING);
 	usleep(data->param[T_TO_SLEEP]);
 	return (sleeping_state);
 }
@@ -36,11 +36,9 @@ static void			*philo(void *i_arg)
 
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
-	dprintf(STDERR_FILENO, "\n\n[PHILO IS %d]\n\n", philo_id);
-	// pthread_exit(NULL);
 	state = startup_state;
 	set_time(&data->last_meal[philo_id]);
-	while(state != dead_state)
+	while(state != dead_state && data->death_report_flag == false)
 	{
 		state = check_aliveness(data, philo_id, state);
 		if (state == thinking_state || state == startup_state )
@@ -48,12 +46,22 @@ static void			*philo(void *i_arg)
 		else if (state ==  eating_state)
 			state = drop_fork_action_handler(data, philo_id);
 		else if (state == sleeping_state)
-			state = wake_up_action_handler(philo_id);
+			state = wake_up_action_handler(data, philo_id);
 	}
+	// dprintf(STDERR_FILENO, "ENDED LOOP FOR PHILO %d, state = %d\n", philo_id, state);
 	if (state == dead_state)
-		put_status(philo_id, MESSAGE_IS_DEAD);
-	// return (NULL);
+		put_status(data, philo_id, MESSAGE_IS_DEAD);
 	pthread_exit(NULL);
+}
+
+static void			destroy_mutex(t_data *data)
+{
+	pthread_mutex_destroy(&data->mutex_stdout);
+}
+
+static void			init_mutex(t_data *data)
+{
+	pthread_mutex_init(&data->mutex_stdout, NULL);
 }
 
 void				process_philo(t_data *data)
@@ -62,6 +70,7 @@ void				process_philo(t_data *data)
 	unsigned int	i;
 	int				*philo_id;
 
+	init_mutex(data);
 	philo_id = (int *)malloc(data->param[NB_PHILO] * sizeof(int));
 	thread = (pthread_t *)malloc(data->param[NB_PHILO] * sizeof(pthread_t));
 	if (philo_id == NULL || thread == NULL)
@@ -79,7 +88,7 @@ void				process_philo(t_data *data)
 		pthread_join(thread[i], NULL);
 		i++;
 	}
+	destroy_mutex(data);
 	free(thread);
 	free(philo_id);
-	// pthread_exit(NULL);
 }

@@ -6,7 +6,7 @@
 
 // 	data = get_data(GET);
 // 	printf("data:\n");
-// 	printf("->nb_dead_philo    = %d\n", data->nb_dead_philo);
+// 	printf("->nb_dead_philo    = %d\n",  data->death_report_flag);
 // 	printf("->nb_philo         = %d \n", data->param[NB_PHILO]);
 // 	printf("->usec[T_TO_DIE]   = %d \n", data->param[T_TO_DIE]);
 // 	printf("->usec[T_TO_EAT]   = %d \n", data->param[T_TO_EAT]);
