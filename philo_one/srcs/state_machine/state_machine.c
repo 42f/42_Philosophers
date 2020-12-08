@@ -1,10 +1,5 @@
 #include "philo_one.h"
 
-static void			set_time(unsigned long *time_mem)
-{
-	*time_mem = get_current_time();
-}
-
 static t_state		wake_up_action_handler(t_data *data, const int philo_id)
 {
 	put_status(data, philo_id, MESSAGE_IS_THINKING);
@@ -13,11 +8,12 @@ static t_state		wake_up_action_handler(t_data *data, const int philo_id)
 
 static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 {
+	//mutex fork
 	put_status(data, philo_id, MESSAGE_HAS_TAKEN_FORK);
 	put_status(data, philo_id, MESSAGE_IS_EATING);
-	set_time(&data->last_meal[philo_id]);
-	usleep(data->param[T_TO_EAT]);
+	data->last_meal[philo_id] = get_current_time();
 	data->nb_meals_eaten[philo_id]++;
+	usleep(data->param[T_TO_EAT]);
 	return (eating_state);
 }
 
@@ -48,16 +44,15 @@ void			*philo_state_machine(void *i_arg)
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
 	state = startup_state;
-	// set_time(&data->last_meal[philo_id]);
 	while(check_loop_conditions(state, data, philo_id) == true)
 	{
+		state = check_aliveness(data, philo_id, state);
 		if (state == thinking_state || state == startup_state )
 			state = take_fork_action_handler(data, philo_id);
 		else if (state ==  eating_state)
 			state = drop_fork_action_handler(data, philo_id);
 		else if (state == sleeping_state)
 			state = wake_up_action_handler(data, philo_id);
-		state = check_aliveness(data, philo_id, state);
 	}
 	if (state == dead_state)
 		put_status(data, philo_id, MESSAGE_IS_DEAD);

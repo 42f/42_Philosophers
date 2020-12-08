@@ -8,7 +8,7 @@ static void			destroy_mutex(t_data *data)
 
 static void			init_mutex(t_data *data)
 {
-	pthread_mutex_init(&data->mutex_stdout, NULL);
+	pthread_mutex_init(&data->mutex_stdout, NULL);						// TODO: check fails
 	pthread_mutex_init(&data->mutex_death_report, NULL);
 }
 
@@ -31,23 +31,23 @@ void				process_philo(t_data *data)
 
 	init_mutex(data);
 	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO]);
-	get_current_time();
 	i = 0;
 	while (i < data->param[NB_PHILO])
 	{
 		philo_id[i] = i;
 		pthread_create(&th_philo[i], NULL, philo_state_machine, &philo_id[i]);
-		pthread_create(&th_monitor[i], NULL, philo_monitor, &philo_id[i]);
+		// pthread_create(&th_monitor[i], NULL, philo_monitor, &philo_id[i]);
 		i++;
 	}
 	i = 0;
 	while (i < data->param[NB_PHILO])
 	{
 		pthread_join(th_philo[i], NULL);
-		pthread_join(th_monitor[i], NULL);
+		// pthread_join(th_monitor[i], NULL);
 		i++;
 	}
 	destroy_mutex(data);
 	free(th_philo);
+	free(th_monitor);
 	free(philo_id);
 }

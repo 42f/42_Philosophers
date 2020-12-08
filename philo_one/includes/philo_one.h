@@ -94,6 +94,11 @@ void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 													const t_state current_state);
 void			put_status(t_data *data, const int philo_id, const char *message);
+
+/*
+**	TIMER
+*/
+
 unsigned long	get_current_time(void);
 
 /*

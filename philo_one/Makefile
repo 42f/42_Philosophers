@@ -43,18 +43,21 @@ endif
 
 HEADER += $(INCLUDES)*.h
 
-SRCS += philo_one_main.c
-SRCS += philo_one_process_threads.c
-SRCS += philo_one_general_utils.c
-SRCS += philo_one_state_machine.c
-SRCS += philo_one_state_machine_utils.c
-SRCS += philo_one_monitor.c
-SRCS += philo_one_arguments_process.c
+SRCS += main.c
+SRCS += process_threads.c
+SRCS += general_utils.c
+SRCS += state_machine.c
+SRCS += monitor.c
+SRCS += status_printer.c
+SRCS += arguments_process.c
+SRCS += timer.c
+SRCS += aliveness.c
 
 vpath %.c ./
 vpath %.c ./srcs
 vpath %.c ./srcs/monitor
 vpath %.c ./srcs/state_machine
+vpath %.c ./srcs/utils
 
 OBJS = $(patsubst %.c, $(OBJ_DIR)%.o, $(SRCS))
 
