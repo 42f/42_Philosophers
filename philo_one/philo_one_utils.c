@@ -50,6 +50,7 @@ char		*ft_itoa(unsigned long nb)
 		len++;
 	}
 	ret = (char *)malloc((len + 2) * sizeof(char));
+	memset(ret, '\0', (len + 2) * sizeof(char));
 	if (ret == NULL)
 		exit (1);							// failure routine
 	return (ft_fill(ret, nb, len));
