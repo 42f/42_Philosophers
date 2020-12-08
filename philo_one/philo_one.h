@@ -75,10 +75,14 @@ typedef struct	s_data
 }				t_data;
 
 /*
-**	MAIN_PROCESS
+**	STATE_MACHINE
 */
 
-void process_philo(t_data *data);
+void			process_philo(t_data *data);
+t_state			check_aliveness(t_data *data, int philo_id,
+													const t_state current_state);
+void			put_status(int philo_id, const char *message);
+unsigned long	get_current_time(void);
 
 /*
 **	UTILS
@@ -92,8 +96,6 @@ void			ft_putnbr(unsigned long n);
 **	ARGUMENTS
 */
 
-void			put_usage(void);
-int				check_arguments(const int ac, const char **av);
 int				process_arguments(t_data *data, const char **av);
 
 #endif

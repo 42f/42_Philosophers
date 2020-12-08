@@ -12,7 +12,8 @@ static size_t		ft_strlen(const char *str)
 
 void	ft_put_str_fd(int fd, const char *s)
 {
-	write(fd, s, ft_strlen(s));
+	if (s != NULL)
+		write(fd, s, ft_strlen(s));
 }
 
 static char	*ft_fill(char *r, unsigned long n_val, int i)
@@ -40,6 +41,7 @@ char		*ft_itoa(unsigned long nb)
 {
 	char			*ret;
 	int				len;
+	size_t			malloc_len;
 	unsigned long	nb_val;
 
 	len = 0;
@@ -49,10 +51,12 @@ char		*ft_itoa(unsigned long nb)
 		nb_val = nb_val / 10;
 		len++;
 	}
-	ret = (char *)malloc((len + 2) * sizeof(char));
-	memset(ret, '\0', (len + 2) * sizeof(char));
-	if (ret == NULL)
-		exit (1);							// failure routine
+	malloc_len = (nb_val > 0) ? len + 2 : len + 3;
+	malloc_len *= sizeof(char);
+	ret = (char *)malloc(malloc_len);
+	// if (ret == NULL)
+	// 	exit (1);							// failure routine
+	memset(ret, '\0', malloc_len);
 	return (ft_fill(ret, nb, len));
 }
 
@@ -61,8 +65,11 @@ void		ft_putnbr(unsigned long n)
 	char	*nb;
 
 	nb = ft_itoa(n);
-	ft_put_str_fd(STDOUT_FILENO, nb);
-	free(nb);
+	if (nb != NULL)
+	{
+		ft_put_str_fd(STDOUT_FILENO, nb);
+		free(nb);
+	}
 }
 
 t_data	*get_data(t_data *mem)

@@ -31,9 +31,6 @@ else ifeq ($(debug), 4)
 	endif
 endif
 
-ifeq ($(db), 1)
-	CFLAGS += -g3
-endif
 ifeq ($(opti), 1)
 	CFLAGS += -O3
 endif

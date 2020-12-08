@@ -14,15 +14,55 @@
 // 	printf("->usec[NB_MEALS] = %d \n", data->param[NB_MEALS]);
 // }
 
-static bool	init_last_eat_time_storage(t_data *data)
+static int	is_digit_only(const char *av)
 {
-	data->last_meal = malloc(sizeof(int) * data->param[NB_PHILO]);
-	data->nb_meals_eaten = malloc(sizeof(int) * data->param[NB_PHILO]);
+	int		i;
+
+	i = 0;
+	while (av != NULL && av[i] != '\0')
+	{
+		if ((av[i] < '0' || av[i] > '9') && (av[i] != '+' || av[i] != ' '))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+static void				put_usage(void)
+{
+	ft_put_str_fd(STDERR_FILENO, USAGE0);
+	ft_put_str_fd(STDERR_FILENO, USAGE1);
+	ft_put_str_fd(STDERR_FILENO, USAGE2);
+	ft_put_str_fd(STDERR_FILENO, USAGE3);
+}
+
+static int	check_arguments(const int ac, const char **av)
+{
+	int		i;
+
+	if (ac < 5 || ac > 6)
+		return (FAILURE);
+	i = 1;
+	while (av != NULL && av[i] != NULL)
+	{
+		if (is_digit_only(av[i]) == false)
+			return (FAILURE);
+		i++;
+	}
+	return (SUCCESS);
+}
+
+static bool	init_meals_info_storage(t_data *data)
+{
+	data->last_meal = malloc(data->param[NB_PHILO] * sizeof(unsigned long));
+	data->nb_meals_eaten = malloc(data->param[NB_PHILO] * sizeof(unsigned int));
 	if (data->last_meal == NULL || data->nb_meals_eaten == NULL)
 	{
 		ft_put_str_fd(STDERR_FILENO, ERR_MALLOC);
 		return (false);
 	}
+	memset(data->last_meal, 0, data->param[NB_PHILO] * sizeof(unsigned long));
+	memset(data->nb_meals_eaten, 0, data->param[NB_PHILO] * sizeof(unsigned int));
 	return (true);
 }
 
@@ -43,7 +83,11 @@ int			main(const int ac, const char **av)
 		return (1);
 	}
 // debug_struct();			// TODO: remove
-	if (init_last_eat_time_storage(&data) == true)
+	if (init_meals_info_storage(&data) == true)
+	{
 		process_philo(&data);
+		free(data.last_meal);
+		free(data.nb_meals_eaten);
+	}
 	return (0);
 }
