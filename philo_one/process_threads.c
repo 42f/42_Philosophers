@@ -30,8 +30,8 @@ void				process_philo(t_data *data)
 	int				*philo_id;
 
 	init_mutex(data);
-	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO]);
-	i = 0;
+	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO] + 1);
+	i = 1;
 	while (i < data->param[NB_PHILO])
 	{
 		philo_id[i] = i;
