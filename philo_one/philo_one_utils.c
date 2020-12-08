@@ -12,18 +12,26 @@ static size_t		ft_strlen(const char *str)
 
 void	ft_put_str_fd(int fd, const char *s)
 {
-	if (!s)
-		return ;
 	write(fd, s, ft_strlen(s));
 }
 
 static char	*ft_fill(char *r, unsigned long n_val, int i)
 {
-	while (n_val > 0 && i >= 0)
+	if (n_val != 0)
 	{
-		r[i] = (n_val % 10) + '0';
-		n_val = n_val / 10;
+		r[i] = ' ';
 		i--;
+		while (n_val > 0 && i >= 0)
+		{
+			r[i] = (n_val % 10) + '0';
+			n_val = n_val / 10;
+			i--;
+		}
+	}
+	else
+	{
+		r[0] = '0';
+		r[1] = ' ';
 	}
 	return (r);
 }
@@ -36,14 +44,15 @@ char		*ft_itoa(unsigned long nb)
 
 	len = 0;
 	nb_val = nb;
-	while (nb != 0)
+	while (nb_val != 0)
 	{
-		nb = nb / 10;
+		nb_val = nb_val / 10;
 		len++;
 	}
-	if (!(ret = (char *)malloc((len + 1) * sizeof(char))))
-		return (NULL);
-	return (ft_fill(ret, nb_val, len - 1));
+	ret = (char *)malloc((len + 2) * sizeof(char));
+	if (ret == NULL)
+		exit (1);							// failure routine
+	return (ft_fill(ret, nb, len));
 }
 
 void		ft_putnbr(unsigned int n)
@@ -51,8 +60,6 @@ void		ft_putnbr(unsigned int n)
 	char	*nb;
 
 	nb = ft_itoa(n);
-	if (nb == NULL)
-		exit (1);							// failure routine
 	ft_put_str_fd(STDOUT_FILENO, nb);
 	free(nb);
 }

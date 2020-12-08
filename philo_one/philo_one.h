@@ -40,6 +40,12 @@
 # define	MESSAGE_IS_THINKING		YELLOW" is thinking\n"RESET
 # define	MESSAGE_IS_DEAD			PURPLE" died\n"RESET
 
+// # define	MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
+// # define	MESSAGE_IS_EATING		"is eating\n"
+// # define	MESSAGE_IS_SLEEPING		"is sleeping\n"
+// # define	MESSAGE_IS_THINKING		"is thinking\n"
+// # define	MESSAGE_IS_DEAD			"died\n"
+
 enum	e_times_arguments
 {
 	NB_PHILO,
