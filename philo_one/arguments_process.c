@@ -22,7 +22,12 @@ static int			ft_atoi(const char *str)
 	return (str[0] == '-' ? -output : output);
 }
 
-static void		convert_to_usec(int *nb)
+int			convert_from_usec_to_msec(int nb)
+{
+	return (nb / 1000);
+}
+
+void		convert_from_msec_to_usec(int *nb)
 {
 	*nb *= 1000;
 }
@@ -42,8 +47,8 @@ int				process_arguments(t_data *data, const char **av)
 		i++;
 		arg_i++;
 	}
-	convert_to_usec(&data->param[T_TO_DIE]);
-	convert_to_usec(&data->param[T_TO_EAT]);
-	convert_to_usec(&data->param[T_TO_SLEEP]);
+	convert_from_msec_to_usec(&data->param[T_TO_DIE]);
+	convert_from_msec_to_usec(&data->param[T_TO_EAT]);
+	convert_from_msec_to_usec(&data->param[T_TO_SLEEP]);
 	return (SUCCESS);
 }

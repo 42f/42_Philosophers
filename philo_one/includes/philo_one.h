@@ -108,6 +108,8 @@ unsigned long	get_current_time(void);
 t_data			*get_data(t_data *mem);
 void			ft_put_str_fd(int fd, const char *s);
 void			ft_putnbr(unsigned long n);
+void			convert_from_msec_to_usec(int *nb);
+int				convert_from_usec_to_msec(int nb);
 
 /*
 **	ARGUMENTS

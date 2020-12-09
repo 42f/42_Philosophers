@@ -5,8 +5,8 @@ static bool	is_alive(t_data *data, const int philo_id)
 	static int	t_delta;
 
 	t_delta = get_current_time() - data->last_meal[philo_id];
-	return(t_delta < data->param[T_TO_DIE]
-											|| data->param[NB_MEALS] != UNSET);
+	return(t_delta < convert_from_usec_to_msec(data->param[T_TO_DIE])
+			|| data->param[NB_MEALS] != UNSET);
 }
 
 t_state		check_aliveness(t_data *data, int philo_id,
