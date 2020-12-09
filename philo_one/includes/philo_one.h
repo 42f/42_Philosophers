@@ -49,7 +49,8 @@
 // # define	MESSAGE_IS_THINKING		"is thinking\n"
 // # define	MESSAGE_IS_DEAD			"died\n"
 
-# define	NB_OF_USEC_ARGS	5
+# define	NB_OF_FORKS_NEEDED_TO_EAT	2
+# define	NB_OF_PARAM					5
 
 enum	e_times_arguments
 {
@@ -63,20 +64,22 @@ enum	e_times_arguments
 typedef enum	e_state
 {
 	sleeping_state,					//0
-	eating_state,					//1
-	thinking_state,					//2
-	dead_state,						//3
-	done_eating_state,				//4
-	startup_state					//5
+	has_forks_state,				//1
+	eating_state,					//2
+	thinking_state,					//3
+	dead_state,						//4
+	done_eating_state,				//5
+	startup_state					//6
 }				t_state;
 
 typedef struct	s_data
 {
-	// pthread_mutex_t	mutex_fork;
+	int				nb_available_forks;
+	pthread_mutex_t	mutex_forks;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
 	bool			death_report_flag;
-	int				param[NB_OF_USEC_ARGS];
+	int				param[NB_OF_PARAM];
 	unsigned long	*last_meal;
 	int				*nb_meals_eaten;
 }				t_data;

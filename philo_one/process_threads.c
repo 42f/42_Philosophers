@@ -4,12 +4,14 @@ static void			destroy_mutex(t_data *data)
 {
 	pthread_mutex_destroy(&data->mutex_stdout);
 	pthread_mutex_destroy(&data->mutex_death_report);
+	pthread_mutex_destroy(&data->mutex_forks);
 }
 
 static void			init_mutex(t_data *data)
 {
 	pthread_mutex_init(&data->mutex_stdout, NULL);						// TODO: check fails
 	pthread_mutex_init(&data->mutex_death_report, NULL);
+	pthread_mutex_init(&data->mutex_forks, NULL);
 }
 
 static void			init_arrays(pthread_t **th_philo,
@@ -37,14 +39,14 @@ void				process_philo(t_data *data)
 	{
 		philo_id[i] = i + 1;
 		pthread_create(&th_philo[i], NULL, philo_state_machine, &philo_id[i]);
-		// pthread_create(&th_monitor[i], NULL, philo_monitor, &philo_id[i]);
+		pthread_create(&th_monitor[i], NULL, philo_monitor, &philo_id[i]);
 		i++;
 	}
 	i = 0;
 	while (i < data->param[NB_PHILO])
 	{
 		pthread_join(th_philo[i], NULL);
-		// pthread_join(th_monitor[i], NULL);
+		pthread_join(th_monitor[i], NULL);
 		i++;
 	}
 	destroy_mutex(data);

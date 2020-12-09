@@ -41,7 +41,7 @@ int				process_arguments(t_data *data, const char **av)
 	data->param[NB_MEALS] = UNSET;
 	i = 0;
 	arg_i = i + 1;
-	while (av != NULL && av[arg_i] != NULL && i < NB_OF_USEC_ARGS)
+	while (av != NULL && av[arg_i] != NULL && i < NB_OF_PARAM)
 	{
 		data->param[i] = ft_atoi(av[arg_i]);
 		if (data->param[i] <= 0)
@@ -51,5 +51,6 @@ int				process_arguments(t_data *data, const char **av)
 	}
 	convert_from_msec_to_usec(&data->param[T_TO_EAT]);
 	convert_from_msec_to_usec(&data->param[T_TO_SLEEP]);
+	data->nb_available_forks = data->param[NB_PHILO];
 	return (SUCCESS);
 }

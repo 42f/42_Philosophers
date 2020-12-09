@@ -8,10 +8,36 @@ static t_state		wake_up_action_handler(t_data *data, const int philo_id)
 
 static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 {
-	//mutex fork
+	int	forks_acquired;
+
+	forks_acquired = 0;
+	while (data->death_report_flag == false && forks_acquired < 2)
+	{
+		if (data->nb_available_forks >= 2)
+		{
+			pthread_mutex_lock(&data->mutex_forks);
+			forks_acquired = 2;
+			data->nb_available_forks -= 2;
+			pthread_mutex_unlock(&data->mutex_forks);
+		}
+		else if (data->nb_available_forks == 1)
+		{
+			pthread_mutex_lock(&data->mutex_forks);
+			forks_acquired += 1;
+			data->nb_available_forks -= 1;
+			pthread_mutex_unlock(&data->mutex_forks);
+		}
+	}
+	if (data->death_report_flag == true)
+		return (done_eating_state);
 	put_status(data, philo_id, MESSAGE_HAS_TAKEN_FORK);
-	put_status(data, philo_id, MESSAGE_IS_EATING);
+	return (has_forks_state);
+}
+
+static t_state		eat_action_handler(t_data *data, const int philo_id)
+{
 	data->last_meal[philo_id] = get_current_time();
+	put_status(data, philo_id, MESSAGE_IS_EATING);
 	data->nb_meals_eaten[philo_id]++;
 	usleep(data->param[T_TO_EAT]);
 	if (data->param[NB_MEALS] != UNSET
@@ -22,6 +48,9 @@ static t_state		take_fork_action_handler(t_data *data, const int philo_id)
 
 static t_state		drop_fork_action_handler(t_data *data, const int philo_id)
 {
+	pthread_mutex_lock(&data->mutex_forks);
+	data->nb_available_forks += 2;
+	pthread_mutex_unlock(&data->mutex_forks);
 	put_status(data, philo_id, MESSAGE_IS_SLEEPING);
 	usleep(data->param[T_TO_SLEEP]);
 	return (sleeping_state);
@@ -29,7 +58,7 @@ static t_state		drop_fork_action_handler(t_data *data, const int philo_id)
 
 static bool			check_loop_conditions(const t_state state, const t_data *data)
 {
-	return (data->death_report_flag == false
+	return (data->death_report_flag != true
 		&& state != dead_state && state != done_eating_state);
 }
 
@@ -46,15 +75,23 @@ void			*philo_state_machine(void *i_arg)
 	data->last_meal[philo_id] = get_current_time();
 	while(check_loop_conditions(state, data) == true)
 	{
-		if (state == thinking_state || state == startup_state )
+		if (state == has_forks_state)
+			state = eat_action_handler(data, philo_id);
+		else if (state == thinking_state || state == startup_state )
 			state = take_fork_action_handler(data, philo_id);
 		else if (state ==  eating_state)
 			state = drop_fork_action_handler(data, philo_id);
 		else if (state == sleeping_state)
 			state = wake_up_action_handler(data, philo_id);
-		state = check_aliveness(data, philo_id, state);
+		if (state == done_eating_state)
+			drop_fork_action_handler(data, philo_id);
 	}
-	if (state == dead_state)
-		put_status(data, philo_id, MESSAGE_IS_DEAD);
 	pthread_exit(NULL);
 }
+
+
+
+
+		// state = check_aliveness(data, philo_id, state);
+		// if (state == dead_state)
+		// 	put_status(data, philo_id, MESSAGE_IS_DEAD);
