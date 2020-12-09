@@ -38,16 +38,17 @@ int				process_arguments(t_data *data, const char **av)
 	int			i;
 
 	memset(data->param, 0, sizeof(data->param));
+	data->param[NB_MEALS] = UNSET;
 	i = 0;
 	arg_i = i + 1;
-	data->param[NB_MEALS] = UNSET;
 	while (av != NULL && av[arg_i] != NULL && i < NB_OF_USEC_ARGS)
 	{
 		data->param[i] = ft_atoi(av[arg_i]);
+		if (data->param[i] <= 0)
+			return (FAILURE);
 		i++;
 		arg_i++;
 	}
-	convert_from_msec_to_usec(&data->param[T_TO_DIE]);
 	convert_from_msec_to_usec(&data->param[T_TO_EAT]);
 	convert_from_msec_to_usec(&data->param[T_TO_SLEEP]);
 	return (SUCCESS);

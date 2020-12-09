@@ -2,11 +2,16 @@
 
 static bool	is_alive(t_data *data, const int philo_id)
 {
-	static int	t_delta;
+	unsigned long	t_delta;
+	// unsigned long	t_curr;
+	// unsigned long	t_last_m;
 
 	t_delta = get_current_time() - data->last_meal[philo_id];
-	return(t_delta < convert_from_usec_to_msec(data->param[T_TO_DIE])
-			|| data->param[NB_MEALS] != UNSET);
+	// t_curr = get_current_time();
+	// t_last_m = data->last_meal[philo_id];
+	// t_delta = t_curr - t_last_m;
+	// printf("[%ld] - [%ld] = Delta = %ld\n",t_curr, t_last_m,t_delta);			// TODO: remove FOBIDDEN
+	return(t_delta < (unsigned long)data->param[T_TO_DIE]);
 }
 
 t_state		check_aliveness(t_data *data, int philo_id,
@@ -32,3 +37,4 @@ t_state		check_aliveness(t_data *data, int philo_id,
 	}
 	return (ret_state);
 }
+

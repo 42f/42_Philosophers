@@ -52,10 +52,11 @@ static int	check_arguments(const int ac, const char **av)
 	return (SUCCESS);
 }
 
-static bool	init_meals_info_storage(t_data *data)
+static bool	init_meals_info_storage(t_data *data, size_t nb_philo)
 {
-	data->last_meal = malloc(data->param[NB_PHILO] * sizeof(unsigned long));
-	data->nb_meals_eaten = malloc(data->param[NB_PHILO] * sizeof(unsigned int));
+	nb_philo += 1;
+	data->last_meal = malloc(nb_philo * sizeof(unsigned long));
+	data->nb_meals_eaten = malloc(nb_philo * sizeof(unsigned int));
 	if (data->last_meal == NULL || data->nb_meals_eaten == NULL)
 	{
 		ft_put_str_fd(STDERR_FILENO, ERR_MALLOC);
@@ -83,7 +84,7 @@ int			main(const int ac, const char **av)
 		return (1);
 	}
 // debug_struct();			// TODO: remove
-	if (init_meals_info_storage(&data) == true)
+	if (init_meals_info_storage(&data, data.param[NB_PHILO]) == true)
 	{
 		process_philo(&data);
 		free(data.last_meal);

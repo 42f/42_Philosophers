@@ -15,6 +15,7 @@ static void			init_mutex(t_data *data)
 static void			init_arrays(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id, size_t nb_philo)
 {
+	nb_philo += 1;
 	*philo_id = (int *)malloc(nb_philo * sizeof(int));
 	*th_philo = (pthread_t *)malloc(nb_philo * sizeof(pthread_t));
 	*th_monitor = (pthread_t *)malloc(nb_philo * sizeof(pthread_t));
@@ -30,11 +31,11 @@ void				process_philo(t_data *data)
 	int				*philo_id;
 
 	init_mutex(data);
-	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO] + 1);
-	i = 1;
+	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO]);
+	i = 0;
 	while (i < data->param[NB_PHILO])
 	{
-		philo_id[i] = i;
+		philo_id[i] = i + 1;
 		pthread_create(&th_philo[i], NULL, philo_state_machine, &philo_id[i]);
 		// pthread_create(&th_monitor[i], NULL, philo_monitor, &philo_id[i]);
 		i++;

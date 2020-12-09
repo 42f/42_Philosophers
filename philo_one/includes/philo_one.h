@@ -36,19 +36,20 @@
 
 # define	ERR_MALLOC	"Philo: error: malloc() failed\n"
 
+
+# define	MESSAGE_HAS_TAKEN_FORK	RED"has taken a fork\n"RESET
+# define	MESSAGE_IS_EATING		GREEN"is eating\n"RESET
+# define	MESSAGE_IS_SLEEPING		BLUE"is sleeping\n"RESET
+# define	MESSAGE_IS_THINKING		YELLOW"is thinking\n"RESET
+# define	MESSAGE_IS_DEAD			PURPLE"died\n"RESET
+
+// # define	MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
+// # define	MESSAGE_IS_EATING		"is eating\n"
+// # define	MESSAGE_IS_SLEEPING		"is sleeping\n"
+// # define	MESSAGE_IS_THINKING		"is thinking\n"
+// # define	MESSAGE_IS_DEAD			"died\n"
+
 # define	NB_OF_USEC_ARGS	5
-
-// # define	MESSAGE_HAS_TAKEN_FORK	RED"has taken a fork\n"RESET
-// # define	MESSAGE_IS_EATING		GREEN"is eating\n"RESET
-// # define	MESSAGE_IS_SLEEPING		BLUE"is sleeping\n"RESET
-// # define	MESSAGE_IS_THINKING		YELLOW"is thinking\n"RESET
-// # define	MESSAGE_IS_DEAD			PURPLE"died\n"RESET
-
-# define	MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
-# define	MESSAGE_IS_EATING		"is eating\n"
-# define	MESSAGE_IS_SLEEPING		"is sleeping\n"
-# define	MESSAGE_IS_THINKING		"is thinking\n"
-# define	MESSAGE_IS_DEAD			"died\n"
 
 enum	e_times_arguments
 {
@@ -61,11 +62,12 @@ enum	e_times_arguments
 
 typedef enum	e_state
 {
-	sleeping_state,
-	eating_state,
-	thinking_state,
-	dead_state,
-	startup_state
+	sleeping_state,					//0
+	eating_state,					//1
+	thinking_state,					//2
+	dead_state,						//3
+	done_eating_state,				//4
+	startup_state					//5
 }				t_state;
 
 typedef struct	s_data
