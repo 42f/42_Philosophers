@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 14:55:51 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 16:32:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	safe_free(void *mem)
 
 void	exit_routine(t_code_err err)
 {
-	t_data	*data;
+	t_data				*data;
+	static const char	*message[NB_ERR_CODE] =
+	{ ERR_MALLOC, ERR_MUTEX, ERR_PTHREAD };
 
 	data = get_data(GET);
 	if (data != NULL)
@@ -33,9 +35,7 @@ void	exit_routine(t_code_err err)
 		safe_free(data->done_report_flag);
 		destroy_mutex(data);
 	}
-	if (err == CODE_ERR_MALLOC)
-		ft_put_str_fd(STDERR_FILENO, ERR_MALLOC);
-	else if (err == CODE_ERR_PTHREAD)
-		ft_put_str_fd(STDERR_FILENO, ERR_PTHREAD);
+	if (err < NB_ERR_CODE)
+		ft_put_str_fd(STDERR_FILENO, message[err]);
 	exit(FAILURE_RETURN);
 }

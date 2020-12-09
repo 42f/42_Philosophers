@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 15:06:16 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 16:43:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,21 @@
 # define USAGE3	"[number_of_time_each_philosophers_must_eat]\n"
 
 # define ERR_MALLOC		"\nPhilo: error: malloc() failed\n"
+# define ERR_MUTEX		"\nPhilo: error: could not initialize mutex\n"
 # define ERR_PTHREAD	"\nPhilo: error: pthread function failed\n"
 
+# define NB_ERR_CODE	3
 typedef enum	e_code_err
 {
 	CODE_ERR_MALLOC,
+	CODE_ERR_MUTEX,
 	CODE_ERR_PTHREAD
 }				t_code_err;
 
 # ifndef DEBUG_MODE
 
 #  define MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
-#  define MESSAGE_IS_EATING		"is eating\n"
+#  define MESSAGE_IS_EATING			"is eating\n"
 #  define MESSAGE_IS_SLEEPING		"is sleeping\n"
 #  define MESSAGE_IS_THINKING		"is thinking\n"
 #  define MESSAGE_IS_DEAD			"died\n"
@@ -112,7 +115,8 @@ void			*philo_state_machine(void *i_arg);
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 												const t_state current_state);
-void			put_status(t_data *data, const int philo_id,
+void			put_death_status(t_data *data, const int philo_id);
+void			put_regular_status(t_data *data, const int philo_id,
 														const char *message);
 bool			check_loop_conditions(const t_state state, const t_data *data);
 

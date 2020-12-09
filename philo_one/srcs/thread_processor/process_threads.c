@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 15:31:38 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 16:25:52 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void			failed_thread_creation(int i, pthread_t *thread)
 }
 
 static int			thread_creation_loop(const t_data *data,
-	pthread_t *thread, void *(*start_routine) (void *), int *philo_id)
+			pthread_t *thread, void *(*start_routine) (void *), int *philo_id)
 {
 	int			i;
 
@@ -34,7 +34,7 @@ static int			thread_creation_loop(const t_data *data,
 		if (pthread_create(&thread[i], NULL, start_routine, &philo_id[i]) != 0)
 		{
 			failed_thread_creation(i, thread);
-			return (FAILURE) ;
+			return (FAILURE);
 		}
 		i++;
 	}

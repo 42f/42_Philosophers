@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 15:07:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 16:20:08 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 void			init_mutex(t_data *data)
 {
-	pthread_mutex_init(&data->mutex_stdout, NULL);						// TODO: check fails
-	pthread_mutex_init(&data->mutex_death_report, NULL);
-	pthread_mutex_init(&data->mutex_forks, NULL);
+	if (pthread_mutex_init(&data->mutex_stdout, NULL) != 0)
+		exit_routine(CODE_ERR_MUTEX);						// TODO: check fails
+	if (pthread_mutex_init(&data->mutex_death_report, NULL) != 0)
+		exit_routine(CODE_ERR_MUTEX);
+	if (pthread_mutex_init(&data->mutex_forks, NULL) != 0)
+		exit_routine(CODE_ERR_MUTEX);
 }
 
 void			init_arrays(pthread_t **th_philo,
