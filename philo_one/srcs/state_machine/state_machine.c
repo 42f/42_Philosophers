@@ -6,51 +6,17 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 16:43:11 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 17:09:25 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-static t_state		wake_up_action_handler(t_data *data, const int philo_id)
+static void		init_data(t_data *data, int philo_id)
 {
-	put_regular_status(data, philo_id, MESSAGE_IS_THINKING);
-	return (thinking_state);
-}
-
-static t_state		take_forks_action_handler(t_data *data, const int philo_id)
-{
-	acquire_forks(data);
-	if (data->death_report_flag == true)
-		return (done_eating_state);
-	put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_FORK);
-	return (has_forks_state);
-}
-
-static t_state		drop_fork_action_handler(t_data *data, const int philo_id)
-{
-	drop_forks(data);
-	put_regular_status(data, philo_id, MESSAGE_IS_SLEEPING);
-	usleep(data->param[T_TO_SLEEP]);
-	return (sleeping_state);
-}
-
-static t_state		eat_action_handler(t_data *data, const int philo_id)
-{
+	data->done_report_flag[philo_id] = false;
+	data->nb_meals_eaten[philo_id] = 0;
 	data->last_meal[philo_id] = get_current_time();
-	put_regular_status(data, philo_id, MESSAGE_IS_EATING);
-	data->nb_meals_eaten[philo_id]++;
-	usleep(data->param[T_TO_EAT]);
-	if (data->param[NB_MEALS] != UNSET
-				&& data->nb_meals_eaten[philo_id] >= data->param[NB_MEALS])
-		return (done_eating_state);
-	return (eating_state);
-}
-
-static void		done_eating_action_handler(t_data *data, const int philo_id)
-{
-	data->done_report_flag[philo_id] = true;
-	drop_forks(data);
 }
 
 void			*philo_state_machine(void *i_arg)
@@ -61,17 +27,15 @@ void			*philo_state_machine(void *i_arg)
 
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
-	data->done_report_flag[philo_id] = false;
-	data->nb_meals_eaten[philo_id] = 0;
-	data->last_meal[philo_id] = get_current_time();
+	init_data(data, philo_id);
 	state = startup_state;
-	while(check_loop_conditions(state, data) == true)
+	while (check_loop_conditions(state, data) == true)
 	{
 		if (state == has_forks_state)
 			state = eat_action_handler(data, philo_id);
-		else if (state == thinking_state || state == startup_state )
+		else if (state == thinking_state || state == startup_state)
 			state = take_forks_action_handler(data, philo_id);
-		else if (state ==  eating_state)
+		else if (state == eating_state)
 			state = drop_fork_action_handler(data, philo_id);
 		else if (state == sleeping_state)
 			state = wake_up_action_handler(data, philo_id);

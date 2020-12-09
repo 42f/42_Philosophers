@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 16:43:11 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 17:01:41 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,11 @@ bool			check_loop_conditions(const t_state state, const t_data *data);
 
 void			acquire_forks(t_data *data);
 void			drop_forks(t_data *data);
-
+t_state			wake_up_action_handler(t_data *data, const int philo_id);
+t_state			take_forks_action_handler(t_data *data, const int philo_id);
+t_state			drop_fork_action_handler(t_data *data, const int philo_id);
+t_state			eat_action_handler(t_data *data, const int philo_id);
+void			done_eating_action_handler(t_data *data, const int philo_id);
 /*
 **	TIMER
 */

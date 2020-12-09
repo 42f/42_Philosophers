@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 15:08:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 16:57:55 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_digit_only(const char *av)
 	return (true);
 }
 
-static void				put_usage(void)
+static void	put_usage(void)
 {
 	ft_put_str_fd(STDERR_FILENO, USAGE0);
 	ft_put_str_fd(STDERR_FILENO, USAGE1);

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:05 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 14:19:27 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/09 17:18:46 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static const char	*get_skipped_input(const char *str)
 
 static int			ft_atoi(const char *str)
 {
-	int			output;
-	size_t		i;
+	int		output;
+	size_t	i;
 
 	output = 0;
 	i = 0;
@@ -34,15 +34,15 @@ static int			ft_atoi(const char *str)
 	return (str[0] == '-' ? -output : output);
 }
 
-static void		convert_from_msec_to_usec(int *nb)
+static void			convert_from_msec_to_usec(int *nb)
 {
 	*nb *= 1000;
 }
 
-int				process_arguments(t_data *data, const char **av)
+int					process_arguments(t_data *data, const char **av)
 {
-	int			arg_i;
-	int			i;
+	int		arg_i;
+	int		i;
 
 	memset(data->param, 0, sizeof(data->param));
 	data->param[NB_MEALS] = UNSET;

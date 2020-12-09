@@ -1,9 +1,18 @@
 NAME := $(lastword $(subst /, ,$(dir $(realpath $(lastword $(MAKEFILE_LIST))))))
+INCLUDES = ./includes/
+CC = gcc
+OBJ_DIR = ../objs/
 
+CFLAGS += -pthread
 CFLAGS += -Wall
 CFLAGS += -Wextra
-CFLAGS += -pthread
-CFLAGS += -fPIC
+
+ifneq ($(no_error), 1)
+	CFLAGS += -Werror
+endif
+
+# CFLAGS += -fPIC
+
 ifeq ($(debug), 1)
 	CFLAGS += -g3
 else ifeq ($(debug), 2)
@@ -22,33 +31,37 @@ else ifeq ($(debug), 4)
 	endif
 endif
 
-ifeq ($(err), 0)
-	CFLAGS += -g3
-else
-	CFLAGS += -Werror
-endif
-ifneq ($(opti), 0)
+ifeq ($(opti), 1)
 	CFLAGS += -O3
 endif
 
 ifeq ($(debug_mode), 1)
-	DEBUG_MODE = 1
-else
-	DEBUG_MODE = 0
+	CFLAGS += -D DEBUG_MODE=1
 endif
 
-CC = gcc
+HEADER += $(INCLUDES)*.h
 
-INCLUDES = ./
-
-HEADER += $(INCLUDES)$(NAME).h
-
-SRCS += $(NAME).c
-SRCS += $(NAME)_utils.c
-
-OBJ_DIR = ../objs/
+SRCS += main.c
+SRCS += process_threads.c
+SRCS += process_threads_utils.c
+SRCS += general_utils.c
+SRCS += state_machine.c
+SRCS += state_machine_action_handlers.c
+SRCS += state_machine_utils.c
+SRCS += monitor.c
+SRCS += status_printer.c
+SRCS += status_printer_utils.c
+SRCS += arguments_process.c
+SRCS += timer.c
+SRCS += aliveness.c
+SRCS += exit_routine.c
 
 vpath %.c ./
+vpath %.c ./srcs
+vpath %.c ./srcs/monitor
+vpath %.c ./srcs/state_machine
+vpath %.c ./srcs/thread_processor
+vpath %.c ./srcs/utils
 
 OBJS = $(patsubst %.c, $(OBJ_DIR)%.o, $(SRCS))
 
