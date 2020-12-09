@@ -36,27 +36,29 @@ ifeq ($(opti), 1)
 endif
 
 ifeq ($(debug_mode), 1)
-	DEBUG_MODE = 1
-else
-	DEBUG_MODE = 0
+	CFLAGS += -D DEBUG_MODE=1
 endif
 
 HEADER += $(INCLUDES)*.h
 
 SRCS += main.c
 SRCS += process_threads.c
+SRCS += process_threads_utils.c
 SRCS += general_utils.c
 SRCS += state_machine.c
+SRCS += state_machine_utils.c
 SRCS += monitor.c
 SRCS += status_printer.c
 SRCS += arguments_process.c
 SRCS += timer.c
 SRCS += aliveness.c
+SRCS += exit_routine.c
 
 vpath %.c ./
 vpath %.c ./srcs
 vpath %.c ./srcs/monitor
 vpath %.c ./srcs/state_machine
+vpath %.c ./srcs/thread_processor
 vpath %.c ./srcs/utils
 
 OBJS = $(patsubst %.c, $(OBJ_DIR)%.o, $(SRCS))

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arguments_process.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/09 12:09:05 by bvalette          #+#    #+#             */
+/*   Updated: 2020/12/09 14:19:27 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_one.h"
 
 static const char	*get_skipped_input(const char *str)
@@ -22,12 +34,7 @@ static int			ft_atoi(const char *str)
 	return (str[0] == '-' ? -output : output);
 }
 
-int			convert_from_usec_to_msec(int nb)
-{
-	return (nb / 1000);
-}
-
-void		convert_from_msec_to_usec(int *nb)
+static void		convert_from_msec_to_usec(int *nb)
 {
 	*nb *= 1000;
 }

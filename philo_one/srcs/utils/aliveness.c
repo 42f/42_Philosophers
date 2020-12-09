@@ -1,16 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   aliveness.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
+/*   Updated: 2020/12/09 12:09:15 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_one.h"
 
 static bool	is_alive(t_data *data, const int philo_id)
 {
 	unsigned long	t_delta;
-	// unsigned long	t_curr;
-	// unsigned long	t_last_m;
 
 	t_delta = get_current_time() - data->last_meal[philo_id];
-	// t_curr = get_current_time();
-	// t_last_m = data->last_meal[philo_id];
-	// t_delta = t_curr - t_last_m;
-	// printf("[%ld] - [%ld] = Delta = %ld\n",t_curr, t_last_m,t_delta);			// TODO: remove FOBIDDEN
 	return(t_delta <= (unsigned long)data->param[T_TO_DIE]);
 }
 
