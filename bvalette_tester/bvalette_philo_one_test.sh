@@ -50,6 +50,13 @@ print_victim_last_meal (){
         echo "[ nop !] more than one died"
         exit 42
  fi
+ err_log=$(cat /tmp/err | wc -l)
+ if [ $(( err_log )) -ne "0" ]; then
+        echo "[ nop !] stderr used:"
+        echo "erro log:"
+        cat /tmp/err
+        exit 42
+ fi
 }
 
 main (){
@@ -63,8 +70,6 @@ main (){
  echo "Death report:"
  var="died" ; cat /tmp/a | grep $var;
  print_victim_last_meal $2
- echo "erro log:"
- cat /tmp/err
 }
 
 echo "Parameters are: $1 $2 $3 $4"
