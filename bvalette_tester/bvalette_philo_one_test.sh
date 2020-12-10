@@ -1,12 +1,12 @@
 print_victim_last_meal (){
  time_to_die=$1
  nb_of_victim=$(cat /tmp/a | grep "died" | wc -l)
- victim=$(cat /tmp/a | grep "died" | sed 's/ /\n/g'| tail -n2 | head -n1)
+ victim=$(cat /tmp/a | grep "died" | eval "$SED_CMD" | tail -n2 | head -n1)
  echo "Last meal was :"
  cat /tmp/a | grep " $victim is eating" | tail -n1
- time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | sed 's/ /\n/g' | head -n1)
+ time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | eval "$SED_CMD" | head -n1)
  echo "Timestamp of the last meal = $time_of_meal"
- time_of_death=$(cat /tmp/a | grep "died" | tail -n1 | sed 's/ /\n/g' | head -n1)
+ time_of_death=$(cat /tmp/a | grep "died" | tail -n1 | eval "$SED_CMD" | head -n1)
  echo "Timestamp of the death     = $time_of_death"
  echo "Time to die parameter      = $time_to_die"
  if [ $(($time_of_meal)) -eq "0" ]; then
@@ -32,6 +32,13 @@ print_victim_last_meal (){
 }
 
 main (){
+ if [[ "$OSTYPE" == "darwin"* ]]; then
+       export SED_CMD="sed -e $'s/ /\\\n/g'"
+       echo "Macos .."
+ else
+       export SED_CMD="sed 's/ /\n/g'"
+       echo "Linux .."
+ fi
  ./philo_one $1 $2 $3 $4 > /tmp/a 2>/tmp/err ;
  var="fork" ; echo -n $var"      = " ;  cat /tmp/a | grep $var | wc -l ;
  var="eating" ; echo -n $var"    = " ;  cat /tmp/a | grep $var | wc -l ;
