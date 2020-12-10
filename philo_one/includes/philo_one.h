@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 17:01:41 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/10 09:41:25 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define ERR_PTHREAD	"\nPhilo: error: pthread function failed\n"
 
 # define NB_ERR_CODE	3
+
 typedef enum	e_code_err
 {
 	CODE_ERR_MALLOC,
@@ -90,28 +91,31 @@ typedef enum	e_state
 
 typedef struct	s_data
 {
+	bool			death_report_flag;
+	char			padding_00[7];
 	int				nb_available_forks;
+	int				padding_01;
+	bool			*done_report_flag;
+	int				*nb_meals_eaten;
+	unsigned long	*last_meal;
 	pthread_mutex_t	mutex_forks;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
-	bool			death_report_flag;
-	bool			*done_report_flag;
+	pthread_mutex_t	mutex_last_meal;
 	int				param[NB_OF_PARAM];
-	unsigned long	*last_meal;
-	int				*nb_meals_eaten;
 }				t_data;
 
 /*
 **	MONITOR
 */
 
-void			*philo_monitor(void *i_arg);
+void			*philo_monitor(void *i_arg) __attribute__((noreturn));
 
 /*
 **	STATE_MACHINE
 */
 
-void			*philo_state_machine(void *i_arg);
+void			*philo_state_machine(void *i_arg) __attribute__((noreturn));
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 												const t_state current_state);
@@ -122,11 +126,15 @@ bool			check_loop_conditions(const t_state state, const t_data *data);
 
 void			acquire_forks(t_data *data);
 void			drop_forks(t_data *data);
+void			update_last_meal(t_data *data, int philo_id);
+
 t_state			wake_up_action_handler(t_data *data, const int philo_id);
 t_state			take_forks_action_handler(t_data *data, const int philo_id);
 t_state			drop_fork_action_handler(t_data *data, const int philo_id);
 t_state			eat_action_handler(t_data *data, const int philo_id);
+
 void			done_eating_action_handler(t_data *data, const int philo_id);
+
 /*
 **	TIMER
 */
@@ -147,7 +155,7 @@ int				ft_putnbr(unsigned long n);
 
 void			destroy_mutex(t_data *data);
 void			safe_free(void *mem);
-void			exit_routine(t_code_err err);
+void			exit_routine(t_code_err err) __attribute__((noreturn));
 /*
 **	ARGUMENTS
 */

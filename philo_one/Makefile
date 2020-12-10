@@ -6,12 +6,21 @@ OBJ_DIR = ../objs/
 CFLAGS += -pthread
 CFLAGS += -Wall
 CFLAGS += -Wextra
+# CFLAGS += -fPIC
 
-ifneq ($(no_error), 1)
+ifeq ($(help), 1)
+	CFLAGS += -Wconversion
+else ifeq ($(help), 2)
+	CFLAGS += -Wsuggest-attribute=pure
+else ifeq ($(help), 3)
+	CFLAGS += -Wsuggest-attribute=const
+else ifeq ($(help), 4)
+	CFLAGS += -Wsuggest-attribute=noreturn
+else ifeq ($(help), 5)
+	CFLAGS += -fsanitize-undefined-trap-on-error
+else ifneq ($(no_error), 1)
 	CFLAGS += -Werror
 endif
-
-# CFLAGS += -fPIC
 
 ifeq ($(debug), 1)
 	CFLAGS += -g3

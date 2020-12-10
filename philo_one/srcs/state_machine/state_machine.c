@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 17:09:25 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/10 09:52:01 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void			*philo_state_machine(void *i_arg)
 	state = startup_state;
 	while (check_loop_conditions(state, data) == true)
 	{
+		if (check_aliveness(data, philo_id, state) == dead_state)
+			put_death_status(data, philo_id);
 		if (state == has_forks_state)
 			state = eat_action_handler(data, philo_id);
 		else if (state == thinking_state || state == startup_state)
@@ -39,8 +41,6 @@ void			*philo_state_machine(void *i_arg)
 			state = drop_fork_action_handler(data, philo_id);
 		else if (state == sleeping_state)
 			state = wake_up_action_handler(data, philo_id);
-		if (check_aliveness(data, philo_id, state) == dead_state)
-			put_death_status(data, philo_id);
 	}
 	if (state == done_eating_state)
 		done_eating_action_handler(data, philo_id);

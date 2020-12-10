@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 17:02:20 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/10 09:41:47 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_state		drop_fork_action_handler(t_data *data, const int philo_id)
 
 t_state		eat_action_handler(t_data *data, const int philo_id)
 {
-	data->last_meal[philo_id] = get_current_time();
+	update_last_meal(data, philo_id);
 	put_regular_status(data, philo_id, MESSAGE_IS_EATING);
 	data->nb_meals_eaten[philo_id]++;
 	usleep(data->param[T_TO_EAT]);
