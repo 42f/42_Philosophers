@@ -1,11 +1,11 @@
 print_victim_last_meal (){
  time_to_die=$1
  nb_of_victim=$(cat /tmp/a | grep "died" | wc -l)
- victim=$(cat /tmp/a | grep "died" | sed 's/ /\n/g'| tail --lines=2 | head --lines=1)
+ victim=$(cat /tmp/a | grep "died" | sed 's/ /\n/g'| tail -n2 | head -n1)
  echo "Last meal was :"
- cat /tmp/a | grep " $victim is eating" | tail --line=1
- time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail --line=1 | sed 's/ /\n/g' | head --lines=1)
- time_of_death=$(cat /tmp/a | grep "died" | tail --line=1 | sed 's/ /\n/g' | head --lines=1)
+ cat /tmp/a | grep " $victim is eating" | tail -n1
+ time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | sed 's/ /\n/g' | head -n1)
+ time_of_death=$(cat /tmp/a | grep "died" | tail -n1 | sed 's/ /\n/g' | head -n1)
  if [ $(($time_of_meal)) -eq "0" ]; then
         echo "Death reported afer $(( $time_of_death - $time_to_die)) ms."
         echo "Nb of died philosopher: [$nb_of_victim]"
