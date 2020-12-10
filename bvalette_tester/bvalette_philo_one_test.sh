@@ -5,7 +5,10 @@ print_victim_last_meal (){
  echo "Last meal was :"
  cat /tmp/a | grep " $victim is eating" | tail -n1
  time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | sed 's/ /\n/g' | head -n1)
+ echo "Timestamp of the last meal = $time_of_meal"
  time_of_death=$(cat /tmp/a | grep "died" | tail -n1 | sed 's/ /\n/g' | head -n1)
+ echo "Timestamp of the death     = $time_of_death"
+ echo "Time to die parameter      = $time_to_die"
  if [ $(($time_of_meal)) -eq "0" ]; then
         echo "Death reported afer $(( $time_of_death - $time_to_die)) ms."
         echo "Nb of died philosopher: [$nb_of_victim]"
@@ -35,11 +38,12 @@ main (){
  var="sleeping" ; echo -n $var"  = " ;  cat /tmp/a | grep $var | wc -l ;
  var="thinking" ; echo -n $var"  = " ;  cat /tmp/a | grep $var | wc -l ;
  var="died" ; echo -n $var"      = " ;  cat /tmp/a | grep $var | wc -l ;
- echo "\nDeath report:"
+ echo
+ echo "Death report:"
  var="died" ; cat /tmp/a | grep $var;
  print_victim_last_meal $2
 }
 
-echo "Parameters are: 1 $2 $3 $4"
+echo "Parameters are: $1 $2 $3 $4"
 true > /tmp/a
 main $1 $2 $3 $4
