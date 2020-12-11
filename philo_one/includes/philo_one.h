@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/11 07:56:53 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 14:46:29 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef enum	e_code_err
 
 # ifndef DEBUG_MODE
 
+#  define MESSAGE_HAS_TAKEN_LEFT_FORK	"has taken a LEFT fork\n"
+#  define MESSAGE_HAS_TAKEN_RIGHT_FORK	"has taken a RIGHT fork\n"
 #  define MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
 #  define MESSAGE_IS_EATING			"is eating\n"
 #  define MESSAGE_IS_SLEEPING		"is sleeping\n"
@@ -86,10 +88,10 @@ enum	e_times_arguments
 typedef enum	e_state
 {
 	sleeping_state,
-	has_forks_state,
-	eating_state,
+	finished_meal_state,
 	thinking_state,
 	dead_state,
+	eating_state,
 	done_eating_state,
 	startup_state
 }				t_state;
@@ -97,10 +99,13 @@ typedef enum	e_state
 typedef struct	s_data
 {
 	bool			first_death_report;
-	char			padding_00[7];
+	bool			first_done_report;
+	char			padding_00[6];
 	unsigned long	current_clock;
 	bool			*done_report_flag;
-	bool			*individual_fork;
+	bool			*philo_fork;
+	t_state			*philo_state;
+	unsigned long	*philo_state_time_stamp;
 	int				*nb_meals_eaten;
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
@@ -133,10 +138,9 @@ void			acquire_forks(t_data *data, int philo_id);
 void			drop_forks(t_data *data, int philo_id);
 void			update_last_meal(t_data *data, int philo_id);
 
-t_state			wake_up_action_handler(t_data *data, const int philo_id);
-t_state			take_forks_action_handler(t_data *data, const int philo_id);
-t_state			drop_fork_action_handler(t_data *data, const int philo_id);
-t_state			eat_action_handler(t_data *data, const int philo_id);
+t_state			think_action_handler(t_data *data, const int philo_id);
+t_state			take_forks_and_eat_action_handler(t_data *data, const int philo_id);
+t_state			sleep_action_handler(t_data *data, const int philo_id);
 
 int				get_right_philo_id(t_data *data, int philo_id);
 
@@ -147,7 +151,7 @@ void			done_eating_action_handler(t_data *data, const int philo_id);
 */
 
 unsigned long	get_current_time(void);
-void			*clock_routine(__attribute__((unused))void *arg);
+void			*clock_routine(void *data_arg);
 
 /*
 **	UTILS

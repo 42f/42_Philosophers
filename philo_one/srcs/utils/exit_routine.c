@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 16:56:09 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 14:45:31 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	exit_routine(t_code_err err)
 		safe_free(data->last_meal);
 		safe_free(data->nb_meals_eaten);
 		safe_free(data->done_report_flag);
-		safe_free(data->individual_fork);
+		safe_free(data->philo_fork);
 		safe_free(data->mutex_fork);
 		destroy_mutex(data);
 	}

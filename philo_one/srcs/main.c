@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 19:38:22 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 14:46:19 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,20 @@ static void	init_philo_info_storage(t_data *data, int nb_philo)
 	data->last_meal = malloc(nb_philo * sizeof(unsigned long));
 	data->nb_meals_eaten = malloc(nb_philo * sizeof(int));
 	data->done_report_flag = malloc(nb_philo * sizeof(bool));
-	data->individual_fork = malloc(nb_philo * sizeof(bool));
+	data->philo_fork = malloc(nb_philo * sizeof(bool));
+	data->philo_state = malloc(nb_philo * sizeof(t_state));
+	data->philo_state_time_stamp = malloc(nb_philo * sizeof(unsigned long));
 	data->mutex_fork = malloc(nb_philo * sizeof(pthread_mutex_t));
 	if (data->last_meal == NULL|| data->nb_meals_eaten == NULL
-		|| data->done_report_flag == NULL || data->individual_fork == NULL
-		|| data->mutex_fork == NULL)
+		|| data->done_report_flag == NULL || data->philo_fork == NULL
+		|| data->philo_state == NULL|| data->mutex_fork == NULL)
 		exit_routine(CODE_ERR_MALLOC);
 	memset(data->last_meal, 0, nb_philo * sizeof(unsigned long));
 	memset(data->nb_meals_eaten, 0, nb_philo * sizeof(int));
 	memset(data->done_report_flag, false, nb_philo * sizeof(bool));
-	memset(data->individual_fork, FORK_AVAILABLE, nb_philo * sizeof(bool));
+	memset(data->philo_fork, FORK_AVAILABLE, nb_philo * sizeof(bool));
+	memset(data->philo_state, startup_state, nb_philo * sizeof(t_state));
+	memset(data->philo_state_time_stamp, 0, nb_philo * sizeof(unsigned long));
 	memset(data->mutex_fork, 0, nb_philo * sizeof(pthread_mutex_t));
 }
 
@@ -86,7 +90,8 @@ int			main(const int ac, const char **av)
 		safe_free(data.last_meal);
 		safe_free(data.nb_meals_eaten);
 		safe_free(data.done_report_flag);
-		safe_free(data.individual_fork);
+		safe_free(data.philo_fork);
+		safe_free(data.philo_state);
 		safe_free(data.mutex_fork);
 	}
 	else

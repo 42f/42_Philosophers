@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/11 07:55:41 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 14:53:35 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,27 @@ int			get_right_philo_id(t_data *data, int philo_id)
 
 static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 {
-	if (data->individual_fork[target_id] == FORK_AVAILABLE)
+	bool		grabed_flag;
+
+	grabed_flag = false;
+	if (data->philo_fork[target_id] == FORK_AVAILABLE)
 	{
 		pthread_mutex_lock(&data->mutex_fork[target_id]);
-		if (data->individual_fork[target_id] == FORK_AVAILABLE)
+		if (data->philo_fork[target_id] == FORK_AVAILABLE)
 		{
-			data->individual_fork[target_id] = FORK_USED;
+			data->philo_fork[target_id] = FORK_USED;
 			*hand = HAND_HAS_FORK;
-			put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_FORK);
+			grabed_flag = true;
 		}
 		pthread_mutex_unlock(&data->mutex_fork[target_id]);
+	}
+	if (grabed_flag == true)
+	{
+		data->philo_state_time_stamp[philo_id] = get_current_time();
+		if (philo_id == target_id)
+			put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_LEFT_FORK);
+		else
+			put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_RIGHT_FORK);
 	}
 }
 
@@ -44,10 +55,11 @@ void	acquire_forks(t_data * data, int philo_id)
 	left_hand = HAND_EMPTY;
 	right_hand = HAND_EMPTY;
 	right_philo_id = get_right_philo_id(data, philo_id);
- 	while (data->first_death_report == false
+	while (data->first_death_report == false
 	 	&& (left_hand == HAND_EMPTY	|| right_hand == HAND_EMPTY))
 	{
-		try_grab_fork(data, philo_id, philo_id, &left_hand);
 		try_grab_fork(data, right_philo_id, philo_id, &right_hand);
+		try_grab_fork(data, philo_id, philo_id, &left_hand);
 	}
+	update_last_meal(data, philo_id);
 }

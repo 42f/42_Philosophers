@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/11 07:57:56 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 14:38:23 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ void				process_philo(t_data *data)
 
 	init_mutex(data);
 	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO]);
-	if (pthread_create(&th_clock, NULL, clock_routine, NULL) != 0)
-		exit_routine(CODE_ERR_PTHREAD);
-	thread_creation_loop(data, th_monitor, philo_monitor, philo_id);
 	thread_creation_loop(data, th_philo, philo_state_machine, philo_id);
+	thread_creation_loop(data, th_monitor, philo_monitor, philo_id);
+	if (pthread_create(&th_clock, NULL, clock_routine, data) != 0)
+		exit_routine(CODE_ERR_PTHREAD);
 	thread_join_loop(data, th_monitor);
 	thread_join_loop(data, th_philo);
 	pthread_join(th_clock, NULL);

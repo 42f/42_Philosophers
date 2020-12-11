@@ -1,6 +1,7 @@
 #! /bin/bash
 
 print_victim_last_meal (){
+ time_of_meal=0
  time_to_die=$1
  nb_of_victim=$(cat /tmp/a | grep "died" | wc -l)
  if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -41,10 +42,12 @@ print_victim_last_meal (){
  if [ $(( $t_delta )) -gt "10" ]; then
         echo "[ nop !] timeframe for death declaration too long: $(( $t_delta ))"
         cat /tmp/a | tail -n20
+        cat /tmp/err
         exit 42
  elif [ $(( $t_delta )) -lt "0" ]; then
         echo "[ nop !] timeframe for death declaration illogic: $(( $t_delta ))"
         cat /tmp/a | tail -n20
+        cat /tmp/err
         exit 42
  else
         echo "[OK]"
@@ -53,16 +56,17 @@ print_victim_last_meal (){
  if [ $(( $nb_of_victim )) -ne "1" ]; then
         echo "[ nop !] more than one died"
         cat /tmp/a | tail -n20
-        exit 42
- fi
- err_log=$(cat /tmp/err | wc -l)
- if [ $(( err_log )) -ne "0" ]; then
-        echo "[ nop !] stderr used:"
-        cat /tmp/a | tail -n20
-        echo "erro log:"
         cat /tmp/err
         exit 42
  fi
+ err_log=$(cat /tmp/err | wc -l)
+#  if [ $(( err_log )) -ne "0" ]; then
+#         echo "[ nop !] stderr used:"
+#         cat /tmp/a | tail -n20
+#         echo "erro log:"
+#         cat /tmp/err
+#         exit 42
+#  fi
 }
 
 main (){
