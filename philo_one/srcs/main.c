@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 19:09:23 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/10 19:38:22 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,21 @@ static int	check_arguments(const int ac, const char **av)
 
 static void	init_philo_info_storage(t_data *data, int nb_philo)
 {
-	nb_philo += 1;
+	nb_philo += 2;
 	data->last_meal = malloc(nb_philo * sizeof(unsigned long));
-	data->nb_meals_eaten = malloc(nb_philo * sizeof(unsigned int));
+	data->nb_meals_eaten = malloc(nb_philo * sizeof(int));
 	data->done_report_flag = malloc(nb_philo * sizeof(bool));
-	if (data->last_meal == NULL
-		|| data->nb_meals_eaten == NULL || data->done_report_flag == NULL)
+	data->individual_fork = malloc(nb_philo * sizeof(bool));
+	data->mutex_fork = malloc(nb_philo * sizeof(pthread_mutex_t));
+	if (data->last_meal == NULL|| data->nb_meals_eaten == NULL
+		|| data->done_report_flag == NULL || data->individual_fork == NULL
+		|| data->mutex_fork == NULL)
 		exit_routine(CODE_ERR_MALLOC);
 	memset(data->last_meal, 0, nb_philo * sizeof(unsigned long));
-	memset(data->nb_meals_eaten, 0, nb_philo * sizeof(unsigned int));
+	memset(data->nb_meals_eaten, 0, nb_philo * sizeof(int));
 	memset(data->done_report_flag, false, nb_philo * sizeof(bool));
+	memset(data->individual_fork, FORK_AVAILABLE, nb_philo * sizeof(bool));
+	memset(data->mutex_fork, 0, nb_philo * sizeof(pthread_mutex_t));
 }
 
 int			main(const int ac, const char **av)
@@ -81,6 +86,8 @@ int			main(const int ac, const char **av)
 		safe_free(data.last_meal);
 		safe_free(data.nb_meals_eaten);
 		safe_free(data.done_report_flag);
+		safe_free(data.individual_fork);
+		safe_free(data.mutex_fork);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 09:39:24 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 07:25:29 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ t_state		check_aliveness(t_data *data, int philo_id,
 	if (is_alive(data, philo_id) == false)
 	{
 		pthread_mutex_lock(&data->mutex_death_report);
-		if (data->death_report_flag == false)
+		if (data->first_death_report == false)
 		{
-			data->death_report_flag = true;
+			data->first_death_report = true;
 			pthread_mutex_unlock(&data->mutex_death_report);
 			ret_state = dead_state;
 		}

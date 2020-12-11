@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 09:37:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 08:08:37 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool		loop_condition(t_data *data, int philo_id, t_state state)
 {
-	return (state != dead_state && data->death_report_flag == false
+	return (state != dead_state && data->first_death_report == false
 	&& data->done_report_flag[philo_id] == false);
 }
 
@@ -29,8 +29,8 @@ void			*philo_monitor(void *i_arg)
 	state = startup_state;
 	while (loop_condition(data, philo_id, state) == true)
 	{
-		usleep(1);
 		state = check_aliveness(data, philo_id, state);
+		// usleep(10);
 	}
 	if (data->done_report_flag[philo_id] == false && state == dead_state)
 		put_death_status(data, philo_id);

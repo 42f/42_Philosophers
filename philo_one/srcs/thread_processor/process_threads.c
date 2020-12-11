@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 16:55:36 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 07:57:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void			failed_thread_creation(int i, pthread_t *thread)
 	exit_routine(CODE_ERR_PTHREAD);
 }
 
-static int			thread_creation_loop(const t_data *data,
+static void			thread_creation_loop(const t_data *data,
 			pthread_t *thread, void *(*start_routine) (void *), int *philo_id)
 {
 	int			i;
@@ -34,11 +34,10 @@ static int			thread_creation_loop(const t_data *data,
 		if (pthread_create(&thread[i], NULL, start_routine, &philo_id[i]) != 0)
 		{
 			failed_thread_creation(i, thread);
-			return (FAILURE);
+			return ;
 		}
 		i++;
 	}
-	return (SUCCESS);
 }
 
 static void			thread_join_loop(const t_data *data, pthread_t *thread)
@@ -58,16 +57,20 @@ void				process_philo(t_data *data)
 {
 	pthread_t	*th_philo;
 	pthread_t	*th_monitor;
+	pthread_t	th_clock;
 	int			*philo_id;
 
 	init_mutex(data);
 	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO]);
-	thread_creation_loop(data, th_philo, philo_state_machine, philo_id);
+	if (pthread_create(&th_clock, NULL, clock_routine, NULL) != 0)
+		exit_routine(CODE_ERR_PTHREAD);
 	thread_creation_loop(data, th_monitor, philo_monitor, philo_id);
+	thread_creation_loop(data, th_philo, philo_state_machine, philo_id);
 	thread_join_loop(data, th_monitor);
 	thread_join_loop(data, th_philo);
+	pthread_join(th_clock, NULL);
 	destroy_mutex(data);
-	free(th_philo);
-	free(th_monitor);
-	free(philo_id);
+	safe_free(th_philo);
+	safe_free(th_monitor);
+	safe_free(philo_id);
 }

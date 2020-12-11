@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 09:41:25 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 07:56:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@
 
 # define GET				NULL
 # define UNSET				-1
+
+# define FORK_AVAILABLE		true
+# define FORK_USED			false
+# define HAND_HAS_FORK		true
+# define HAND_EMPTY			false
 
 # define SUCCESS			1
 # define FAILURE			-1
@@ -91,14 +96,14 @@ typedef enum	e_state
 
 typedef struct	s_data
 {
-	bool			death_report_flag;
+	bool			first_death_report;
 	char			padding_00[7];
-	int				nb_available_forks;
-	int				padding_01;
+	unsigned long	current_clock;
 	bool			*done_report_flag;
+	bool			*individual_fork;
 	int				*nb_meals_eaten;
 	unsigned long	*last_meal;
-	pthread_mutex_t	mutex_forks;
+	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
 	pthread_mutex_t	mutex_last_meal;
@@ -124,14 +129,16 @@ void			put_regular_status(t_data *data, const int philo_id,
 														const char *message);
 bool			check_loop_conditions(const t_state state, const t_data *data);
 
-void			acquire_forks(t_data *data);
-void			drop_forks(t_data *data);
+void			acquire_forks(t_data *data, int philo_id);
+void			drop_forks(t_data *data, int philo_id);
 void			update_last_meal(t_data *data, int philo_id);
 
 t_state			wake_up_action_handler(t_data *data, const int philo_id);
 t_state			take_forks_action_handler(t_data *data, const int philo_id);
 t_state			drop_fork_action_handler(t_data *data, const int philo_id);
 t_state			eat_action_handler(t_data *data, const int philo_id);
+
+int				get_right_philo_id(t_data *data, int philo_id);
 
 void			done_eating_action_handler(t_data *data, const int philo_id);
 
@@ -140,6 +147,7 @@ void			done_eating_action_handler(t_data *data, const int philo_id);
 */
 
 unsigned long	get_current_time(void);
+void			*clock_routine(__attribute__((unused))void *arg);
 
 /*
 **	UTILS
@@ -156,6 +164,7 @@ int				ft_putnbr(unsigned long n);
 void			destroy_mutex(t_data *data);
 void			safe_free(void *mem);
 void			exit_routine(t_code_err err) __attribute__((noreturn));
+
 /*
 **	ARGUMENTS
 */

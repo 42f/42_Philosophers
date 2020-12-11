@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 17:12:56 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/11 07:25:40 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void		put_regular_status(t_data *data, const int philo_id,
 
 	time = get_current_time();
 	pthread_mutex_lock(&data->mutex_stdout);
-	if (data->death_report_flag == false)
+	if (data->first_death_report == false)
 		status_printer(data, philo_id, time, message);
 	pthread_mutex_unlock(&data->mutex_stdout);
 }

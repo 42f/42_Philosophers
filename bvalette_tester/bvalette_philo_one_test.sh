@@ -29,18 +29,22 @@ print_victim_last_meal (){
  echo "Time to die parameter      = $time_to_die"
 
  if [ $(($time_of_meal)) -eq "0" ]; then
-        echo "Death reported afer $(( $time_of_death - $time_to_die)) ms."
+        echo "Death reported afer $(( $time_of_death - $time_to_die )) ms."
+        t_delta=$(( $time_of_death - $time_to_die ))
         echo "Nb of died philosopher: [$nb_of_victim]"
  else
-        echo "Death reported afer $(( $time_of_death - $time_of_meal - $time_to_die)) ms."
+        echo "Death reported afer $(( $time_of_death - $time_of_meal - $time_to_die )) ms."
+        t_delta=$(( $time_of_death - $time_of_meal - $time_to_die ))
         echo "Nb of died philosopher: [$nb_of_victim]"
  fi
 
- if [ $(( $time_of_death - $time_of_meal - $time_to_die)) -gt "10" ]; then
-        echo "[ nop !]"
+ if [ $(( $t_delta )) -gt "10" ]; then
+        echo "[ nop !] timeframe for death declaration too long: $(( $t_delta ))"
+        cat /tmp/a | tail -n20
         exit 42
- elif [ $(( $time_of_death - $time_of_meal - $time_to_die)) -lt "0" ]; then
-        echo "[ nop !]"
+ elif [ $(( $t_delta )) -lt "0" ]; then
+        echo "[ nop !] timeframe for death declaration illogic: $(( $t_delta ))"
+        cat /tmp/a | tail -n20
         exit 42
  else
         echo "[OK]"
@@ -48,11 +52,13 @@ print_victim_last_meal (){
 
  if [ $(( $nb_of_victim )) -ne "1" ]; then
         echo "[ nop !] more than one died"
+        cat /tmp/a | tail -n20
         exit 42
  fi
  err_log=$(cat /tmp/err | wc -l)
  if [ $(( err_log )) -ne "0" ]; then
         echo "[ nop !] stderr used:"
+        cat /tmp/a | tail -n20
         echo "erro log:"
         cat /tmp/err
         exit 42
