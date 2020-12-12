@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/11 14:53:35 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 13:05:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 	bool		grabed_flag;
 
 	grabed_flag = false;
+	(void)philo_id;
 	if (data->philo_fork[target_id] == FORK_AVAILABLE)
 	{
 		pthread_mutex_lock(&data->mutex_fork[target_id]);
@@ -38,11 +39,15 @@ static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 	}
 	if (grabed_flag == true)
 	{
-		data->philo_state_time_stamp[philo_id] = get_current_time();
-		if (philo_id == target_id)
-			put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_LEFT_FORK);
-		else
-			put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_RIGHT_FORK);
+		put_regular_status(philo_id, get_current_time(), MESSAGE_HAS_TAKEN_FORK);
+		// data->philo_state_time_stamp[philo_id] = get_current_time();
+		// data->philo_state[philo_id] = has_fork_state;
+		// data->philo_state_time_stamp[philo_id] = get_current_time();
+		// put_regular_status(philo_id, data->philo_state_time_stamp[philo_id], MESSAGE_HAS_TAKEN_FORK);
+		// if (philo_id == target_id)
+		// 	put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_LEFT_FORK);
+		// else
+		// 	put_regular_status(data, philo_id, MESSAGE_HAS_TAKEN_RIGHT_FORK);
 	}
 }
 

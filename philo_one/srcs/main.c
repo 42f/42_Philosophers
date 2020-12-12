@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/11 14:46:19 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 11:24:26 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	check_arguments(const int ac, const char **av)
 
 static void	init_philo_info_storage(t_data *data, int nb_philo)
 {
-	nb_philo += 2;
+	nb_philo += 1;
 	data->last_meal = malloc(nb_philo * sizeof(unsigned long));
 	data->nb_meals_eaten = malloc(nb_philo * sizeof(int));
 	data->done_report_flag = malloc(nb_philo * sizeof(bool));
@@ -92,7 +92,9 @@ int			main(const int ac, const char **av)
 		safe_free(data.done_report_flag);
 		safe_free(data.philo_fork);
 		safe_free(data.philo_state);
+		safe_free(data.philo_state_time_stamp);
 		safe_free(data.mutex_fork);
+		get_data(REMOVE);
 	}
 	else
 	{

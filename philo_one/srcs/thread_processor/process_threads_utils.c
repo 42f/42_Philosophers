@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 19:33:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 11:26:07 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void			init_mutex(t_data *data)
 {
 	int	i;
 
+	if (pthread_mutex_init(&data->mutex_active_printer_count, NULL) != 0)
+		exit_routine(CODE_ERR_MUTEX);
 	if (pthread_mutex_init(&data->mutex_stdout, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
 	if (pthread_mutex_init(&data->mutex_death_report, NULL) != 0)
@@ -31,7 +33,7 @@ void			init_mutex(t_data *data)
 	}
 }
 
-void			init_arrays(pthread_t **th_philo,
+void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id, size_t nb_philo)
 {
 	nb_philo += 1;
@@ -49,6 +51,7 @@ void			destroy_mutex(t_data *data)
 {
 	int	i;
 
+	pthread_mutex_destroy(&data->mutex_active_printer_count);
 	pthread_mutex_destroy(&data->mutex_stdout);
 	pthread_mutex_destroy(&data->mutex_death_report);
 	pthread_mutex_destroy(&data->mutex_last_meal);

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/11 14:46:29 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 12:18:30 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <string.h>
 
 # define GET				NULL
+# define REMOVE				(void *)0xffffffffffffffff
 # define UNSET				-1
 
 # define FORK_AVAILABLE		true
@@ -53,7 +54,7 @@ typedef enum	e_code_err
 	CODE_ERR_PTHREAD
 }				t_code_err;
 
-# ifndef DEBUG_MODE
+// # ifndef DEBUG_MODE
 
 #  define MESSAGE_HAS_TAKEN_LEFT_FORK	"has taken a LEFT fork\n"
 #  define MESSAGE_HAS_TAKEN_RIGHT_FORK	"has taken a RIGHT fork\n"
@@ -63,15 +64,15 @@ typedef enum	e_code_err
 #  define MESSAGE_IS_THINKING		"is thinking\n"
 #  define MESSAGE_IS_DEAD			"died\n"
 
-# else
+// # else
 
-#  define MESSAGE_HAS_TAKEN_FORK	"\033[0;31mhas taken a fork\033[0m\n"
-#  define MESSAGE_IS_EATING			"\033[0;32mis eating\033[0m\n"
-#  define MESSAGE_IS_SLEEPING		"\033[0;34mis sleeping\033[0m\n"
-#  define MESSAGE_IS_THINKING		"\033[0;33mis thinking\033[0m\n"
-#  define MESSAGE_IS_DEAD			"\033[0;35mdied\033[0m\n"
+// #  define MESSAGE_HAS_TAKEN_FORK	"\033[0;31mhas taken a fork\033[0m\n"
+// #  define MESSAGE_IS_EATING			"\033[0;32mis eating\033[0m\n"
+// #  define MESSAGE_IS_SLEEPING		"\033[0;34mis sleeping\033[0m\n"
+// #  define MESSAGE_IS_THINKING		"\033[0;33mis thinking\033[0m\n"
+// #  define MESSAGE_IS_DEAD			"\033[0;35mdied\033[0m\n"
 
-# endif
+// # endif
 
 # define NB_OF_FORKS_NEEDED_TO_EAT		2
 # define NB_OF_PARAM					5
@@ -87,13 +88,14 @@ enum	e_times_arguments
 
 typedef enum	e_state
 {
-	sleeping_state,
+	startup_state,
+	has_fork_state,
+	eating_state,
 	finished_meal_state,
+	reached_meals_nb_state,
+	sleeping_state,
 	thinking_state,
 	dead_state,
-	eating_state,
-	done_eating_state,
-	startup_state
 }				t_state;
 
 typedef struct	s_data
@@ -101,6 +103,7 @@ typedef struct	s_data
 	bool			first_death_report;
 	bool			first_done_report;
 	char			padding_00[6];
+	int				active_printer_count;
 	unsigned long	current_clock;
 	bool			*done_report_flag;
 	bool			*philo_fork;
@@ -109,11 +112,20 @@ typedef struct	s_data
 	int				*nb_meals_eaten;
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
+	pthread_mutex_t	mutex_active_printer_count;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
 	pthread_mutex_t	mutex_last_meal;
 	int				param[NB_OF_PARAM];
 }				t_data;
+
+typedef struct s_printer_data
+{
+	int				philo_id;
+	unsigned long	time;
+	const char		*message;
+}				t_printer_data;
+
 
 /*
 **	MONITOR
@@ -130,9 +142,8 @@ void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 												const t_state current_state);
 void			put_death_status(t_data *data, const int philo_id);
-void			put_regular_status(t_data *data, const int philo_id,
-														const char *message);
-bool			check_loop_conditions(const t_state state, const t_data *data);
+void			put_regular_status(const int philo_id,
+										const int time, const char *message);
 
 void			acquire_forks(t_data *data, int philo_id);
 void			drop_forks(t_data *data, int philo_id);
@@ -159,7 +170,7 @@ void			*clock_routine(void *data_arg);
 void			init_mutex(t_data *data);
 void			failed_init_arrays(pthread_t *th_philo,
 					pthread_t *th_monitor, int *philo_id);
-void			init_arrays(pthread_t **th_philo,
+void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id, size_t nb_philo);
 t_data			*get_data(t_data *mem);
 void			ft_put_str_fd(int fd, const char *s);
