@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:23:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 17:14:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void			*philo_monitor(void *i_arg)
 	while (loop_condition(data, philo_id, state) == true)
 		state = check_aliveness(data, philo_id, state);
 	if (data->done_report_flag[philo_id] == false && state == dead_state)
-		put_death_status(data, philo_id, get_current_time(), MESSAGE_IS_DEAD);
-		// create_printer(put_regular_status, philo_id,
-		// 							get_current_time(), MESSAGE_IS_DEAD);
+		put_death_status(data, philo_id, data->philo_state_time_stamp[philo_id], MESSAGE_IS_DEAD);
 	pthread_exit(NULL);
 }

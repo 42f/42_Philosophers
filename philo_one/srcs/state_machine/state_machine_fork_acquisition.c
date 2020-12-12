@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:09:20 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 17:11:01 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 
 	grabed_flag = false;
 	if (philo_id % 2 == 0)
-		usleep (data->param[T_TO_DIE] / 2);
+		usleep (data->param[T_TO_DIE] / 4);
 	if (data->philo_fork[target_id] == FORK_AVAILABLE)
 	{
 		pthread_mutex_lock(&data->mutex_fork[target_id]);

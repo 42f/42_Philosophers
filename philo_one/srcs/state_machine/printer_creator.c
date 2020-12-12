@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:00:59 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 15:56:31 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:35:03 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static void		*thread_printer(void *arg)
 	printer_data = (t_printer_data *)arg;
 	printer_data->printer_routine(data, printer_data->philo_id,
 									printer_data->time, printer_data->message);
-	pthread_mutex_lock(&data->mutex_active_printer_count);
+	pthread_mutex_lock(&data->mutex_stderr);
 	data->active_printer_count--;
-	pthread_mutex_unlock(&data->mutex_active_printer_count);
+	pthread_mutex_unlock(&data->mutex_stderr);
 	free(printer_data);
 	pthread_exit(NULL);
 }
@@ -46,9 +46,9 @@ void		create_printer(t_printer printer_routine, int philo_id,
 	if (pthread_create(&th_printer, NULL, thread_printer, printer_data) == 0)
 	{
 		data = get_data(GET);
-		pthread_mutex_lock(&data->mutex_active_printer_count);
+		pthread_mutex_lock(&data->mutex_stderr);
 		data->active_printer_count++;
-		pthread_mutex_unlock(&data->mutex_active_printer_count);
+		pthread_mutex_unlock(&data->mutex_stderr);
 		pthread_detach(th_printer);
 	}
 	else

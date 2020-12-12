@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:13:56 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:55:49 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct	s_data
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	*mutex_last_meal;
-	pthread_mutex_t	mutex_active_printer_count;
+	pthread_mutex_t	mutex_stderr;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
 	int				param[NB_OF_PARAM];
@@ -136,6 +136,7 @@ typedef struct s_printer_data
 */
 
 void			*philo_monitor(void *i_arg) __attribute__((noreturn));
+bool			is_alive(t_data *data, const int philo_id);
 
 /*
 **	STATE_MACHINE

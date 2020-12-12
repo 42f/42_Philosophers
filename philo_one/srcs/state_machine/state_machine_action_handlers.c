@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:09:34 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:48:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ static bool	is_nb_meals_reached(t_data *data, const int philo_id)
 t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 {
 	acquire_forks(data, philo_id);
+	if (data->first_death_report == true)
+	{
+		drop_forks(data, philo_id);
+		return (finished_meal_state);
+	}
 	// create_printer(put_regular_status, philo_id,
 	// 								get_current_time(), MESSAGE_IS_EATING);
 	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_EATING);
