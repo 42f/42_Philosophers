@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 13:39:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:13:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,11 @@ typedef struct	s_data
 	int				param[NB_OF_PARAM];
 }				t_data;
 
+typedef void (*t_printer)(t_data*, const int, unsigned long, const char*);
+
 typedef struct s_printer_data
 {
+	t_printer		printer_routine;
 	int				philo_id;
 	unsigned long	time;
 	const char		*message;
@@ -142,9 +145,10 @@ void			*philo_state_machine(void *i_arg) __attribute__((noreturn));
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 												const t_state current_state);
-void			put_death_status(t_data *data, const int philo_id);
-void			put_regular_status(const int philo_id,
-										const int time, const char *message);
+void			put_death_status(t_data *data, const int philo_id,
+										unsigned long time, const char *message);
+void			put_regular_status(t_data *data, const int philo_id,
+										unsigned long time, const char *message);
 
 void			acquire_forks(t_data *data, int philo_id);
 void			drop_forks(t_data *data, int philo_id);
@@ -157,6 +161,8 @@ int				get_right_philo_id(t_data *data, int philo_id);
 
 void			done_eating_action_handler(t_data *data, const int philo_id);
 
+void			create_printer(t_printer printer, int philo_id,
+									unsigned long time, const char *message);
 /*
 **	TIMER
 */
@@ -174,7 +180,7 @@ void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id, size_t nb_philo);
 t_data			*get_data(t_data *mem);
 void			ft_put_str_fd(int fd, const char *s);
-int				ft_putnbr(unsigned long n);
+int				ft_putnbr(int fd, unsigned long n);
 
 void			destroy_mutex(t_data *data);
 void			safe_free(void *mem);

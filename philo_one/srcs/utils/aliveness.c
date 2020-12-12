@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 13:31:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:24:38 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_state		check_aliveness(t_data *data, int philo_id,
 		else
 		{
 			pthread_mutex_unlock(&data->mutex_death_report);
-			ret_state = current_state;
+			ret_state = reached_meals_nb_state;
 		}
 	}
 	return (ret_state);

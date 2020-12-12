@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 17:17:32 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:13:28 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,14 @@ static char		*ft_itoa(unsigned long nb)
 		return (NULL);
 }
 
-int				ft_putnbr(unsigned long n)
+int				ft_putnbr(int fd, unsigned long n)
 {
 	char			*nb;
 
 	nb = ft_itoa(n);
 	if (nb != NULL)
 	{
-		ft_put_str_fd(STDOUT_FILENO, nb);
+		ft_put_str_fd(fd, nb);
 		free(nb);
 		return (SUCCESS);
 	}

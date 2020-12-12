@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 13:27:53 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:09:34 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,9 @@ static bool	is_nb_meals_reached(t_data *data, const int philo_id)
 t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 {
 	acquire_forks(data, philo_id);
-	// pthread_mutex_lock(&data->mutex_last_meal);
-	// pthread_mutex_unlock(&data->mutex_last_meal);
-	// data->philo_state_time_stamp[philo_id] = get_current_time();
-	// data->philo_state[philo_id] = eating_state;
-	put_regular_status(philo_id, get_current_time(), MESSAGE_IS_EATING);
+	// create_printer(put_regular_status, philo_id,
+	// 								get_current_time(), MESSAGE_IS_EATING);
+	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_EATING);
 	usleep(data->param[T_TO_EAT]);
 	drop_forks(data, philo_id);
 	data->nb_meals_eaten[philo_id]++;
@@ -37,15 +35,14 @@ t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 
 t_state		sleep_action_handler(t_data *data, const int philo_id)
 {
-	// data->philo_state_time_stamp[philo_id] = get_current_time();
-	// data->philo_state[philo_id] = sleeping_state;
-	put_regular_status(philo_id, get_current_time(), MESSAGE_IS_SLEEPING);
+	// create_printer(put_regular_status, philo_id,
+	// 								get_current_time(), MESSAGE_IS_SLEEPING);
+	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_SLEEPING);
 	usleep(data->param[T_TO_SLEEP]);
-	// data->philo_state_time_stamp[philo_id] = get_current_time();
-	// data->philo_state[philo_id] = thinking_state;
-	put_regular_status(philo_id, get_current_time(), MESSAGE_IS_THINKING);
+	// create_printer(put_regular_status, philo_id,
+	// 								get_current_time(), MESSAGE_IS_THINKING);
+	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_THINKING);
 	return (thinking_state);
-	// usleep(2);
 }
 
 void		done_eating_action_handler(t_data *data, const int philo_id)
