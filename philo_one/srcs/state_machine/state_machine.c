@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 12:04:26 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 19:14:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void			*philo_state_machine(void *i_arg)
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
 	data->philo_state[philo_id] = startup_state;
+	pthread_mutex_lock(&data->mutex_race_starter);
+	pthread_mutex_unlock(&data->mutex_race_starter);
 	data->last_meal[philo_id] = get_current_time();
 	data->philo_state_time_stamp[philo_id] = get_current_time();
 	state = startup_state;

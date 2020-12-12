@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 17:54:21 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 19:11:31 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct	s_data
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	*mutex_last_meal;
-	pthread_mutex_t	mutex_stderr;
+	pthread_mutex_t	mutex_race_starter;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
 	int				param[NB_OF_PARAM];

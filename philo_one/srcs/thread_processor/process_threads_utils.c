@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:35:03 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 19:11:02 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void			init_mutex(t_data *data)
 {
 	int	i;
 
-	if (pthread_mutex_init(&data->mutex_stderr, NULL) != 0)
+	if (pthread_mutex_init(&data->mutex_race_starter, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
 	if (pthread_mutex_init(&data->mutex_stdout, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
@@ -51,7 +51,7 @@ void			destroy_mutex(t_data *data)
 {
 	int	i;
 
-	pthread_mutex_destroy(&data->mutex_stderr);
+	pthread_mutex_destroy(&data->mutex_race_starter);
 	pthread_mutex_destroy(&data->mutex_stdout);
 	pthread_mutex_destroy(&data->mutex_death_report);
 	i = 0;

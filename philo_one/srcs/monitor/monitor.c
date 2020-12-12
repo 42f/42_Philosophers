@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 17:14:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 19:14:50 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void			*philo_monitor(void *i_arg)
 
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
-	state = data->philo_state[philo_id];
+	pthread_mutex_lock(&data->mutex_race_starter);
+	pthread_mutex_unlock(&data->mutex_race_starter);
 	state = startup_state;
 	while (loop_condition(data, philo_id, state) == true)
 		state = check_aliveness(data, philo_id, state);

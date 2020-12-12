@@ -11,7 +11,12 @@ print_victim_last_meal (){
  fi
 
  echo "Last meal was :"
- cat /tmp/a | grep " $victim is eating" | tail -n1
+ last_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | wc -l)
+ if [ $(($last_meal)) -eq "0" ]; then
+        echo "[$victim have not eaten]"
+ else
+      cat /tmp/a | grep " $victim is eating" | tail -n1
+ fi
  if [[ "$OSTYPE" == "darwin"* ]]; then
        time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | sed -e $'s/ /\\\n/g' | head -n1)
  else
