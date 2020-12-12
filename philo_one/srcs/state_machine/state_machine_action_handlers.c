@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:48:09 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 18:19:06 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 		drop_forks(data, philo_id);
 		return (finished_meal_state);
 	}
-	// create_printer(put_regular_status, philo_id,
-	// 								get_current_time(), MESSAGE_IS_EATING);
 	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_EATING);
 	usleep(data->param[T_TO_EAT]);
 	drop_forks(data, philo_id);
@@ -40,12 +38,8 @@ t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 
 t_state		sleep_action_handler(t_data *data, const int philo_id)
 {
-	// create_printer(put_regular_status, philo_id,
-	// 								get_current_time(), MESSAGE_IS_SLEEPING);
 	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_SLEEPING);
 	usleep(data->param[T_TO_SLEEP]);
-	// create_printer(put_regular_status, philo_id,
-	// 								get_current_time(), MESSAGE_IS_THINKING);
 	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_THINKING);
 	return (thinking_state);
 }

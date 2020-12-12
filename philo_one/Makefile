@@ -61,7 +61,6 @@ SRCS += state_machine_utils.c
 SRCS += monitor.c
 SRCS += status_printer.c
 SRCS += status_printer_utils.c
-SRCS += printer_creator.c
 SRCS += arguments_process.c
 SRCS += timer.c
 SRCS += aliveness.c

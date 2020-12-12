@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:55:49 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 17:54:21 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,6 @@ int				get_right_philo_id(t_data *data, int philo_id);
 
 void			done_eating_action_handler(t_data *data, const int philo_id);
 
-void			create_printer(t_printer printer, int philo_id,
-									unsigned long time, const char *message);
 /*
 **	TIMER
 */
