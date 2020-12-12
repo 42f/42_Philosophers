@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 09:37:03 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:35:03 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,26 @@
 
 void			init_mutex(t_data *data)
 {
+	int	i;
+
+	if (pthread_mutex_init(&data->mutex_stderr, NULL) != 0)
+		exit_routine(CODE_ERR_MUTEX);
 	if (pthread_mutex_init(&data->mutex_stdout, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
 	if (pthread_mutex_init(&data->mutex_death_report, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
-	if (pthread_mutex_init(&data->mutex_forks, NULL) != 0)
-		exit_routine(CODE_ERR_MUTEX);
-	if (pthread_mutex_init(&data->mutex_last_meal, NULL) != 0)
-		exit_routine(CODE_ERR_MUTEX);
+	i = 0;
+	while (i < data->param[NB_PHILO])
+	{
+		if (pthread_mutex_init(&data->mutex_fork[i], NULL) != 0)
+			exit_routine(CODE_ERR_MUTEX);
+		if (pthread_mutex_init(&data->mutex_last_meal[i], NULL) != 0)
+			exit_routine(CODE_ERR_MUTEX);
+		i++;
+	}
 }
 
-void			init_arrays(pthread_t **th_philo,
+void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id, size_t nb_philo)
 {
 	nb_philo += 1;
@@ -40,10 +49,18 @@ void			init_arrays(pthread_t **th_philo,
 
 void			destroy_mutex(t_data *data)
 {
+	int	i;
+
+	pthread_mutex_destroy(&data->mutex_stderr);
 	pthread_mutex_destroy(&data->mutex_stdout);
 	pthread_mutex_destroy(&data->mutex_death_report);
-	pthread_mutex_destroy(&data->mutex_forks);
-	pthread_mutex_destroy(&data->mutex_last_meal);
+	i = 0;
+	while (i < data->param[NB_PHILO])
+	{
+		pthread_mutex_destroy(&data->mutex_fork[i]);
+		pthread_mutex_destroy(&data->mutex_fork[i]);
+		i++;
+	}
 }
 
 void			failed_init_arrays(pthread_t *th_philo,

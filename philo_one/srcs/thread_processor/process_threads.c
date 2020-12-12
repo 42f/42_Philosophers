@@ -6,24 +6,21 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/09 16:55:36 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 18:19:32 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-static void			failed_thread_creation(int i, pthread_t *thread)
+static void			failed_thread_creation(t_data *data)
 {
-	while (i >= 0)
-	{
-		pthread_join(thread[i], NULL);
-		i--;
-	}
+	data->first_death_report = true;
+	data->first_done_report = true;
 	exit_routine(CODE_ERR_PTHREAD);
 }
 
-static int			thread_creation_loop(const t_data *data,
-			pthread_t *thread, void *(*start_routine) (void *), int *philo_id)
+static void			thread_creation_loop(t_data *data,
+			pthread_t *th_philo, pthread_t *th_monitor, int *philo_id)
 {
 	int			i;
 
@@ -31,14 +28,12 @@ static int			thread_creation_loop(const t_data *data,
 	while (i < data->param[NB_PHILO])
 	{
 		philo_id[i] = i + 1;
-		if (pthread_create(&thread[i], NULL, start_routine, &philo_id[i]) != 0)
-		{
-			failed_thread_creation(i, thread);
-			return (FAILURE);
-		}
+		if (pthread_create(&th_monitor[i], NULL, philo_monitor, &philo_id[i]) != 0)
+			failed_thread_creation(data);
+		if (pthread_create(&th_philo[i], NULL, philo_state_machine, &philo_id[i]) != 0)
+			failed_thread_creation(data);
 		i++;
 	}
-	return (SUCCESS);
 }
 
 static void			thread_join_loop(const t_data *data, pthread_t *thread)
@@ -59,15 +54,20 @@ void				process_philo(t_data *data)
 	pthread_t	*th_philo;
 	pthread_t	*th_monitor;
 	int			*philo_id;
+	pthread_t	th_clock;
 
 	init_mutex(data);
-	init_arrays(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO]);
-	thread_creation_loop(data, th_philo, philo_state_machine, philo_id);
-	thread_creation_loop(data, th_monitor, philo_monitor, philo_id);
+	init_threads_arr(&th_philo, &th_monitor, &philo_id, data->param[NB_PHILO]);
+	thread_creation_loop(data, th_philo, th_monitor, philo_id);
+	if (pthread_create(&th_clock, NULL, clock_routine, data) != 0)
+		exit_routine(CODE_ERR_PTHREAD);
 	thread_join_loop(data, th_monitor);
 	thread_join_loop(data, th_philo);
+	pthread_join(th_clock, NULL);
+	while (data->active_printer_count > 0)
+		usleep(1);
 	destroy_mutex(data);
-	free(th_philo);
-	free(th_monitor);
-	free(philo_id);
+	safe_free(th_philo);
+	safe_free(th_monitor);
+	safe_free(philo_id);
 }

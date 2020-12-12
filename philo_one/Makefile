@@ -48,7 +48,7 @@ ifeq ($(debug_mode), 1)
 	CFLAGS += -D DEBUG_MODE=1
 endif
 
-HEADER += $(INCLUDES)*.h
+HEADER += $(INCLUDES)$(NAME).h
 
 SRCS += main.c
 SRCS += process_threads.c
@@ -56,6 +56,7 @@ SRCS += process_threads_utils.c
 SRCS += general_utils.c
 SRCS += state_machine.c
 SRCS += state_machine_action_handlers.c
+SRCS += state_machine_fork_acquisition.c
 SRCS += state_machine_utils.c
 SRCS += monitor.c
 SRCS += status_printer.c
