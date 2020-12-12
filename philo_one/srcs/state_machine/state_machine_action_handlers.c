@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 13:04:53 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 13:27:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static bool	is_nb_meals_reached(t_data *data, const int philo_id)
 t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 {
 	acquire_forks(data, philo_id);
+	// pthread_mutex_lock(&data->mutex_last_meal);
+	// pthread_mutex_unlock(&data->mutex_last_meal);
 	// data->philo_state_time_stamp[philo_id] = get_current_time();
 	// data->philo_state[philo_id] = eating_state;
 	put_regular_status(philo_id, get_current_time(), MESSAGE_IS_EATING);

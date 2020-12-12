@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 12:18:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 13:39:30 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ enum	e_times_arguments
 
 typedef enum	e_state
 {
+	no_state,
 	startup_state,
 	has_fork_state,
 	eating_state,
@@ -112,10 +113,10 @@ typedef struct	s_data
 	int				*nb_meals_eaten;
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
+	pthread_mutex_t	*mutex_last_meal;
 	pthread_mutex_t	mutex_active_printer_count;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
-	pthread_mutex_t	mutex_last_meal;
 	int				param[NB_OF_PARAM];
 }				t_data;
 
@@ -147,7 +148,6 @@ void			put_regular_status(const int philo_id,
 
 void			acquire_forks(t_data *data, int philo_id);
 void			drop_forks(t_data *data, int philo_id);
-void			update_last_meal(t_data *data, int philo_id);
 
 t_state			think_action_handler(t_data *data, const int philo_id);
 t_state			take_forks_and_eat_action_handler(t_data *data, const int philo_id);

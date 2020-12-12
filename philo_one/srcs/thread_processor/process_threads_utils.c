@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 11:26:07 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 13:36:40 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void			init_mutex(t_data *data)
 		exit_routine(CODE_ERR_MUTEX);
 	if (pthread_mutex_init(&data->mutex_death_report, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
-	if (pthread_mutex_init(&data->mutex_last_meal, NULL) != 0)
-		exit_routine(CODE_ERR_MUTEX);
 	i = 0;
 	while (i < data->param[NB_PHILO])
 	{
 		if (pthread_mutex_init(&data->mutex_fork[i], NULL) != 0)
+			exit_routine(CODE_ERR_MUTEX);
+		if (pthread_mutex_init(&data->mutex_last_meal[i], NULL) != 0)
 			exit_routine(CODE_ERR_MUTEX);
 		i++;
 	}
@@ -54,10 +54,13 @@ void			destroy_mutex(t_data *data)
 	pthread_mutex_destroy(&data->mutex_active_printer_count);
 	pthread_mutex_destroy(&data->mutex_stdout);
 	pthread_mutex_destroy(&data->mutex_death_report);
-	pthread_mutex_destroy(&data->mutex_last_meal);
 	i = 0;
 	while (i < data->param[NB_PHILO])
-		pthread_mutex_destroy(&data->mutex_fork[i++]);
+	{
+		pthread_mutex_destroy(&data->mutex_fork[i]);
+		pthread_mutex_destroy(&data->mutex_fork[i]);
+		i++;
+	}
 }
 
 void			failed_init_arrays(pthread_t *th_philo,

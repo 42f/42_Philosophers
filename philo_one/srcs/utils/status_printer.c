@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 13:09:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 14:59:50 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static void	death_printer(t_data *data, const int philo_id, unsigned long time,
 		exit_routine(CODE_ERR_MALLOC);
 	}
 	#endif
+pthread_mutex_lock(&data->mutex_stdout);
 	#ifdef DEBUG_MODE
 	ft_put_str_fd(STDOUT_FILENO, ".");
 	if (ft_putnbr(get_current_time()) == FAILURE)						// TODO: REMOVE
@@ -74,6 +75,7 @@ static void	death_printer(t_data *data, const int philo_id, unsigned long time,
 	if (ft_putnbr(philo_id) == FAILURE)
 		exit_routine(CODE_ERR_MALLOC);
 	ft_put_str_fd(STDOUT_FILENO, message);
+pthread_mutex_unlock(&data->mutex_stdout);
 }
 
 void		put_regular_status(const int philo_id,

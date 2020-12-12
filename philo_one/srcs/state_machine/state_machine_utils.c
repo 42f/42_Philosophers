@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 11:50:25 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/12 13:21:25 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void		drop_forks(t_data *data, int philo_id)
 	data->philo_fork[right_side_philo_id] = FORK_AVAILABLE;
 }
 
-void	update_last_meal(t_data *data, int philo_id)
-{
-	(void)data;
-	(void)philo_id;
-	// pthread_mutex_lock(&data->mutex_last_meal);
-	// data->last_meal[philo_id] = get_current_time();
-	// pthread_mutex_unlock(&data->mutex_last_meal);
-}
+// void	update_last_meal(t_data *data, int philo_id)
+// {
+// 	(void)data;
+// 	(void)philo_id;
+// 	// pthread_mutex_lock(&data->mutex_last_meal);
+// 	// data->last_meal[philo_id] = get_current_time();
+// 	// pthread_mutex_unlock(&data->mutex_last_meal);
+// }
