@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 17:49:39 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 10:47:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 bool	is_alive(t_data *data, const int philo_id)
 {
 	int			t_delta;
+	unsigned long	time;
 
 	// pthread_mutex_lock(&data->mutex_last_meal[philo_id]);
-	t_delta = get_current_time() - data->last_meal[philo_id];
+	time = get_current_time();
+	t_delta = time - data->last_meal[philo_id];
 	if (t_delta > data->param[T_TO_DIE])
 		data->philo_state_time_stamp[philo_id] = get_current_time();
  	// pthread_mutex_unlock(&data->mutex_last_meal[philo_id]);

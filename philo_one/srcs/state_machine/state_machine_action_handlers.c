@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/13 09:12:35 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 12:17:38 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@ static bool	is_nb_meals_reached(t_data *data, const int philo_id)
 				&& data->nb_meals_eaten[philo_id] >= data->param[NB_MEALS]);
 }
 
+static bool	is_done_eating(t_data *data, int philo_id)
+{
+	unsigned long	time_to_eat;
+
+	time_to_eat = (unsigned long)data->param[T_TO_EAT] / 1000;
+	return (get_current_time() - data->last_meal[philo_id] >= time_to_eat
+			|| data->first_death_report == true);
+}
+
 t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 {
 	acquire_forks(data, philo_id);
@@ -27,7 +36,8 @@ t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 		return (finished_meal_state);
 	}
 	put_regular_status(data, philo_id, LEN_IS_EATING, MESSAGE_IS_EATING);
-	usleep(data->param[T_TO_EAT]);
+	while (is_done_eating(data, philo_id) == false)
+		usleep(100);
 	drop_forks(data, philo_id);
 	data->nb_meals_eaten[philo_id]++;
 	if (is_nb_meals_reached(data, philo_id) == true)
@@ -36,10 +46,23 @@ t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 		return (finished_meal_state);
 }
 
+static bool	is_done_sleeping(t_data *data, unsigned long fell_asleep_timestamp)
+{
+	unsigned long	time_to_sleep;
+
+	time_to_sleep = (unsigned long)data->param[T_TO_SLEEP] / 1000;
+	return (get_current_time() - fell_asleep_timestamp >= time_to_sleep
+			|| data->first_death_report == true);
+}
+
 t_state		sleep_action_handler(t_data *data, const int philo_id)
 {
+	unsigned long	fell_asleep_timestamp;
+
 	put_regular_status(data, philo_id, LEN_IS_SLEEPING, MESSAGE_IS_SLEEPING);
-	usleep(data->param[T_TO_SLEEP]);
+	fell_asleep_timestamp = get_current_time();
+	while (is_done_sleeping(data, fell_asleep_timestamp) == false)
+		usleep(100);
 	put_regular_status(data, philo_id, LEN_IS_THINKING, MESSAGE_IS_THINKING);
 	return (thinking_state);
 }

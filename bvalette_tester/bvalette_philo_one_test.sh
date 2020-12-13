@@ -1,13 +1,28 @@
 #! /bin/bash
 
 print_victim_last_meal (){
+ first_eater=0
+ first_eat_time=0
+ first_sleep=0
+ first_think=0
  time_of_meal=0
- time_to_die=$1
+ time_to_die=$2
  nb_of_victim=$(cat /tmp/a | grep "died" | wc -l)
  if [[ "$OSTYPE" == "darwin"* ]]; then
        victim=$(cat /tmp/a | grep "died" | sed -e $'s/ /\\\n/g' | tail -n2 | head -n1)
  else
        victim=$(cat /tmp/a | grep "died" | sed 's/ /\n/g' | tail -n2 | head -n1)
+ fi
+ if [[ "$OSTYPE" == "darwin"* ]]; then
+       first_eater=$(cat /tmp/a | grep "eating" | head -n1 | sed -e $'s/ /\\\n/g' | head -n2 | tail -n1)
+       first_eat_time=$(cat /tmp/a | grep "eating" | sed -e $'s/ /\\\n/g' | head -n1)
+       first_sleep=$(cat /tmp/a | grep " $first_eater " | grep "sleeping" | head -n1 | sed -e $'s/ /\\\n/g' | head -n1)
+       first_think=$(cat /tmp/a | grep " $first_eater " | grep "thinking" | head -n1 | sed -e $'s/ /\\\n/g' | head -n1)
+ else
+       first_eater=$(cat /tmp/a | grep "eating" | head -n1 | sed 's/ /\n/g' | head -n2 | tail -n1)
+       first_eat_time=$(cat /tmp/a | grep "eating" |  sed 's/ /\n/g' | head -n1)
+       first_sleep=$(cat /tmp/a | grep " $first_eater " | grep "sleeping" | head -n1 | sed 's/ /\n/g' | head -n1)
+       first_think=$(cat /tmp/a | grep " $first_eater " | grep "thinking" | head -n1 | sed 's/ /\n/g' | head -n1)
  fi
 
  echo "Last meal was :"
@@ -34,44 +49,63 @@ print_victim_last_meal (){
  echo "Timestamp of the death     = $time_of_death"
  echo "Time to die parameter      = $time_to_die"
 
- if [ $(($time_of_meal)) -eq "0" ]; then
-        echo "Death reported afer $(( $time_of_death - $time_to_die )) ms."
-        t_delta=$(( $time_of_death - $time_to_die ))
-        echo "Nb of dead philosopher: [$nb_of_victim]"
- else
-        echo "Death reported afer $(( $time_of_death - $time_of_meal - $time_to_die )) ms."
-        t_delta=$(( $time_of_death - $time_of_meal - $time_to_die ))
-        echo "Nb of dead philosopher: [$nb_of_victim]"
- fi
+       echo "-----------------------------------------"
+       echo "Timestamp: $first_eater is eating   @ $first_eat_time"
+       echo "Timestamp: $first_eater is sleeping @ $first_sleep"
+       echo "Timestamp: $first_eater is thinking @ $first_think"
 
- if [ $(( $t_delta )) -gt "10" ]; then
-        echo "❌ [ nop !] timeframe for death declaration too long: $(( $t_delta ))"
-        cat /tmp/a | tail -n20
-        cat /tmp/err
-        exit 42
- elif [ $(( $t_delta )) -lt "0" ]; then
-        echo " ❌ [ nop !] timeframe for death declaration illogic: $(( $t_delta ))"
-        cat /tmp/a | tail -n20
-        cat /tmp/err
-        exit 42
- else
-        echo "✅ [OK]"
- fi
+       if [ $(( $first_sleep )) -gt "0" ]; then
+              t_delta=$(( $first_sleep - $first_eat_time ))
+              if [ $(( $t_delta )) -lt $(( $3 )) ]; then
+                     echo "         ❌ [ nop !] $first_eater is eating too early !"
+              fi
+       fi
 
- if [ $(( $nb_of_victim )) -ne "1" ]; then
-        echo " ❌ [ nop !] more than one died"
-        cat /tmp/a | tail -n20
-        cat /tmp/err
-        exit 42
- fi
- err_log=$(cat /tmp/err | wc -l)
-#  if [ $(( err_log )) -ne "0" ]; then
-#         echo "[ nop !] stderr used:"
-#         cat /tmp/a | tail -n20
-#         echo "erro log:"
-#         cat /tmp/err
-#         exit 42
-#  fi
+       if [ $(( $first_think )) -gt "0" ]; then
+              t_delta=$(( $first_think - $first_sleep ))
+              if [ $(( $t_delta )) -lt $(( $4 )) ]; then
+                     echo "         ❌ [ nop !] $first_eater is sleeping too early !"
+              fi
+       fi
+       echo
+       echo "-----------------------------------------"
+
+       if [ $(($time_of_meal)) -eq "0" ]; then
+              echo "Death reported afer $(( $time_of_death - $time_to_die )) ms."
+              t_delta=$(( $time_of_death - $time_to_die ))
+       else
+              echo "Death reported afer $(( $time_of_death - $time_of_meal - $time_to_die )) ms."
+              t_delta=$(( $time_of_death - $time_of_meal - $time_to_die ))
+       fi
+
+
+
+       if [ $(( $t_delta )) -gt "10" ]; then
+              echo "❌ [ nop !] timeframe for death declaration too long: $(( $t_delta ))"
+              echo "=============== LOG =========================================="
+              cat /tmp/a | tail -n20
+              echo "=============== ERR LOG ======================================"
+              cat /tmp/err
+              exit 42
+       elif [ $(( $t_delta )) -lt "0" ]; then
+              echo " ❌ [ nop !] timeframe for death declaration illogic: $(( $t_delta ))"
+              echo "=============== LOG =========================================="
+              cat /tmp/a | tail -n20
+              echo "=============== ERR LOG ======================================"
+              cat /tmp/err
+              exit 42
+       else
+              echo "✅ [OK]"
+       fi
+
+       if [ $(( $nb_of_victim )) -ne "1" ]; then
+              echo " ❌ [ nop !] more than one died"
+              echo "=============== LOG =========================================="
+              cat /tmp/a | tail -n20
+              echo "=============== ERR LOG ======================================"
+              cat /tmp/err
+              exit 42
+       fi
 }
 
 main (){
@@ -85,7 +119,7 @@ main (){
  echo
  echo "Death report:"
  var="died" ; cat /tmp/a | grep $var;
- print_victim_last_meal $2
+ print_victim_last_meal $1 $2 $3 $4
 }
 echo $(date)
 echo "Parameters are: $1 $2 $3 $4"
