@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 18:16:31 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 09:12:43 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 		pthread_mutex_unlock(&data->mutex_fork[target_id]);
 	}
 	if (grabed_flag == true)
-		put_regular_status(data, philo_id, get_current_time(), MESSAGE_HAS_TAKEN_FORK);
+		put_regular_status(data, philo_id, LEN_HAS_TAKEN_FORK, MESSAGE_HAS_TAKEN_FORK);
 }
 
 void	acquire_forks(t_data * data, int philo_id)

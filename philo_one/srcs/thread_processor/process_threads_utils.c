@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 19:11:02 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 10:00:47 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void			init_mutex(t_data *data)
 	int	i;
 
 	if (pthread_mutex_init(&data->mutex_race_starter, NULL) != 0)
+		exit_routine(CODE_ERR_MUTEX);
+	if (pthread_mutex_init(&data->mutex_started_threads_counter, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
 	if (pthread_mutex_init(&data->mutex_stdout, NULL) != 0)
 		exit_routine(CODE_ERR_MUTEX);
@@ -52,13 +54,14 @@ void			destroy_mutex(t_data *data)
 	int	i;
 
 	pthread_mutex_destroy(&data->mutex_race_starter);
+	pthread_mutex_destroy(&data->mutex_started_threads_counter);
 	pthread_mutex_destroy(&data->mutex_stdout);
 	pthread_mutex_destroy(&data->mutex_death_report);
 	i = 0;
 	while (i < data->param[NB_PHILO])
 	{
 		pthread_mutex_destroy(&data->mutex_fork[i]);
-		pthread_mutex_destroy(&data->mutex_fork[i]);
+		pthread_mutex_destroy(&data->mutex_last_meal[i]);
 		i++;
 	}
 }

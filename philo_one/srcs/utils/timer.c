@@ -6,15 +6,11 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 11:45:27 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 10:02:43 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-       #include <sys/types.h>
-       #include <sys/stat.h>
-       #include <fcntl.h>
-		int	fd;
 
 static void		update_current_time(t_data *data)
 {
@@ -45,11 +41,13 @@ void			*clock_routine(void *data_arg)
 {
 	t_data						*data;
 
-	fd = open("/tmp/timer", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	data = (t_data *)data_arg;
+	pthread_mutex_lock(&data->mutex_race_starter);
+	while (data->started_threads_counter < data->param[NB_PHILO] * 2)
+		usleep(10);
+	pthread_mutex_unlock(&data->mutex_race_starter);
 	while (data->first_death_report == false && data->first_done_report == false)
 		update_current_time(data);
-	close(fd);
 	pthread_exit(NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 18:19:06 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 09:12:35 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 		drop_forks(data, philo_id);
 		return (finished_meal_state);
 	}
-	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_EATING);
+	put_regular_status(data, philo_id, LEN_IS_EATING, MESSAGE_IS_EATING);
 	usleep(data->param[T_TO_EAT]);
 	drop_forks(data, philo_id);
 	data->nb_meals_eaten[philo_id]++;
@@ -38,9 +38,9 @@ t_state		take_forks_and_eat_action_handler(t_data *data, const int philo_id)
 
 t_state		sleep_action_handler(t_data *data, const int philo_id)
 {
-	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_SLEEPING);
+	put_regular_status(data, philo_id, LEN_IS_SLEEPING, MESSAGE_IS_SLEEPING);
 	usleep(data->param[T_TO_SLEEP]);
-	put_regular_status(data, philo_id, get_current_time(), MESSAGE_IS_THINKING);
+	put_regular_status(data, philo_id, LEN_IS_THINKING, MESSAGE_IS_THINKING);
 	return (thinking_state);
 }
 

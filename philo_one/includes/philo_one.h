@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 19:11:31 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 10:00:49 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <string.h>
+
+# define BUFF_SIZE			32
 
 # define GET				NULL
 # define REMOVE				(void *)0xffffffffffffffff
@@ -56,13 +58,16 @@ typedef enum	e_code_err
 
 // # ifndef DEBUG_MODE
 
-#  define MESSAGE_HAS_TAKEN_LEFT_FORK	"has taken a LEFT fork\n"
-#  define MESSAGE_HAS_TAKEN_RIGHT_FORK	"has taken a RIGHT fork\n"
 #  define MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
+#  define LEN_HAS_TAKEN_FORK		17
 #  define MESSAGE_IS_EATING			"is eating\n"
+#  define LEN_IS_EATING				10
 #  define MESSAGE_IS_SLEEPING		"is sleeping\n"
+#  define LEN_IS_SLEEPING			12
 #  define MESSAGE_IS_THINKING		"is thinking\n"
+#  define LEN_IS_THINKING			12
 #  define MESSAGE_IS_DEAD			"died\n"
+#  define LEN_IS_DEAD				5
 
 // # else
 
@@ -104,7 +109,7 @@ typedef struct	s_data
 	bool			first_death_report;
 	bool			first_done_report;
 	char			padding_00[6];
-	int				active_printer_count;
+	int				started_threads_counter;
 	unsigned long	current_clock;
 	bool			*done_report_flag;
 	bool			*philo_fork;
@@ -115,6 +120,7 @@ typedef struct	s_data
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	*mutex_last_meal;
 	pthread_mutex_t	mutex_race_starter;
+	pthread_mutex_t	mutex_started_threads_counter;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
 	int				param[NB_OF_PARAM];
@@ -146,10 +152,9 @@ void			*philo_state_machine(void *i_arg) __attribute__((noreturn));
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 												const t_state current_state);
-void			put_death_status(t_data *data, const int philo_id,
-										unsigned long time, const char *message);
 void			put_regular_status(t_data *data, const int philo_id,
-										unsigned long time, const char *message);
+								const int message_len, const char *message);
+void			put_death_status(t_data *data, const int philo_id);
 
 void			acquire_forks(t_data *data, int philo_id);
 void			drop_forks(t_data *data, int philo_id);
@@ -179,7 +184,8 @@ void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id, size_t nb_philo);
 t_data			*get_data(t_data *mem);
 void			ft_put_str_fd(int fd, const char *s);
-int				ft_putnbr(int fd, unsigned long n);
+void			ft_put_message_fd(int fd,  const size_t len, const char *str);
+void			ft_putnbr(int fd, unsigned long n);
 
 void			destroy_mutex(t_data *data);
 void			safe_free(void *mem);

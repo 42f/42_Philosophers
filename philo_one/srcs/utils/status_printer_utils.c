@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 16:13:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 09:47:44 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,70 +22,56 @@ static size_t	ft_strlen(const char *str)
 	return (len);
 }
 
-void			ft_put_str_fd(int fd, const char *s)
+void			ft_put_str_fd(int fd, const char *str)
 {
-	if (s != NULL)
-		write(fd, s, ft_strlen(s));
+	if (str != NULL)
+		write(fd, str, ft_strlen(str));
 }
 
-static char		*ft_fill(char *r, unsigned long n_val, int i)
+void			ft_put_message_fd(int fd,  const size_t len, const char *str)
 {
-	if (n_val != 0)
-	{
-		r[i] = ' ';
-		i--;
-		while (n_val > 0 && i >= 0)
-		{
-			r[i] = (n_val % 10) + '0';
-			n_val = n_val / 10;
-			i--;
-		}
-	}
-	else
-	{
-		r[0] = '0';
-		r[1] = ' ';
-	}
-	return (r);
+	if (str != NULL)
+		write(fd, str, len);
 }
 
-static char		*ft_itoa(unsigned long nb)
+static void		ft_fill(char *buffer, unsigned long n_val)
 {
-	char			*ret;
-	int				len;
-	size_t			malloc_len;
+	if (n_val >= 10)
+		ft_fill(buffer - 1, n_val / 10 );
+	*buffer = (n_val % 10) + '0';
+}
+
+static size_t	ft_itoa(unsigned long nb, char buffer[BUFF_SIZE])
+{
+	size_t			len;
 	unsigned long	nb_val;
 
-	len = 0;
-	nb_val = nb;
-	while (nb_val != 0)
+	if (nb != 0)
 	{
-		nb_val = nb_val / 10;
-		len++;
-	}
-	malloc_len = (nb_val > 0) ? len + 2 : len + 3;
-	malloc_len *= sizeof(char);
-	ret = (char *)malloc(malloc_len);
-	if (ret != NULL)
-	{
-		memset(ret, '\0', malloc_len);
-		return (ft_fill(ret, nb, len));
+		len = 0;
+		nb_val = nb;
+		while (nb_val != 0)
+		{
+			nb_val = nb_val / 10;
+			len++;
+		}
+		ft_fill(buffer + len - 1, nb);
+		return (len);
 	}
 	else
-		return (NULL);
+	{
+		buffer[0] = '0';
+		return (1);
+	}
 }
 
-int				ft_putnbr(int fd, unsigned long n)
+void			ft_putnbr(int fd, unsigned long nb)
 {
-	char			*nb;
+	static char		buffer[BUFF_SIZE];
+	size_t			len;
 
-	nb = ft_itoa(n);
-	if (nb != NULL)
-	{
-		ft_put_str_fd(fd, nb);
-		free(nb);
-		return (SUCCESS);
-	}
-	else
-		return (FAILURE);
+	memset(buffer, '\0', BUFF_SIZE);
+	len = ft_itoa(nb, buffer);
+	buffer[len] = ' ';
+	write(fd, buffer, len + 1);
 }
