@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:05 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/10 18:58:13 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/13 12:23:00 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int					process_arguments(t_data *data, const char **av)
 	while (av != NULL && av[arg_i] != NULL && i < NB_OF_PARAM)
 	{
 		data->param[i] = ft_atoi(av[arg_i]);
-		if (data->param[i] <= 0)
+		if (data->param[i] <= 1)
 			return (FAILURE);
 		i++;
 		arg_i++;

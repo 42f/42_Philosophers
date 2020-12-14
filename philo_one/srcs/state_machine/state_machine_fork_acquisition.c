@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/13 09:12:43 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/14 17:58:44 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 		pthread_mutex_unlock(&data->mutex_fork[target_id]);
 	}
 	if (grabed_flag == true)
+	{
+		data->philo_state_time_stamp[philo_id] = get_current_time();
 		put_regular_status(data, philo_id, LEN_HAS_TAKEN_FORK, MESSAGE_HAS_TAKEN_FORK);
+	}
 }
 
 void	acquire_forks(t_data * data, int philo_id)
@@ -49,8 +52,7 @@ void	acquire_forks(t_data * data, int philo_id)
 	left_hand = HAND_EMPTY;
 	right_hand = HAND_EMPTY;
 	right_philo_id = get_right_philo_id(data, philo_id);
-	if (philo_id == 1 || philo_id == data->param[NB_PHILO])
-		usleep ((data->param[T_TO_DIE] / data->param[NB_PHILO]) * 1000);
+
 	while (left_hand == HAND_EMPTY	|| right_hand == HAND_EMPTY)
 	{
 		if (get_current_time() % 2 == 0)
@@ -64,7 +66,5 @@ void	acquire_forks(t_data * data, int philo_id)
 			try_grab_fork(data, right_philo_id, philo_id, &right_hand);
 		}
 	}
-	pthread_mutex_lock(&data->mutex_last_meal[philo_id]);
-	data->last_meal[philo_id] = get_current_time();
-	pthread_mutex_unlock(&data->mutex_last_meal[philo_id]);
+	// data->last_meal[philo_id] = get_current_time();
 }

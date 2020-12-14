@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/13 10:00:49 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/14 17:33:10 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define SUCCESS_RETURN		0
 # define FAILURE_RETURN		1
 
-# define USAGE0	"Philo: Usage: positive value only\n"
+# define USAGE0	"Philo: Usage: > 1 value only\n"
 # define USAGE1	"number_of_philosopher time_to_die "
 # define USAGE2	"time_to_eat time_to_sleep\n"
 # define USAGE3	"[number_of_time_each_philosophers_must_eat]\n"
@@ -151,7 +151,7 @@ bool			is_alive(t_data *data, const int philo_id);
 void			*philo_state_machine(void *i_arg) __attribute__((noreturn));
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
-												const t_state current_state);
+										const t_state current_state, int time);
 void			put_regular_status(t_data *data, const int philo_id,
 								const int message_len, const char *message);
 void			put_death_status(t_data *data, const int philo_id);

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/13 11:44:17 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/14 17:49:25 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,30 @@ void			*philo_state_machine(void *i_arg)
 	pthread_mutex_lock(&data->mutex_started_threads_counter);
 	data->started_threads_counter++;
 	pthread_mutex_unlock(&data->mutex_started_threads_counter);
+	// if (philo_id == 1)
+		// dprintf(STDERR_FILENO, "%ld ....... %d .............%ld...............WAITING\n", get_current_time(), philo_id, data->last_meal[philo_id]);
 	pthread_mutex_lock(&data->mutex_race_starter);
 	// usleep(philo_id * 1000);
-// dprintf(STDERR_FILENO, "%ld ....... %d .............%ld...............WAITING\n", get_current_time(), philo_id, data->last_meal[philo_id]);
 	pthread_mutex_unlock(&data->mutex_race_starter);
-// dprintf(STDERR_FILENO, "%ld ....... %d .............%ld..................GO\n", get_current_time(), philo_id, data->last_meal[philo_id]);
+	// if (philo_id == 1)
+		// dprintf(STDERR_FILENO, "%ld ....... %d .............%ld..................GO\n", get_current_time(), philo_id, data->last_meal[philo_id]);
+
+	// pthread_mutex_lock(&data->mutex_started_threads_counter);
+	data->started_threads_counter--;
+	// pthread_mutex_unlock(&data->mutex_started_threads_counter);
+	while(data->started_threads_counter != 0);
+
+
+
+	// if (data->param[NB_PHILO] > 2
+	// 					&& (philo_id == 1 || philo_id == data->param[NB_PHILO]))
+	// 	usleep((data->param[T_TO_DIE] / data->param[NB_PHILO]) * 1000);
 	state = startup_state;
-	data->philo_state_time_stamp[philo_id] = get_current_time();
-	data->last_meal[philo_id] = get_current_time();
+	// data->philo_state_time_stamp[philo_id] = get_current_time();
+	// data->last_meal[philo_id] = getcurrent_time();
+	data->last_meal[philo_id] = 1;
+	// dprintf(STDERR_FILENO, "%ld ....... %d ........set meal @ .....%ld...............\n", get_current_time(), philo_id, data->last_meal[philo_id]);
+
 	while (data->first_death_report != true && state != reached_meals_nb_state)
 	{
 		if (state == thinking_state || state == startup_state)
