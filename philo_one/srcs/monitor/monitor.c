@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 11:14:46 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 14:54:46 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void			*philo_monitor(void *i_arg)
 
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
-	// time = get_current_time();
-	time = 0;
 	alive = false;
 	pthread_mutex_lock(&data->mutex_race_starter);
 	pthread_mutex_unlock(&data->mutex_race_starter);
+	// time = get_current_time();
+	time = 0;
 	while ((alive = (int)time - (int)data->last_meal[philo_id] <= data->param[T_TO_DIE]) == true
 								&& data->first_death_report == false
 								&& data->done_report_flag[philo_id] == false)
