@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/12 13:35:42 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 08:57:48 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,18 @@ static void	init_philo_info_storage(t_data *data, int nb_philo)
 	memset(data->mutex_last_meal, 0, nb_philo * sizeof(pthread_mutex_t));
 }
 
+static void	free_data_struct_content(t_data *data)
+{
+		safe_free(data->last_meal);
+		safe_free(data->nb_meals_eaten);
+		safe_free(data->done_report_flag);
+		safe_free(data->philo_fork);
+		safe_free(data->philo_state);
+		safe_free(data->philo_state_time_stamp);
+		safe_free(data->mutex_fork);
+		get_data(REMOVE);
+}
+
 int			main(const int ac, const char **av)
 {
 	int		ret;
@@ -90,14 +102,7 @@ int			main(const int ac, const char **av)
 	{
 		init_philo_info_storage(&data, data.param[NB_PHILO]);
 		process_philo(&data);
-		safe_free(data.last_meal);
-		safe_free(data.nb_meals_eaten);
-		safe_free(data.done_report_flag);
-		safe_free(data.philo_fork);
-		safe_free(data.philo_state);
-		safe_free(data.philo_state_time_stamp);
-		safe_free(data.mutex_fork);
-		get_data(REMOVE);
+		free_data_struct_content(&data);
 	}
 	else
 	{

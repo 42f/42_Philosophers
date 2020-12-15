@@ -7,43 +7,43 @@ print_victim_last_meal (){
  first_think=0
  time_of_meal=0
  time_to_die=$2
- nb_of_victim=$(cat /tmp/a | grep "died" | wc -l)
+ nb_of_victim=$(cat /tmp/log | grep "died" | wc -l)
  if [[ "$OSTYPE" == "darwin"* ]]; then
-       victim=$(cat /tmp/a | grep "died" | sed -e $'s/ /\\\n/g' | tail -n2 | head -n1)
+       victim=$(cat /tmp/log | grep "died" | sed -e $'s/ /\\\n/g' | tail -n2 | head -n1)
  else
-       victim=$(cat /tmp/a | grep "died" | sed 's/ /\n/g' | tail -n2 | head -n1)
+       victim=$(cat /tmp/log | grep "died" | sed 's/ /\n/g' | tail -n2 | head -n1)
  fi
  if [[ "$OSTYPE" == "darwin"* ]]; then
-       first_eater=$(cat /tmp/a | grep "eating" | head -n1 | sed -e $'s/ /\\\n/g' | head -n2 | tail -n1)
-       first_eat_time=$(cat /tmp/a | grep "eating" | sed -e $'s/ /\\\n/g' | head -n1)
-       first_sleep=$(cat /tmp/a | grep " $first_eater " | grep "sleeping" | head -n1 | sed -e $'s/ /\\\n/g' | head -n1)
-       first_think=$(cat /tmp/a | grep " $first_eater " | grep "thinking" | head -n1 | sed -e $'s/ /\\\n/g' | head -n1)
+       first_eater=$(cat /tmp/log | grep "eating" | head -n1 | sed -e $'s/ /\\\n/g' | head -n2 | tail -n1)
+       first_eat_time=$(cat /tmp/log | grep "eating" | sed -e $'s/ /\\\n/g' | head -n1)
+       first_sleep=$(cat /tmp/log | grep " $first_eater " | grep "sleeping" | head -n1 | sed -e $'s/ /\\\n/g' | head -n1)
+       first_think=$(cat /tmp/log | grep " $first_eater " | grep "thinking" | head -n1 | sed -e $'s/ /\\\n/g' | head -n1)
  else
-       first_eater=$(cat /tmp/a | grep "eating" | head -n1 | sed 's/ /\n/g' | head -n2 | tail -n1)
-       first_eat_time=$(cat /tmp/a | grep "eating" |  sed 's/ /\n/g' | head -n1)
-       first_sleep=$(cat /tmp/a | grep " $first_eater " | grep "sleeping" | head -n1 | sed 's/ /\n/g' | head -n1)
-       first_think=$(cat /tmp/a | grep " $first_eater " | grep "thinking" | head -n1 | sed 's/ /\n/g' | head -n1)
+       first_eater=$(cat /tmp/log | grep "eating" | head -n1 | sed 's/ /\n/g' | head -n2 | tail -n1)
+       first_eat_time=$(cat /tmp/log | grep "eating" |  sed 's/ /\n/g' | head -n1)
+       first_sleep=$(cat /tmp/log | grep " $first_eater " | grep "sleeping" | head -n1 | sed 's/ /\n/g' | head -n1)
+       first_think=$(cat /tmp/log | grep " $first_eater " | grep "thinking" | head -n1 | sed 's/ /\n/g' | head -n1)
  fi
 
  echo "Last meal was :"
- last_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | wc -l)
+ last_meal=$(cat /tmp/log | grep " $victim is eating" | tail -n1 | wc -l)
  if [ $(($last_meal)) -eq "0" ]; then
         echo "[$victim have not eaten]"
  else
-      cat /tmp/a | grep " $victim is eating" | tail -n1
+      cat /tmp/log | grep " $victim is eating" | tail -n1
  fi
  if [[ "$OSTYPE" == "darwin"* ]]; then
-       time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | sed -e $'s/ /\\\n/g' | head -n1)
+       time_of_meal=$(cat /tmp/log | grep " $victim is eating" | tail -n1 | sed -e $'s/ /\\\n/g' | head -n1)
  else
-       time_of_meal=$(cat /tmp/a | grep " $victim is eating" | tail -n1 | sed 's/ /\n/g' | head -n1)
+       time_of_meal=$(cat /tmp/log | grep " $victim is eating" | tail -n1 | sed 's/ /\n/g' | head -n1)
  fi
 
  echo "Timestamp of the last meal = $time_of_meal"
 
  if [[ "$OSTYPE" == "darwin"* ]]; then
-       time_of_death=$(cat /tmp/a | grep "died" | tail -n1 | sed -e $'s/ /\\\n/g' | head -n1)
+       time_of_death=$(cat /tmp/log | grep "died" | tail -n1 | sed -e $'s/ /\\\n/g' | head -n1)
  else
-       time_of_death=$(cat /tmp/a | grep "died" | tail -n1 | sed 's/ /\n/g' | head -n1)
+       time_of_death=$(cat /tmp/log | grep "died" | tail -n1 | sed 's/ /\n/g' | head -n1)
  fi
 
  echo "Timestamp of the death     = $time_of_death"
@@ -83,14 +83,14 @@ print_victim_last_meal (){
        if [ $(( $t_delta )) -gt "10" ]; then
               echo "❌ [ nop !] timeframe for death declaration too long: $(( $t_delta ))"
               echo "=============== LOG =========================================="
-              cat /tmp/a | tail -n20
+              cat /tmp/log | tail -n20
               echo "=============== ERR LOG ======================================"
               cat /tmp/err
               exit 42
        elif [ $(( $t_delta )) -lt "0" ]; then
               echo " ❌ [ nop !] timeframe for death declaration illogic: $(( $t_delta ))"
               echo "=============== LOG =========================================="
-              cat /tmp/a | tail -n20
+              cat /tmp/log | tail -n20
               echo "=============== ERR LOG ======================================"
               cat /tmp/err
               exit 42
@@ -101,7 +101,7 @@ print_victim_last_meal (){
        if [ $(( $nb_of_victim )) -ne "1" ]; then
               echo " ❌ [ nop !] more than one died"
               echo "=============== LOG =========================================="
-              cat /tmp/a | tail -n20
+              cat /tmp/log | tail -n20
               echo "=============== ERR LOG ======================================"
               cat /tmp/err
               exit 42
@@ -109,19 +109,20 @@ print_victim_last_meal (){
 }
 
 main (){
- ./philo_one $1 $2 $3 $4 &>/tmp/a
+ ./philo_one $1 $2 $3 $4 &>/tmp/log
 #   2>/tmp/err ;
- var="fork" ; echo -n $var"      = " ;  cat /tmp/a | grep $var | wc -l ;
- var="eating" ; echo -n $var"    = " ;  cat /tmp/a | grep $var | wc -l ;
- var="sleeping" ; echo -n $var"  = " ;  cat /tmp/a | grep $var | wc -l ;
- var="thinking" ; echo -n $var"  = " ;  cat /tmp/a | grep $var | wc -l ;
- var="died" ; echo -n $var"      = " ;  cat /tmp/a | grep $var | wc -l ;
+ var="fork" ; echo -n $var"      = " ;  cat /tmp/log | grep $var | wc -l ;
+ var="eating" ; echo -n $var"    = " ;  cat /tmp/log | grep $var | wc -l ;
+ var="sleeping" ; echo -n $var"  = " ;  cat /tmp/log | grep $var | wc -l ;
+ var="thinking" ; echo -n $var"  = " ;  cat /tmp/log | grep $var | wc -l ;
+ var="died" ; echo -n $var"      = " ;  cat /tmp/log | grep $var | wc -l ;
  echo
  echo "Death report:"
- var="died" ; cat /tmp/a | grep $var;
+ var="died" ; cat /tmp/log | grep $var;
  print_victim_last_meal $1 $2 $3 $4
 }
 echo $(date)
 echo "Parameters are: $1 $2 $3 $4"
-true > /tmp/a
+true > /tmp/log
+true > /tmp/err
 main $1 $2 $3 $4
