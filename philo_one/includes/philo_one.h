@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/14 17:33:10 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 11:00:37 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ typedef enum	e_code_err
 
 // # ifndef DEBUG_MODE
 
-#  define MESSAGE_HAS_TAKEN_FORK	"has taken a fork\n"
-#  define LEN_HAS_TAKEN_FORK		17
+#  define MESSAGE_HAS_FORK_L		"has LEFT    fork\n"
+#  define MESSAGE_HAS_FORK_R		"has   RIGHT fork\n"
+#  define MESSAGE_HAS_FORK			"has taken a fork\n"
+#  define LEN_HAS_FORK				17
 #  define MESSAGE_IS_EATING			"is eating\n"
 #  define LEN_IS_EATING				10
 #  define MESSAGE_IS_SLEEPING		"is sleeping\n"
@@ -71,7 +73,7 @@ typedef enum	e_code_err
 
 // # else
 
-// #  define MESSAGE_HAS_TAKEN_FORK	"\033[0;31mhas taken a fork\033[0m\n"
+// #  define MESSAGE_HAS_FORK			"\033[0;31mhas taken a fork\033[0m\n"
 // #  define MESSAGE_IS_EATING			"\033[0;32mis eating\033[0m\n"
 // #  define MESSAGE_IS_SLEEPING		"\033[0;34mis sleeping\033[0m\n"
 // #  define MESSAGE_IS_THINKING		"\033[0;33mis thinking\033[0m\n"
@@ -107,10 +109,9 @@ typedef enum	e_state
 typedef struct	s_data
 {
 	bool			first_death_report;
-	bool			first_done_report;
-	char			padding_00[6];
-	int				started_threads_counter;
+	unsigned long	first_death_report_timestamp;
 	unsigned long	current_clock;
+	int				nb_philo_done;
 	bool			*done_report_flag;
 	bool			*philo_fork;
 	t_state			*philo_state;
@@ -119,10 +120,12 @@ typedef struct	s_data
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	*mutex_last_meal;
+
 	pthread_mutex_t	mutex_race_starter;
-	pthread_mutex_t	mutex_started_threads_counter;
+	pthread_mutex_t	mutex_nb_philo_done_counter;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
+
 	int				param[NB_OF_PARAM];
 }				t_data;
 
@@ -160,19 +163,18 @@ void			acquire_forks(t_data *data, int philo_id);
 void			drop_forks(t_data *data, int philo_id);
 
 t_state			think_action_handler(t_data *data, const int philo_id);
-t_state			take_forks_and_eat_action_handler(t_data *data, const int philo_id);
-t_state			sleep_action_handler(t_data *data, const int philo_id);
+t_state			take_forks_and_eat_handler(t_data *data, const int philo_id);
+t_state			sleep_and_think_handler(t_data *data, const int philo_id);
 
 int				get_right_philo_id(t_data *data, int philo_id);
 
-void			done_eating_action_handler(t_data *data, const int philo_id);
 
 /*
 **	TIMER
 */
 
 unsigned long	get_current_time(void);
-void			*clock_routine(void *data_arg);
+void			*clock_routine(void *data_arg) __attribute__((noreturn));
 
 /*
 **	UTILS
