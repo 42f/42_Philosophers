@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 16:08:56 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 16:43:22 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # define BUFF_SIZE			32
 
 # define GET				NULL
-# define REMOVE				(void *)0xffffffffffffffff
 # define UNSET				-1
 
 # define FORK_AVAILABLE		true
@@ -56,18 +55,18 @@ typedef enum	e_code_err
 	CODE_ERR_PTHREAD
 }				t_code_err;
 
-#  define MESSAGE_HAS_FORK_L		"has LEFT    fork\n"
-#  define MESSAGE_HAS_FORK_R		"has   RIGHT fork\n"
-#  define MESSAGE_HAS_FORK			"has taken a fork\n"
-#  define LEN_HAS_FORK				17
-#  define MESSAGE_IS_EATING			"is eating\n"
-#  define LEN_IS_EATING				10
-#  define MESSAGE_IS_SLEEPING		"is sleeping\n"
-#  define LEN_IS_SLEEPING			12
-#  define MESSAGE_IS_THINKING		"is thinking\n"
-#  define LEN_IS_THINKING			12
-#  define MESSAGE_IS_DEAD			"died\n"
-#  define LEN_IS_DEAD				5
+# define MESSAGE_HAS_FORK_L			"has LEFT    fork\n"
+# define MESSAGE_HAS_FORK_R			"has   RIGHT fork\n"
+# define MESSAGE_HAS_FORK			"has taken a fork\n"
+# define LEN_HAS_FORK				17
+# define MESSAGE_IS_EATING			"is eating\n"
+# define LEN_IS_EATING				10
+# define MESSAGE_IS_SLEEPING		"is sleeping\n"
+# define LEN_IS_SLEEPING			12
+# define MESSAGE_IS_THINKING		"is thinking\n"
+# define LEN_IS_THINKING			12
+# define MESSAGE_IS_DEAD			"died\n"
+# define LEN_IS_DEAD				5
 
 # define NB_OF_FORKS_NEEDED_TO_EAT		2
 # define NB_OF_PARAM					5
@@ -116,17 +115,6 @@ typedef struct	s_data
 	int				param[NB_OF_PARAM];
 }				t_data;
 
-typedef void (*t_printer)(t_data*, const int, unsigned long, const char*);
-
-typedef struct s_printer_data
-{
-	t_printer		printer_routine;
-	int				philo_id;
-	unsigned long	time;
-	const char		*message;
-}				t_printer_data;
-
-
 /*
 **	MONITOR
 */
@@ -154,7 +142,6 @@ t_state			sleep_and_think_handler(t_data *data, const int philo_id);
 
 int				get_right_philo_id(t_data *data, int philo_id);
 
-
 /*
 **	TIMER
 */
@@ -165,17 +152,23 @@ void			*clock_routine(void *data_arg) __attribute__((noreturn));
 /*
 **	UTILS
 */
+
+t_data			*get_data(t_data *mem);
+
 void			init_mutex(t_data *data);
+void			destroy_mutex(t_data *data);
+
 void			failed_init_arrays(pthread_t *th_philo,
 					pthread_t *th_monitor, int *philo_id);
 void			init_threads_arr(pthread_t **th_philo,
-					pthread_t **th_monitor, int **philo_id, size_t nb_philo);
-t_data			*get_data(t_data *mem);
+					pthread_t **th_monitor, int **philo_id);
+
 void			ft_put_str_fd(int fd, const char *s);
-void			ft_put_message_fd(int fd,  const size_t len, const char *str);
+void			ft_put_message_fd(int fd, const size_t len, const char *str);
 void			ft_putnbr(int fd, unsigned long n);
 
-void			destroy_mutex(t_data *data);
+void			*malloc_and_set(size_t size, int set_value);
+void			free_data_struct_content(t_data *data);
 void			safe_free(void *mem);
 void			exit_routine(t_code_err err) __attribute__((noreturn));
 
@@ -183,6 +176,7 @@ void			exit_routine(t_code_err err) __attribute__((noreturn));
 **	ARGUMENTS
 */
 
+int				is_digit_only(const char *av);
 int				process_arguments(t_data *data, const char **av);
 
 #endif

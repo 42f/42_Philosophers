@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 15:44:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 16:49:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static void		update_current_time(t_data *data)
 
 	usleep(250);
 	gettimeofday(&time, NULL);
-	current_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	current_time = (unsigned long)(time.tv_sec * 1000)
+					+ (unsigned long)(time.tv_usec / 1000);
 	if (origin_time == 0)
 		origin_time = current_time;
 	data->current_clock = current_time - origin_time;

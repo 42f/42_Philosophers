@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 16:09:24 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 16:43:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,11 @@ void			init_mutex(t_data *data)
 }
 
 void			init_threads_arr(pthread_t **th_philo,
-					pthread_t **th_monitor, int **philo_id, size_t nb_philo)
+					pthread_t **th_monitor, int **philo_id)
 {
-	nb_philo += 1;
-	*philo_id = (int *)malloc(nb_philo * sizeof(int));
-	*th_philo = (pthread_t *)malloc(nb_philo * sizeof(pthread_t));
-	*th_monitor = (pthread_t *)malloc(nb_philo * sizeof(pthread_t));
+	*philo_id = (int *)malloc_and_set(sizeof(int), 0);
+	*th_philo = (pthread_t *)malloc_and_set(sizeof(pthread_t), 0);
+	*th_monitor = (pthread_t *)malloc_and_set(sizeof(pthread_t), 0);
 	if (*philo_id == NULL || *th_philo == NULL || *th_monitor == NULL)
 	{
 		failed_init_arrays(*th_philo, *th_monitor, *philo_id);

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 15:45:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 16:21:55 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 			data->philo_fork[target_id] = FORK_USED;
 			*hand = HAND_HAS_FORK;
 			grabed_flag = true;
-
 		}
 		pthread_mutex_unlock(&data->mutex_fork[target_id]);
 	}
@@ -46,16 +45,16 @@ static void	try_grab_fork(t_data *data, int target_id, int philo_id, bool *hand)
 	}
 }
 
-void	acquire_forks(t_data * data, int philo_id)
+void		acquire_forks(t_data *data, int philo_id)
 {
-	bool		left_hand;
-	bool		right_hand;
-	int			right_philo_id;
+	bool			left_hand;
+	bool			right_hand;
+	int				right_philo_id;
 
 	left_hand = HAND_EMPTY;
 	right_hand = HAND_EMPTY;
 	right_philo_id = get_right_philo_id(data, philo_id);
-	while ((left_hand == HAND_EMPTY	|| right_hand == HAND_EMPTY)
+	while ((left_hand == HAND_EMPTY || right_hand == HAND_EMPTY)
 			&& data->first_death_report == false)
 	{
 		if (data->nb_meals_eaten[philo_id] == 0 && philo_id % 2 != 0)
