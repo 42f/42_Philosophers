@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 17:11:41 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static size_t	ft_itoa(unsigned long nb, char buffer[BUFF_SIZE])
 	}
 }
 
-void			ft_putnbr(int fd, unsigned long nb)
+int				ft_putnbr(int fd, unsigned long nb)
 {
 	static char		buffer[BUFF_SIZE];
 	size_t			len;
@@ -51,5 +51,5 @@ void			ft_putnbr(int fd, unsigned long nb)
 	memset(buffer, '\0', BUFF_SIZE);
 	len = ft_itoa(nb, buffer);
 	buffer[len] = ' ';
-	write(fd, buffer, len + 1);
+	return(write(fd, buffer, len + 1));
 }
