@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 09:50:46 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 15:46:41 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,3 @@ void	put_death_status(t_data *data, const int philo_id)
 		pthread_mutex_unlock(&data->mutex_stdout);
 	}
 }
-
-
-
-
-
-
-
-	// if (data->first_death_report == true)
-		// return ;
-		// ft_putnbr(STDOUT_FILENO, get_current_time());
-
-
-
-// dprintf(STDERR_FILENO, "%ld %d trying to report...............................\n", get_current_time(), philo_id);
-	// dprintf(STDERR_FILENO, "%ld %d ---------------------------------------FLAG\n", get_current_time(), philo_id);

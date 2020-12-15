@@ -63,7 +63,6 @@ SRCS += status_printer.c
 SRCS += status_printer_utils.c
 SRCS += arguments_process.c
 SRCS += timer.c
-SRCS += aliveness.c
 SRCS += exit_routine.c
 
 vpath %.c ./

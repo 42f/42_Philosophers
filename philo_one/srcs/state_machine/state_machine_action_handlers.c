@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 11:22:39 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 15:45:19 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static bool	is_done_eating(t_data *data, int philo_id)
 
 	time_to_eat = (unsigned long)data->param[T_TO_EAT] / 1000;
 	return (get_current_time() - data->last_meal[philo_id] >= time_to_eat);
-			// || data->first_death_report == true);
 }
 
 t_state		take_forks_and_eat_handler(t_data *data, const int philo_id)
@@ -58,7 +57,6 @@ static bool	is_done_sleeping(t_data *data, unsigned long fell_asleep_timestamp)
 
 	time_to_sleep = (unsigned long)data->param[T_TO_SLEEP] / 1000;
 	return (get_current_time() - fell_asleep_timestamp >= time_to_sleep);
-			// || data->first_death_report == true);
 }
 
 t_state		sleep_and_think_handler(t_data *data, const int philo_id)

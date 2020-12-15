@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 15:27:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 15:44:30 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ void			*clock_routine(void *data_arg)
 
 	data = (t_data *)data_arg;
 	nb_philo = data->param[NB_PHILO];
-	// pthread_mutex_lock(&data->mutex_race_starter);
-	// pthread_mutex_unlock(&data->mutex_race_starter);
 	while (data->nb_philo_done < nb_philo)
 		update_current_time(data);
 	pthread_exit(NULL);

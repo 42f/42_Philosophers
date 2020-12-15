@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 11:00:37 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 16:08:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ typedef enum	e_code_err
 	CODE_ERR_PTHREAD
 }				t_code_err;
 
-// # ifndef DEBUG_MODE
-
 #  define MESSAGE_HAS_FORK_L		"has LEFT    fork\n"
 #  define MESSAGE_HAS_FORK_R		"has   RIGHT fork\n"
 #  define MESSAGE_HAS_FORK			"has taken a fork\n"
@@ -70,16 +68,6 @@ typedef enum	e_code_err
 #  define LEN_IS_THINKING			12
 #  define MESSAGE_IS_DEAD			"died\n"
 #  define LEN_IS_DEAD				5
-
-// # else
-
-// #  define MESSAGE_HAS_FORK			"\033[0;31mhas taken a fork\033[0m\n"
-// #  define MESSAGE_IS_EATING			"\033[0;32mis eating\033[0m\n"
-// #  define MESSAGE_IS_SLEEPING		"\033[0;34mis sleeping\033[0m\n"
-// #  define MESSAGE_IS_THINKING		"\033[0;33mis thinking\033[0m\n"
-// #  define MESSAGE_IS_DEAD			"\033[0;35mdied\033[0m\n"
-
-// # endif
 
 # define NB_OF_FORKS_NEEDED_TO_EAT		2
 # define NB_OF_PARAM					5
@@ -119,7 +107,6 @@ typedef struct	s_data
 	int				*nb_meals_eaten;
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
-	pthread_mutex_t	*mutex_last_meal;
 
 	pthread_mutex_t	mutex_race_starter;
 	pthread_mutex_t	mutex_nb_philo_done_counter;
@@ -145,7 +132,6 @@ typedef struct s_printer_data
 */
 
 void			*philo_monitor(void *i_arg) __attribute__((noreturn));
-bool			is_alive(t_data *data, const int philo_id);
 
 /*
 **	STATE_MACHINE

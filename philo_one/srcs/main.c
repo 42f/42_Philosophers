@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 08:57:48 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 16:09:37 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,26 @@ static int	check_arguments(const int ac, const char **av)
 	return (SUCCESS);
 }
 
-static void	init_philo_info_storage(t_data *data, int nb_philo)
+static void	*malloc_and_set(size_t size, int set_value)
 {
-	nb_philo += 1;
-	data->last_meal = malloc(nb_philo * sizeof(unsigned long));
-	data->nb_meals_eaten = malloc(nb_philo * sizeof(int));
-	data->done_report_flag = malloc(nb_philo * sizeof(bool));
-	data->philo_fork = malloc(nb_philo * sizeof(bool));
-	data->philo_state = malloc(nb_philo * sizeof(t_state));
-	data->philo_state_time_stamp = malloc(nb_philo * sizeof(unsigned long));
-	data->mutex_fork = malloc(nb_philo * sizeof(pthread_mutex_t));
-	data->mutex_last_meal = malloc(nb_philo * sizeof(pthread_mutex_t));
-	if (data->last_meal == NULL|| data->nb_meals_eaten == NULL
-		|| data->done_report_flag == NULL || data->philo_fork == NULL
-		|| data->philo_state == NULL|| data->mutex_fork == NULL)
+	void	*new_mem;
+	size_t	nb_philo;
+
+	nb_philo = get_data(GET)->param[NB_PHILO];
+	new_mem = malloc(size * (nb_philo + 1));
+	if (new_mem == NULL)
 		exit_routine(CODE_ERR_MALLOC);
-		//CHECK THIS LIST
-	memset(data->last_meal, 0, nb_philo * sizeof(unsigned long));
-	memset(data->nb_meals_eaten, 0, nb_philo * sizeof(int));
-	memset(data->done_report_flag, false, nb_philo * sizeof(bool));
-	memset(data->philo_fork, FORK_AVAILABLE, nb_philo * sizeof(bool));
-	memset(data->philo_state, startup_state, nb_philo * sizeof(t_state));
-	memset(data->philo_state_time_stamp, 0, nb_philo * sizeof(unsigned long));
-	memset(data->mutex_fork, 0, nb_philo * sizeof(pthread_mutex_t));
-	memset(data->mutex_last_meal, 0, nb_philo * sizeof(pthread_mutex_t));
+	return (memset(new_mem, set_value, size * nb_philo + 1));
+}
+
+static void	init_philo_info_storage(t_data *data)
+{
+	data->last_meal = (unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
+	data->nb_meals_eaten = (int *)malloc_and_set(sizeof(int), 0);
+	data->done_report_flag = (bool *)malloc_and_set(sizeof(bool), false);
+	data->philo_fork = (bool *)malloc_and_set(sizeof(bool), FORK_AVAILABLE);
+	data->philo_state_time_stamp = (unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
+	data->mutex_fork = (pthread_mutex_t *)malloc_and_set(sizeof(pthread_mutex_t), 0);
 }
 
 static void	free_data_struct_content(t_data *data)
@@ -100,7 +96,7 @@ int			main(const int ac, const char **av)
 		ret = process_arguments(&data, av);
 	if (ret == SUCCESS)
 	{
-		init_philo_info_storage(&data, data.param[NB_PHILO]);
+		init_philo_info_storage(&data);
 		process_philo(&data);
 		free_data_struct_content(&data);
 	}
