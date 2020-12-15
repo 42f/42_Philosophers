@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/15 17:11:49 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,9 +163,9 @@ void			failed_init_arrays(pthread_t *th_philo,
 void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id);
 
-void			ft_put_str_fd(int fd, const char *s);
-void			ft_put_message_fd(int fd, const size_t len, const char *str);
-void			ft_putnbr(int fd, unsigned long n);
+int				ft_put_str_fd(int fd, const char *s);
+int				ft_put_message_fd(int fd, const size_t len, const char *str);
+int				ft_putnbr(int fd, unsigned long n);
 
 void			*malloc_and_set(size_t size, int set_value);
 void			free_data_struct_content(t_data *data);
