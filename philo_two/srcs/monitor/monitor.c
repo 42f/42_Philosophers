@@ -1,38 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state_machine.c                                    :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
+/*   Updated: 2020/12/15 17:04:00 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void			*philo_state_machine(void *i_arg)
+void			*philo_monitor(void *i_arg)
 {
+	bool			alive;
 	int				philo_id;
 	t_data			*data;
-	t_state			state;
+	unsigned long	time;
 
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
-	state = startup_state;
+	alive = false;
 	pthread_mutex_lock(&data->mutex_race_starter);
 	pthread_mutex_unlock(&data->mutex_race_starter);
-	while (data->first_death_report == false && state != reached_meals_nb_state)
+	time = 0;
+	while ((alive =
+	(int)time - (int)data->last_meal[philo_id] <= data->param[T_TO_DIE]) == true
+			&& data->first_death_report == false
+			&& data->done_report_flag[philo_id] == false)
+		time = get_current_time();
+	if (data->first_death_report == false && alive == false)
 	{
-		if (state == thinking_state || state == startup_state)
-			state = take_forks_and_eat_handler(data, philo_id);
-		else if (state == finished_meal_state)
-			state = sleep_and_think_handler(data, philo_id);
+		pthread_mutex_lock(&data->mutex_death_report);
+		data->first_death_report = true;
+		data->first_death_report_timestamp = time;
+		put_death_status(data, philo_id);
+		pthread_mutex_unlock(&data->mutex_death_report);
 	}
-	data->done_report_flag[philo_id] = true;
-	pthread_mutex_lock(&data->mutex_nb_philo_done_counter);
-	data->nb_philo_done++;
-	pthread_mutex_unlock(&data->mutex_nb_philo_done_counter);
 	pthread_exit(NULL);
 }
