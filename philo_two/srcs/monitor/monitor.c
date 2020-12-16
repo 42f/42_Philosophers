@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:20:13 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:49:17 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void			*philo_monitor(void *i_arg)
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
 	alive = false;
-	pthread_mutex_lock(&data->mutex_race_starter);
-	pthread_mutex_unlock(&data->mutex_race_starter);
 	time = 0;
 	while ((alive =
 	(int)time - (int)data->last_meal[philo_id] <= data->param[T_TO_DIE]) == true
@@ -32,11 +30,11 @@ void			*philo_monitor(void *i_arg)
 		time = data->current_clock;
 	if (data->first_death_report == false && alive == false)
 	{
-		pthread_mutex_lock(&data->mutex_death_report);
+		sem_wait(data->sem_death_report);
 		data->first_death_report = true;
 		data->first_death_report_timestamp = time;
 		put_death_status(data, philo_id);
-		pthread_mutex_unlock(&data->mutex_death_report);
+		sem_post(data->sem_death_report);
 	}
 	pthread_exit(NULL);
 }

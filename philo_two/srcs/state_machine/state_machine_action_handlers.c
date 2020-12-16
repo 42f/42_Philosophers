@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:20:13 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 11:20:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,27 @@ static bool	is_done_eating(t_data *data, int philo_id)
 	return (data->current_clock - data->last_meal[philo_id] >= time_to_eat);
 }
 
+void		aquire_forks(t_data *data, int philo_id)
+{
+	if (data->nb_meals_eaten[philo_id] == 0 && philo_id % 2 != 0)
+		usleep(10 * 1000);
+	sem_wait(data->sem_forks_heap);
+	data->philo_state_time_stamp[philo_id] = data->current_clock;
+	put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
+	if (data->first_death_report == false && data->param[NB_PHILO] > 1)
+	{
+		sem_wait(data->sem_forks_heap);
+		data->philo_state_time_stamp[philo_id] = data->current_clock;
+		put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
+	}
+	if (data->param[NB_PHILO] == 1)
+		usleep(data->param[T_TO_DIE] * 1500);
+}
+
 t_state		take_forks_and_eat_handler(t_data *data, const int philo_id)
 {
-	acquire_forks(data, philo_id);
+	aquire_forks(data, philo_id);
+	data->philo_state_time_stamp[philo_id] = data->current_clock;
 	if (data->first_death_report == false)
 	{
 		data->last_meal[philo_id] = data->current_clock;
@@ -38,13 +56,14 @@ t_state		take_forks_and_eat_handler(t_data *data, const int philo_id)
 			usleep(100);
 		data->nb_meals_eaten[philo_id]++;
 	}
-	drop_forks(data, philo_id);
+	sem_post(data->sem_forks_heap);
+	sem_post(data->sem_forks_heap);
 	if (is_nb_meals_reached(data, philo_id) == true)
 	{
 		data->done_report_flag[philo_id] = true;
-		pthread_mutex_lock(&data->mutex_nb_philo_done_counter);
+		sem_wait(data->sem_nb_philo_done);
 		data->nb_philo_done++;
-		pthread_mutex_unlock(&data->mutex_nb_philo_done_counter);
+		sem_post(data->sem_nb_philo_done);
 		pthread_exit(NULL);
 	}
 	else

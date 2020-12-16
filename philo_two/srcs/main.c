@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 10:45:30 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,14 @@ static void	init_philo_info_storage(t_data *data)
 	data->last_meal = (unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
 	data->nb_meals_eaten = (int *)malloc_and_set(sizeof(int), 0);
 	data->done_report_flag = (bool *)malloc_and_set(sizeof(bool), false);
-	data->philo_fork = (bool *)malloc_and_set(sizeof(bool), FORK_AVAILABLE);
 	data->philo_state_time_stamp =
 					(unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
-	data->mutex_fork =
-				(pthread_mutex_t *)malloc_and_set(sizeof(pthread_mutex_t), 0);
 }
 
 int			main(const int ac, const char **av)
 {
-	int		ret;
 	t_data	data;
+	int		ret;
 
 	get_data(&data);
 	memset(&data, 0, sizeof(t_data));

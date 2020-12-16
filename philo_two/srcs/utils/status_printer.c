@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:39:36 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:49:17 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void	put_regular_status(t_data *data, const int philo_id,
 								const int message_len, const char *message)
 {
-	pthread_mutex_lock(&data->mutex_stdout);
+	sem_wait(data->sem_stdout);
 	if (data->first_death_report == false)
 	{
 		ft_putnbr(STDOUT_FILENO, data->philo_state_time_stamp[philo_id]);
 		ft_putnbr(STDOUT_FILENO, (unsigned long)philo_id);
 		ft_put_message_fd(STDOUT_FILENO, (size_t)message_len, message);
 	}
-	pthread_mutex_unlock(&data->mutex_stdout);
+	sem_post(data->sem_stdout);
 }
 
 void	put_death_status(t_data *data, const int philo_id)
@@ -31,7 +31,7 @@ void	put_death_status(t_data *data, const int philo_id)
 
 	if (already_reported_flag == false)
 	{
-		pthread_mutex_lock(&data->mutex_stdout);
+		sem_wait(data->sem_stdout);
 		if (already_reported_flag == false)
 		{
 			already_reported_flag = true;
@@ -39,6 +39,6 @@ void	put_death_status(t_data *data, const int philo_id)
 			ft_putnbr(STDOUT_FILENO, (unsigned long)philo_id);
 			ft_put_message_fd(STDOUT_FILENO, LEN_IS_DEAD, MESSAGE_IS_DEAD);
 		}
-		pthread_mutex_unlock(&data->mutex_stdout);
+		sem_post(data->sem_stdout);
 	}
 }

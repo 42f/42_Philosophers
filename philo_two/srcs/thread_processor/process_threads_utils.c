@@ -6,31 +6,36 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 10:00:21 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void			init_mutex(t_data *data)
+sem_t			*safe_sem_open(const char *name, int sem_value)
 {
-	int	i;
+	sem_t	*opened_semaphore;
 
-	if (pthread_mutex_init(&data->mutex_race_starter, NULL) != 0)
-		exit_routine(CODE_ERR_MUTEX);
-	if (pthread_mutex_init(&data->mutex_nb_philo_done_counter, NULL) != 0)
-		exit_routine(CODE_ERR_MUTEX);
-	if (pthread_mutex_init(&data->mutex_stdout, NULL) != 0)
-		exit_routine(CODE_ERR_MUTEX);
-	if (pthread_mutex_init(&data->mutex_death_report, NULL) != 0)
-		exit_routine(CODE_ERR_MUTEX);
-	i = 0;
-	while (i < data->param[NB_PHILO])
+	errno = 0;
+	opened_semaphore = sem_open(name, O_CREAT | O_EXCL, 0644, sem_value);
+	if (opened_semaphore == SEM_FAILED && errno == EEXIST)
 	{
-		if (pthread_mutex_init(&data->mutex_fork[i], NULL) != 0)
-			exit_routine(CODE_ERR_MUTEX);
-		i++;
+		sem_unlink(name);
+		opened_semaphore = sem_open(name, O_CREAT | O_EXCL, 0644, sem_value);
 	}
+	if (opened_semaphore == SEM_FAILED)
+		exit_routine(CODE_ERR_SEM);
+	return (opened_semaphore);
+}
+
+void			init_sem(t_data *data)
+{
+	data->sem_race_starter = safe_sem_open(SEM_NAME_RACE_STARTER, 1);
+	data->sem_nb_philo_done = safe_sem_open(SEM_NAME_NB_PHILO_DONE, 1);
+	data->sem_stdout = safe_sem_open(SEM_NAME_STDOUT, 1);
+	data->sem_death_report = safe_sem_open(SEM_NAME_DEATH_REPORT, 1);
+	data->sem_forks_heap = safe_sem_open(SEM_NAME_FORKS_HEAP,
+														data->param[NB_PHILO]);
 }
 
 void			init_threads_arr(pthread_t **th_philo,
@@ -46,20 +51,25 @@ void			init_threads_arr(pthread_t **th_philo,
 	}
 }
 
-void			destroy_mutex(t_data *data)
+static void		safe_sem_close(sem_t *sem_to_close)
 {
-	int	i;
+	if (sem_to_close != NULL)
+		sem_close(sem_to_close);
+}
 
-	pthread_mutex_destroy(&data->mutex_race_starter);
-	pthread_mutex_destroy(&data->mutex_nb_philo_done_counter);
-	pthread_mutex_destroy(&data->mutex_stdout);
-	pthread_mutex_destroy(&data->mutex_death_report);
-	i = 0;
-	while (i < data->param[NB_PHILO])
-	{
-		pthread_mutex_destroy(&data->mutex_fork[i]);
-		i++;
-	}
+void			destroy_sem(t_data *data)
+{
+	safe_sem_close(data->sem_race_starter);
+	safe_sem_close(data->sem_nb_philo_done);
+	safe_sem_close(data->sem_stdout);
+	safe_sem_close(data->sem_death_report);
+	safe_sem_close(data->sem_forks_heap);
+																	// check if next block is necessary
+	sem_unlink(SEM_NAME_RACE_STARTER);
+	sem_unlink(SEM_NAME_NB_PHILO_DONE);
+	sem_unlink(SEM_NAME_STDOUT);
+	sem_unlink(SEM_NAME_DEATH_REPORT);
+	sem_unlink(SEM_NAME_FORKS_HEAP);
 }
 
 void			failed_init_arrays(pthread_t *th_philo,

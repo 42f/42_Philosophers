@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 10:56:40 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void			*philo_state_machine(void *i_arg)
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
 	state = startup_state;
-	pthread_mutex_lock(&data->mutex_race_starter);
-	pthread_mutex_unlock(&data->mutex_race_starter);
+	sem_wait(data->sem_race_starter);
+	sem_post(data->sem_race_starter);
 	while (data->first_death_report == false && state != reached_meals_nb_state)
 	{
 		if (state == thinking_state || state == startup_state)
@@ -31,8 +31,8 @@ void			*philo_state_machine(void *i_arg)
 			state = sleep_and_think_handler(data, philo_id);
 	}
 	data->done_report_flag[philo_id] = true;
-	pthread_mutex_lock(&data->mutex_nb_philo_done_counter);
+	sem_wait(data->sem_nb_philo_done);
 	data->nb_philo_done++;
-	pthread_mutex_unlock(&data->mutex_nb_philo_done_counter);
+	sem_post(data->sem_nb_philo_done);
 	pthread_exit(NULL);
 }

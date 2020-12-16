@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:32:44 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 10:19:31 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ void	free_data_struct_content(t_data *data)
 	safe_free(data->last_meal);
 	safe_free(data->nb_meals_eaten);
 	safe_free(data->done_report_flag);
-	safe_free(data->philo_fork);
 	safe_free(data->philo_state);
 	safe_free(data->philo_state_time_stamp);
-	safe_free(data->mutex_fork);
 }
