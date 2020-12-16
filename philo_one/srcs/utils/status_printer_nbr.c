@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:11:41 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 07:38:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 static void		ft_fill(char *buffer, unsigned long n_val)
 {
-	if (n_val >= 10)
-		ft_fill(buffer - 1, n_val / 10);
-	*buffer = (n_val % 10) + '0';
+	while (n_val > 0)
+	{
+		*buffer = (n_val % 10) + '0';
+		n_val /= 10;
+		buffer--;
+	}
 }
 
 static size_t	ft_itoa(unsigned long nb, char buffer[BUFF_SIZE])
