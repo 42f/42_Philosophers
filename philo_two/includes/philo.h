@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 10:41:10 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 14:11:07 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ typedef enum	e_code_err
 # define MESSAGE_HAS_FORK_R			"has   RIGHT fork\n"
 # define MESSAGE_HAS_FORK			"has taken a fork\n"
 # define LEN_HAS_FORK				17
-# define MESSAGE_IS_EATING			"is eating\n"
+# define MESSAGE_EATING			"is eating\n"
 # define LEN_IS_EATING				10
-# define MESSAGE_IS_SLEEPING		"is sleeping\n"
+# define MESSAGE_SLEEPING		"is sleeping\n"
 # define LEN_IS_SLEEPING			12
-# define MESSAGE_IS_THINKING		"is thinking\n"
+# define MESSAGE_THINKING		"is thinking\n"
 # define LEN_IS_THINKING			12
-# define MESSAGE_IS_DEAD			"died\n"
+# define MESSAGE_DEAD			"died\n"
 # define LEN_IS_DEAD				5
 
 # define NB_OF_FORKS_NEEDED_TO_EAT		2
@@ -130,13 +130,13 @@ typedef struct	s_data
 **	MONITOR
 */
 
-void			*philo_monitor(void *i_arg) __attribute__((noreturn));
+void			*philo_monitor(void *i_arg);
 
 /*
 **	STATE_MACHINE
 */
 
-void			*philo_state_machine(void *i_arg) __attribute__((noreturn));
+void			*philo_state_machine(void *i_arg);
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 										const t_state current_state, int time);
@@ -149,12 +149,15 @@ t_state			take_forks_and_eat_handler(t_data *data, const int philo_id);
 t_state			sleep_and_think_handler(t_data *data, const int philo_id);
 
 int				get_right_philo_id(t_data *data, int philo_id);
+void			aquire_forks(t_data *data, int philo_id);
+void			report_nb_meals_reached_and_exit_thread(t_data *data,
+									int philo_id) __attribute__((noreturn));
 
 /*
 **	TIMER
 */
 
-void			*clock_routine(void *data_arg) __attribute__((noreturn));
+void			*clock_routine(void *data_arg);
 
 /*
 **	UTILS
@@ -164,6 +167,8 @@ t_data			*get_data(t_data *mem);
 
 void			init_sem(t_data *data);
 void			destroy_sem(t_data *data);
+sem_t			*safe_sem_open(const char *name, int sem_value);
+void			safe_sem_close(sem_t *sem_to_close, const char* name);
 
 void			failed_init_arrays(pthread_t *th_philo,
 					pthread_t *th_monitor, int *philo_id);

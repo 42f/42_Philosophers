@@ -51,10 +51,12 @@ endif
 HEADER += $(INCLUDES)philo.h
 
 SRCS += main.c
+SRCS += sem_utils.c
 SRCS += process_threads.c
 SRCS += process_threads_utils.c
 SRCS += general_utils.c
 SRCS += state_machine.c
+SRCS += state_machine_utils.c
 SRCS += state_machine_action_handlers.c
 SRCS += monitor.c
 SRCS += status_printer.c

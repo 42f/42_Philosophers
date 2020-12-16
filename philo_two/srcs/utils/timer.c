@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 10:23:09 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 13:46:29 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ void			*clock_routine(void *data_arg)
 	nb_philo = data->param[NB_PHILO];
 	while (data->nb_philo_done < nb_philo)
 		update_current_time(data);
-	pthread_exit(NULL);
+	return (NULL);
 }

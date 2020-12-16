@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:30:39 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 13:49:07 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ typedef enum	e_code_err
 # define MESSAGE_HAS_FORK_R			"has   RIGHT fork\n"
 # define MESSAGE_HAS_FORK			"has taken a fork\n"
 # define LEN_HAS_FORK				17
-# define MESSAGE_IS_EATING			"is eating\n"
+# define MESSAGE_EATING				"is eating\n"
 # define LEN_IS_EATING				10
-# define MESSAGE_IS_SLEEPING		"is sleeping\n"
+# define MESSAGE_SLEEPING			"is sleeping\n"
 # define LEN_IS_SLEEPING			12
-# define MESSAGE_IS_THINKING		"is thinking\n"
+# define MESSAGE_THINKING			"is thinking\n"
 # define LEN_IS_THINKING			12
-# define MESSAGE_IS_DEAD			"died\n"
+# define MESSAGE_DEAD				"died\n"
 # define LEN_IS_DEAD				5
 
 # define NB_OF_FORKS_NEEDED_TO_EAT		2
@@ -96,9 +96,13 @@ typedef enum	e_state
 typedef struct	s_data
 {
 	bool			first_death_report;
+	char			padd_00[7];
+	int				nb_philo_done;
+	char			padd_01[4];
+	int				param[NB_OF_PARAM];
+	char			padd_02[4];
 	unsigned long	first_death_report_timestamp;
 	unsigned long	current_clock;
-	int				nb_philo_done;
 	bool			*done_report_flag;
 	bool			*philo_fork;
 	t_state			*philo_state;
@@ -106,26 +110,23 @@ typedef struct	s_data
 	int				*nb_meals_eaten;
 	unsigned long	*last_meal;
 	pthread_mutex_t	*mutex_fork;
-
 	pthread_mutex_t	mutex_race_starter;
 	pthread_mutex_t	mutex_nb_philo_done_counter;
 	pthread_mutex_t	mutex_stdout;
 	pthread_mutex_t	mutex_death_report;
-
-	int				param[NB_OF_PARAM];
 }				t_data;
 
 /*
 **	MONITOR
 */
 
-void			*philo_monitor(void *i_arg) __attribute__((noreturn));
+void			*philo_monitor(void *i_arg);
 
 /*
 **	STATE_MACHINE
 */
 
-void			*philo_state_machine(void *i_arg) __attribute__((noreturn));
+void			*philo_state_machine(void *i_arg);
 void			process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 										const t_state current_state, int time);
@@ -141,12 +142,14 @@ t_state			take_forks_and_eat_handler(t_data *data, const int philo_id);
 t_state			sleep_and_think_handler(t_data *data, const int philo_id);
 
 int				get_right_philo_id(t_data *data, int philo_id);
+void			report_nb_meals_reached_and_exit_thread(t_data *data,
+									int philo_id) __attribute__((noreturn));
 
 /*
 **	TIMER
 */
 
-void			*clock_routine(void *data_arg) __attribute__((noreturn));
+void			*clock_routine(void *data_arg);
 
 /*
 **	UTILS

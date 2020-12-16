@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 13:45:16 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ void			*philo_state_machine(void *i_arg)
 	pthread_mutex_lock(&data->mutex_nb_philo_done_counter);
 	data->nb_philo_done++;
 	pthread_mutex_unlock(&data->mutex_nb_philo_done_counter);
+	return (NULL);
 	pthread_exit(NULL);
 }

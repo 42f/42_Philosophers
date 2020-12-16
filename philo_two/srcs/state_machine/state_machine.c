@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 10:56:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 13:51:47 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@ void			*philo_state_machine(void *i_arg)
 	sem_wait(data->sem_nb_philo_done);
 	data->nb_philo_done++;
 	sem_post(data->sem_nb_philo_done);
-	pthread_exit(NULL);
+	return (NULL);
 }
