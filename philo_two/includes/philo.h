@@ -6,13 +6,14 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:30:39 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:54:25 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <errno.h>
 # include <sys/time.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -20,6 +21,10 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <string.h>
+
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <semaphore.h>
 
 # define BUFF_SIZE			32
 
@@ -37,13 +42,19 @@
 # define SUCCESS_RETURN		0
 # define FAILURE_RETURN		1
 
+# define SEM_NAME_RACE_STARTER	"/philo_race_starter"
+# define SEM_NAME_NB_PHILO_DONE	"/philo_nb_philo_done"
+# define SEM_NAME_STDOUT		"/philo_stdout"
+# define SEM_NAME_DEATH_REPORT	"/philo_death_report"
+# define SEM_NAME_FORKS_HEAP	"/philo_forks_heap"
+
 # define USAGE0	"Philo: Usage: > 1 value only\n"
 # define USAGE1	"number_of_philosopher time_to_die "
 # define USAGE2	"time_to_eat time_to_sleep\n"
 # define USAGE3	"[number_of_time_each_philosophers_must_eat]\n"
 
 # define ERR_MALLOC		"\nPhilo: error: malloc() failed\n"
-# define ERR_MUTEX		"\nPhilo: error: could not initialize mutex\n"
+# define ERR_SEM		"\nPhilo: error: could not initialize semaphore\n"
 # define ERR_PTHREAD	"\nPhilo: error: pthread function failed\n"
 
 # define NB_ERR_CODE	3
@@ -51,7 +62,7 @@
 typedef enum	e_code_err
 {
 	CODE_ERR_MALLOC,
-	CODE_ERR_MUTEX,
+	CODE_ERR_SEM,
 	CODE_ERR_PTHREAD
 }				t_code_err;
 
@@ -100,18 +111,15 @@ typedef struct	s_data
 	unsigned long	current_clock;
 	int				nb_philo_done;
 	bool			*done_report_flag;
-	bool			*philo_fork;
 	t_state			*philo_state;
 	unsigned long	*philo_state_time_stamp;
 	int				*nb_meals_eaten;
 	unsigned long	*last_meal;
-	pthread_mutex_t	*mutex_fork;
-
-	pthread_mutex_t	mutex_race_starter;
-	pthread_mutex_t	mutex_nb_philo_done_counter;
-	pthread_mutex_t	mutex_stdout;
-	pthread_mutex_t	mutex_death_report;
-
+	sem_t			*sem_race_starter;
+	sem_t			*sem_nb_philo_done;
+	sem_t			*sem_stdout;
+	sem_t			*sem_death_report;
+	sem_t			*sem_forks_heap;
 	int				param[NB_OF_PARAM];
 }				t_data;
 
@@ -133,8 +141,8 @@ void			put_regular_status(t_data *data, const int philo_id,
 								const int message_len, const char *message);
 void			put_death_status(t_data *data, const int philo_id);
 
-void			acquire_forks(t_data *data, int philo_id);
-void			drop_forks(t_data *data, int philo_id);
+// void			acquire_forks(t_data *data, int philo_id);
+// void			drop_forks(t_data *data, int philo_id);
 
 t_state			think_action_handler(t_data *data, const int philo_id);
 t_state			take_forks_and_eat_handler(t_data *data, const int philo_id);
@@ -154,8 +162,8 @@ void			*clock_routine(void *data_arg) __attribute__((noreturn));
 
 t_data			*get_data(t_data *mem);
 
-void			init_mutex(t_data *data);
-void			destroy_mutex(t_data *data);
+void			init_sem(t_data *data);
+void			destroy_sem(t_data *data);
 
 void			failed_init_arrays(pthread_t *th_philo,
 					pthread_t *th_monitor, int *philo_id);
