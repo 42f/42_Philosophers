@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 09:54:25 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 10:41:10 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,13 @@ typedef enum	e_state
 typedef struct	s_data
 {
 	bool			first_death_report;
+	char			padd_00[7];
+	int				nb_philo_done;
+	char			padd_01[4];
+	int				param[NB_OF_PARAM];
+	char			padd_02[4];
 	unsigned long	first_death_report_timestamp;
 	unsigned long	current_clock;
-	int				nb_philo_done;
 	bool			*done_report_flag;
 	t_state			*philo_state;
 	unsigned long	*philo_state_time_stamp;
@@ -120,7 +124,6 @@ typedef struct	s_data
 	sem_t			*sem_stdout;
 	sem_t			*sem_death_report;
 	sem_t			*sem_forks_heap;
-	int				param[NB_OF_PARAM];
 }				t_data;
 
 /*
@@ -140,9 +143,6 @@ t_state			check_aliveness(t_data *data, int philo_id,
 void			put_regular_status(t_data *data, const int philo_id,
 								const int message_len, const char *message);
 void			put_death_status(t_data *data, const int philo_id);
-
-// void			acquire_forks(t_data *data, int philo_id);
-// void			drop_forks(t_data *data, int philo_id);
 
 t_state			think_action_handler(t_data *data, const int philo_id);
 t_state			take_forks_and_eat_handler(t_data *data, const int philo_id);
