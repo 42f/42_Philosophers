@@ -52,7 +52,7 @@ HEADER += $(INCLUDES)philo.h
 
 SRCS += main.c
 SRCS += sem_utils.c
-SRCS += process_threads.c
+SRCS += process_fork.c
 SRCS += process_threads_utils.c
 SRCS += general_utils.c
 SRCS += state_machine.c
@@ -70,7 +70,7 @@ vpath %.c ./
 vpath %.c ./srcs
 vpath %.c ./srcs/monitor
 vpath %.c ./srcs/state_machine
-vpath %.c ./srcs/thread_processor
+vpath %.c ./srcs/children_processor
 vpath %.c ./srcs/utils
 
 OBJS = $(patsubst %.c, $(OBJ_DIR)%.o, $(SRCS))

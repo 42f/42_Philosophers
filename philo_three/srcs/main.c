@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 15:58:08 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,34 +36,18 @@ static int	check_arguments(const int ac, const char **av)
 	return (SUCCESS);
 }
 
-static void	init_philo_info_storage(t_data *data)
-{
-	data->last_meal = (unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
-	data->nb_meals_eaten = (int *)malloc_and_set(sizeof(int), 0);
-	data->done_report_flag = (bool *)malloc_and_set(sizeof(bool), false);
-	data->philo_fork = (bool *)malloc_and_set(sizeof(bool), FORK_AVAILABLE);
-	data->philo_state_time_stamp =
-					(unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
-	data->mutex_fork =
-				(pthread_mutex_t *)malloc_and_set(sizeof(pthread_mutex_t), 0);
-}
-
 int			main(const int ac, const char **av)
 {
+	t_data	global_data;
 	int		ret;
-	t_data	data;
 
-	get_data(&data);
-	memset(&data, 0, sizeof(t_data));
+	memset(&global_data, 0, sizeof(t_data));
+	get_data(&global_data);
 	ret = check_arguments(ac, av);
 	if (ret == SUCCESS)
-		ret = process_arguments(&data, av);
+		ret = process_arguments(&global_data, av);
 	if (ret == SUCCESS)
-	{
-		init_philo_info_storage(&data);
-		process_philo(&data);
-		free_data_struct_content(&data);
-	}
+		process_fork(&global_data);
 	else
 	{
 		put_usage();

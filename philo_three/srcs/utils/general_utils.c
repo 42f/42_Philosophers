@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 13:43:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 15:56:40 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,9 @@ unsigned long	get_death_time(t_data *data, int philo_id)
 {
 	unsigned long	death_time;
 
-	death_time = data->first_death_report_timestamp;
+	death_time = data->death_report_timestamp;
 	if (death_time - data->last_meal[philo_id] - data->param[T_TO_DIE] > 10)
 		return (data->last_meal[philo_id] + data->param[T_TO_DIE] + 1);
 	else
-		return (data->first_death_report_timestamp);
-}
-
-void			free_data_struct_content(t_data *data)
-{
-	safe_free(data->last_meal);
-	safe_free(data->nb_meals_eaten);
-	safe_free(data->done_report_flag);
-	safe_free(data->philo_fork);
-	safe_free(data->philo_state);
-	safe_free(data->philo_state_time_stamp);
-	safe_free(data->mutex_fork);
+		return (data->death_report_timestamp);
 }

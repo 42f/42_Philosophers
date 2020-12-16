@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:20:13 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 14:55:15 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void		acquire_forks(t_data *data, int philo_id)
 	right_hand = HAND_EMPTY;
 	right_philo_id = get_right_philo_id(data, philo_id);
 	while ((left_hand == HAND_EMPTY || right_hand == HAND_EMPTY)
-			&& data->first_death_report == false)
+			&& data->death_report == false)
 	{
 		if (data->nb_meals_eaten[philo_id] == 0 && philo_id % 2 != 0)
 		{

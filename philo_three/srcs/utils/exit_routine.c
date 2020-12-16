@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 15:16:49 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,13 @@ void	exit_routine(t_code_err err)
 {
 	t_data				*data;
 	static const char	*message[NB_ERR_CODE] =
-	{ ERR_MALLOC, ERR_MUTEX, ERR_PTHREAD };
+	{ ERR_MALLOC, ERR_FORK, ERR_SEM, ERR_PTHREAD };
 
 	data = get_data(GET);
 	if (data != NULL)
 	{
-		safe_free(data->last_meal);
-		safe_free(data->nb_meals_eaten);
-		safe_free(data->done_report_flag);
-		safe_free(data->philo_fork);
-		safe_free(data->mutex_fork);
-		destroy_mutex(data);
+		free_data_struct_content(data);
+		destroy_sem(data);
 	}
 	if (err < NB_ERR_CODE)
 		ft_put_str_fd(STDERR_FILENO, message[err]);

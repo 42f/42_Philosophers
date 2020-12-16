@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 13:51:47 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 14:55:15 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void			*philo_state_machine(void *i_arg)
 	state = startup_state;
 	sem_wait(data->sem_race_starter);
 	sem_post(data->sem_race_starter);
-	while (data->first_death_report == false && state != reached_meals_nb_state)
+	while (data->death_report == false && state != reached_meals_nb_state)
 	{
 		if (state == thinking_state || state == startup_state)
 			state = take_forks_and_eat_handler(data, philo_id);
