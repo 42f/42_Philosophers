@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/16 07:21:10 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,6 @@ static void		update_current_time(t_data *data)
 	if (origin_time == 0)
 		origin_time = current_time;
 	data->current_clock = current_time - origin_time;
-}
-
-unsigned long	get_current_time(void)
-{
-	return (get_data(GET)->current_clock);
 }
 
 void			*clock_routine(void *data_arg)
