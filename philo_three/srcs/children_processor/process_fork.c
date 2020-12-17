@@ -30,31 +30,32 @@ static void		kill_all_philo(t_gdata *gdata, pid_t pid_already_dead_philo)
 	{
 		pid_to_kill = gdata->philo_pids[philo_to_kill];
 		if (pid_to_kill != pid_already_dead_philo && pid_to_kill > 1)
-			kill(pid_to_kill, SIGKILL);
+		{
+			kill(pid_to_kill, SIGTERM);
+		}
 		philo_to_kill++;
 	}
 }
 
 static void		waiter(t_gdata *gdata)
 {
+	int		exit_value;
 	bool	is_the_first_death;
 	int		wstatus;
 	pid_t	pid;
 
-(void)gdata;
 	is_the_first_death = true;
 	wstatus = 0;
-	while ((pid = waitpid(0, &wstatus, NO_OPTIONS)) != FAILURE)
+	while ((pid = waitpid(EVERY_CHILDREN, &wstatus, NO_OPTIONS)) != FAILURE)
 	{
-		if (exit_status(wstatus) == CHILD_IS_DEAD && is_the_first_death == true)
+		exit_value = exit_status(wstatus);
+		if ((exit_value == CHILD_IS_DEAD || exit_value == CHILD_FAILURE)
+			 									&& is_the_first_death == true)
 		{
-			// sem_wait(gdata->sem_death_report);
 			kill_all_philo(gdata, pid);
 			is_the_first_death = false;
-			// sem_post(gdata->sem_death_report);						// see init_sem 1 or 2
 		}
 	}
-	// sem_post(gdata->sem_stdout);
 }
 
 static void		fork_loop(t_gdata *gdata)

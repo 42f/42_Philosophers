@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 13:41:42 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 15:02:36 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@
 # define SUCCESS			1
 # define FAILURE			-1
 
-# define CHILD_REACH_MEAL_NB	-1
-# define CHILD_IS_DEAD			42
+# define CHILD_FAILURE		1
+# define CHILD_IS_DEAD		42
 # define NO_OPTIONS			0
 # define ANY_CHILD			-1
 # define EVERY_CHILDREN		0

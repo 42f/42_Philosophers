@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 14:28:45 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:44:26 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,9 @@ void			*philo_monitor(void *i_arg)
 	if (alive == false && data->done_report_flag == false)
 	{
 		sem_wait(data->sem_stdout);
-		// sem_wait(data->sem_death_report);
 		data->death_report = true;
 		data->death_report_timestamp = time;
 		put_death_status(data, philo_id);
-		// sem_post(data->sem_death_report);									// 1 / 2 ?
 		exit(CHILD_IS_DEAD);
 	}
 	return (NULL);

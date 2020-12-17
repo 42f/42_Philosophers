@@ -37,7 +37,7 @@ void	exit_routine_childprocess(t_code_err err)
 	}
 	if (err < NB_ERR_CODE)
 		ft_put_str_fd(STDERR_FILENO, message[err]);
-	exit(FAILURE_RETURN);
+	exit(CHILD_FAILURE);
 }
 
 void	exit_routine_mainprocess(t_code_err err, t_gdata *gdata)
