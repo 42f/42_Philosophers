@@ -6,13 +6,13 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 09:00:24 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 15:39:07 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void		update_current_time(t_data *data)
+void		update_current_time(t_data *data)
 {
 	static unsigned long		origin_time;
 	static unsigned long		current_time;

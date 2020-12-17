@@ -52,6 +52,7 @@ static void		waiter(t_gdata *gdata)
 		if ((exit_value == CHILD_IS_DEAD || exit_value == CHILD_FAILURE)
 			 									&& is_the_first_death == true)
 		{
+		// dprintf(STDERR_FILENO, "DEAD IS %d ---------------------+++++++-\n", pid );			// TODO: remove FOBIDDEN
 			kill_all_philo(gdata, pid);
 			is_the_first_death = false;
 		}

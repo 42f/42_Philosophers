@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 15:02:36 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 15:22:51 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <sys/stat.h>
 # include <semaphore.h>
 # include <sys/wait.h>
+# include <signal.h>
 
 # define BUFF_SIZE			32
 
@@ -181,6 +182,7 @@ void			*clock_routine(void *data_arg);
 */
 
 t_data			*get_data(t_data *mem);
+void			update_current_time(t_data *data);
 
 void			init_sem(t_gdata *data);
 void			destroy_sem(t_gdata *data);
