@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 14:55:15 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 08:59:26 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,21 @@ void			*philo_monitor(void *i_arg)
 	int				philo_id;
 	t_data			*data;
 	unsigned long	time;
+	int				t_to_die;
 
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
 	alive = false;
 	time = 0;
-	while ((alive =
-	(int)time - (int)data->last_meal[philo_id] <= data->param[T_TO_DIE]) == true
-			&& data->death_report == false
-			&& data->done_report_flag[philo_id] == false)
+	t_to_die = data->param[T_TO_DIE];
+	while ((alive =	(int)time - (int)data->last_meal <= t_to_die) == true)
 		time = data->current_clock;
-	if (data->death_report == false && alive == false)
+	if (alive == false && data->done_report_flag == false)
 	{
-		sem_wait(data->sem_death_report);
 		data->death_report = true;
 		data->death_report_timestamp = time;
 		put_death_status(data, philo_id);
-		sem_post(data->sem_death_report);
+		exit(CHILD_IS_DEAD);
 	}
 	return (NULL);
 }

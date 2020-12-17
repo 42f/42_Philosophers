@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 15:58:08 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 09:46:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,10 @@ static int	check_arguments(const int ac, const char **av)
 
 int			main(const int ac, const char **av)
 {
-	t_data	global_data;
+	t_gdata	global_data;
 	int		ret;
 
 	memset(&global_data, 0, sizeof(t_data));
-	get_data(&global_data);
 	ret = check_arguments(ac, av);
 	if (ret == SUCCESS)
 		ret = process_arguments(&global_data, av);

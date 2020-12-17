@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:05 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 08:13:57 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void			convert_from_msec_to_usec(int *nb)
 	*nb *= 1000;
 }
 
-int					process_arguments(t_data *data, const char **av)
+int					process_arguments(t_gdata *data, const char **av)
 {
 	int		arg_i;
 	int		i;

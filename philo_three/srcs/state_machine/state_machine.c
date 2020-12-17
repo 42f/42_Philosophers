@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 14:55:15 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 09:05:05 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ void			*philo_state_machine(void *i_arg)
 		else if (state == finished_meal_state)
 			state = sleep_and_think_handler(data, philo_id);
 	}
-	data->done_report_flag[philo_id] = true;
-	sem_wait(data->sem_nb_philo_done);
-	data->nb_philo_done++;
-	sem_post(data->sem_nb_philo_done);
+	if (state == reached_meals_nb_state)
+		data->done_report_flag = true;
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 14:55:15 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 09:32:34 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	put_regular_status(t_data *data, const int philo_id,
 	sem_wait(data->sem_stdout);
 	if (data->death_report == false)
 	{
-		ft_putnbr(STDOUT_FILENO, data->philo_state_time_stamp[philo_id]);
+		ft_putnbr(STDOUT_FILENO, data->philo_state_time_stamp);
 		ft_putnbr(STDOUT_FILENO, (unsigned long)philo_id);
 		ft_put_message_fd(STDOUT_FILENO, (size_t)message_len, message);
 	}
@@ -35,7 +35,7 @@ void	put_death_status(t_data *data, const int philo_id)
 		if (already_reported_flag == false)
 		{
 			already_reported_flag = true;
-			ft_putnbr(STDOUT_FILENO, get_death_time(data, philo_id));
+			ft_putnbr(STDOUT_FILENO, get_death_time(data));
 			ft_putnbr(STDOUT_FILENO, (unsigned long)philo_id);
 			ft_put_message_fd(STDOUT_FILENO, LEN_IS_DEAD, MESSAGE_DEAD);
 		}

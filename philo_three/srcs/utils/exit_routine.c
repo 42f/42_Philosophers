@@ -6,22 +6,38 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 15:16:49 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 09: by51bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	safe_free(void *mem)
+// void	safe_free(void *mem)												// remove ?
+// {
+// 	if (mem != NULL)
+// 	{
+// 		free(mem);
+// 		mem = NULL;
+// 	}
+// }
+
+void	exit_routine_mainprocess(t_code_err err, t_gdata *gdata)
 {
-	if (mem != NULL)
+	static const char	*message[NB_ERR_CODE] =
+	{ ERR_MALLOC, ERR_FORK, ERR_SEM, ERR_PTHREAD };
+
+	if (gdata != NULL)
 	{
-		free(mem);
-		mem = NULL;
+		safe_sem_close(gdata->sem_race_starter, SEM_NAME_RACE_STARTER);
+		safe_sem_close(gdata->sem_stdout, SEM_NAME_STDOUT);
+		safe_sem_close(gdata->sem_forks_heap, SEM_NAME_FORKS_HEAP);
 	}
+	if (err < NB_ERR_CODE)
+		ft_put_str_fd(STDERR_FILENO, message[err]);
+	exit(FAILURE_RETURN);
 }
 
-void	exit_routine(t_code_err err)
+void	exit_routine_childprocess(t_code_err err)
 {
 	t_data				*data;
 	static const char	*message[NB_ERR_CODE] =
@@ -30,8 +46,9 @@ void	exit_routine(t_code_err err)
 	data = get_data(GET);
 	if (data != NULL)
 	{
-		free_data_struct_content(data);
-		destroy_sem(data);
+		safe_sem_close(data->sem_race_starter, SEM_NAME_RACE_STARTER);
+		safe_sem_close(data->sem_stdout, SEM_NAME_STDOUT);
+		safe_sem_close(data->sem_forks_heap, SEM_NAME_FORKS_HEAP);
 	}
 	if (err < NB_ERR_CODE)
 		ft_put_str_fd(STDERR_FILENO, message[err]);

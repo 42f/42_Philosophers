@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 13:46:29 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 09:00:24 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ static void		update_current_time(t_data *data)
 	data->current_clock = current_time - origin_time;
 }
 
-void			*clock_routine(void *data_arg)
+void			*clock_routine(__attribute__((unused)) void *i_arg)
 {
 	t_data						*data;
-	int							nb_philo;
 
-	data = (t_data *)data_arg;
-	nb_philo = data->param[NB_PHILO];
-	while (data->nb_philo_done < nb_philo)
+	data = get_data(GET);
+	while (data->done_report_flag == false && data->death_report == false)
 		update_current_time(data);
+	if (data->death_report == true)
+		exit(CHILD_IS_DEAD);
 	return (NULL);
 }

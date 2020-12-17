@@ -6,13 +6,13 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 15:48:59 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 09:49:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-sem_t	*safe_sem_open(const char *name, int sem_value)
+static sem_t	*safe_sem_open(t_gdata *gdata, const char *name, int sem_value)
 {
 	sem_t	*opened_semaphore;
 
@@ -25,7 +25,7 @@ sem_t	*safe_sem_open(const char *name, int sem_value)
 		opened_semaphore = sem_open(name, O_CREAT | O_EXCL, 0644, sem_value);
 	}
 	if (opened_semaphore == SEM_FAILED)
-		exit_routine(CODE_ERR_SEM);
+		exit_routine_mainprocess(CODE_ERR_SEM, gdata);
 	return (opened_semaphore);
 }
 
@@ -36,17 +36,17 @@ void	safe_sem_close(sem_t *sem_to_close, const char* name)
 	sem_unlink(name);
 }
 
-void			init_sem(t_data *data)
+void			init_sem(t_gdata *gdata)
 {
-	data->sem_stdout = safe_sem_open(SEM_NAME_STDOUT, 1);
-	data->sem_forks_heap = safe_sem_open(SEM_NAME_FORKS_HEAP,
-														data->param[NB_PHILO]);
-	data->sem_race_starter = safe_sem_open(SEM_NAME_RACE_STARTER, 1);
+	gdata->sem_stdout = safe_sem_open(gdata, SEM_NAME_STDOUT, 1);
+	gdata->sem_forks_heap = safe_sem_open(gdata, SEM_NAME_FORKS_HEAP,
+														gdata->param[NB_PHILO]);
+	gdata->sem_race_starter = safe_sem_open(gdata, SEM_NAME_RACE_STARTER, 1);
 }
 
-void			destroy_sem(t_data *data)
+void			destroy_sem(t_gdata *gdata)
 {
-	safe_sem_close(data->sem_race_starter, SEM_NAME_RACE_STARTER);
-	safe_sem_close(data->sem_stdout, SEM_NAME_STDOUT);
-	safe_sem_close(data->sem_forks_heap, SEM_NAME_FORKS_HEAP);
+	safe_sem_close(gdata->sem_race_starter, SEM_NAME_RACE_STARTER);
+	safe_sem_close(gdata->sem_stdout, SEM_NAME_STDOUT);
+	safe_sem_close(gdata->sem_forks_heap, SEM_NAME_FORKS_HEAP);
 }

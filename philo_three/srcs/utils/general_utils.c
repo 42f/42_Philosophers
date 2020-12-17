@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 15:56:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 09:32:20 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,6 @@ t_data			*get_data(t_data *mem)
 	if (mem != GET)
 		mem_backup = mem;
 	return (mem_backup);
-}
-
-void			*malloc_and_set(size_t size, int set_value)
-{
-	void			*new_mem;
-	size_t			nb_philo;
-
-	new_mem = NULL;
-	nb_philo = (size_t)get_data(GET)->param[NB_PHILO];
-	new_mem = malloc(size * (nb_philo + 1));
-	if (new_mem == NULL)
-		exit_routine(CODE_ERR_MALLOC);
-	return (memset(new_mem, set_value, size * (nb_philo + 1)));
 }
 
 int				is_digit_only(const char *av)
@@ -48,13 +35,13 @@ int				is_digit_only(const char *av)
 	return (true);
 }
 
-unsigned long	get_death_time(t_data *data, int philo_id)
+unsigned long	get_death_time(t_data *data)
 {
 	unsigned long	death_time;
 
 	death_time = data->death_report_timestamp;
-	if (death_time - data->last_meal[philo_id] - data->param[T_TO_DIE] > 10)
-		return (data->last_meal[philo_id] + data->param[T_TO_DIE] + 1);
+	if (death_time - data->last_meal - data->param[T_TO_DIE] > 10)
+		return (data->last_meal + data->param[T_TO_DIE] + 1);
 	else
 		return (data->death_report_timestamp);
 }

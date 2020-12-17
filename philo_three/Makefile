@@ -51,20 +51,21 @@ endif
 HEADER += $(INCLUDES)philo.h
 
 SRCS += main.c
-SRCS += sem_utils.c
-SRCS += process_fork.c
-SRCS += process_threads_utils.c
-SRCS += general_utils.c
-SRCS += state_machine.c
 SRCS += state_machine_utils.c
 SRCS += state_machine_action_handlers.c
-SRCS += monitor.c
-SRCS += status_printer.c
-SRCS += status_printer_str.c
-SRCS += status_printer_nbr.c
-SRCS += arguments_process.c
-SRCS += timer.c
+SRCS += state_machine.c
+SRCS += general_utils.c
 SRCS += exit_routine.c
+SRCS += status_printer_nbr.c
+SRCS += timer.c
+SRCS += status_printer_str.c
+SRCS += status_printer.c
+SRCS += child_process.c
+SRCS += sem_utils.c
+SRCS += process_fork.c
+SRCS += monitor.c
+SRCS += arguments_process.c
+
 
 vpath %.c ./
 vpath %.c ./srcs
