@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 15:22:51 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 16:43:32 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define SEM_NAME_FORKS_HEAP	"/philo_forks_heap"
 # define SEM_NAME_DEATH_REPORT	"/philo_death_report"
 
-# define USAGE0	"Philo: Usage: > 1 value only\n"
+# define USAGE0	"Philo: Usage: > 1 value only, no more than 200 philosophers\n"
 # define USAGE1	"number_of_philosopher time_to_die "
 # define USAGE2	"time_to_eat time_to_sleep\n"
 # define USAGE3	"[number_of_time_each_philosophers_must_eat]\n"
@@ -119,7 +119,6 @@ typedef struct	s_global_data
 	sem_t			*sem_race_starter;
 	sem_t			*sem_stdout;
 	sem_t			*sem_forks_heap;
-	sem_t			*sem_death_report;
 	int				param[NB_OF_PARAM];
 	char			padd_00[4];
 	pid_t			*philo_pids;
@@ -139,6 +138,7 @@ typedef struct	s_data
 	sem_t			*sem_stdout;
 	sem_t			*sem_forks_heap;
 	sem_t			*sem_death_report;
+	char			sem_death_report_name_buff[BUFF_SIZE];
 	int				param[NB_OF_PARAM];
 	char			padd_01[4];
 }				t_data;
@@ -185,7 +185,9 @@ t_data			*get_data(t_data *mem);
 void			update_current_time(t_data *data);
 
 void			init_sem(t_gdata *data);
+void			init_local_semaphore(t_data *local_data, int philo_id);
 void			destroy_sem(t_gdata *data);
+sem_t			*safe_sem_open(const char *name, int sem_value);
 void			safe_sem_close(sem_t *sem_to_close, const char* name);
 
 void			failed_init_arrays(pthread_t *th_philo,

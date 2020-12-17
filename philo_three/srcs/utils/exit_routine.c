@@ -33,7 +33,6 @@ void	exit_routine_childprocess(t_code_err err)
 		safe_sem_close(data->sem_race_starter, SEM_NAME_RACE_STARTER);
 		safe_sem_close(data->sem_stdout, SEM_NAME_STDOUT);
 		safe_sem_close(data->sem_forks_heap, SEM_NAME_FORKS_HEAP);
-		safe_sem_close(data->sem_death_report, SEM_NAME_DEATH_REPORT);
 	}
 	if (err < NB_ERR_CODE)
 		ft_put_str_fd(STDERR_FILENO, message[err]);

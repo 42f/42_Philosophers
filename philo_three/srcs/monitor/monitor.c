@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 15:48:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 16:47:39 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static void		process_death(t_data *data, int philo_id, unsigned long time)
 	pid = fork();
 	if (pid == 0)
 	{
+		safe_sem_close(data->sem_death_report, SEM_NAME_DEATH_REPORT);
 		put_death_status(data, philo_id);
 		exit (0);
 	}
 	else if (pid == FAILURE)
 		put_death_status(data, philo_id);
-	else
-		exit(CHILD_IS_DEAD);
+	exit(CHILD_IS_DEAD);
 }
 
 void			*philo_monitor(void *i_arg)
@@ -49,7 +49,9 @@ void			*philo_monitor(void *i_arg)
 	if (alive == false && data->done_report_flag == false)
 	{
 		sem_wait(data->sem_stdout);
+		sem_wait(data->sem_death_report);
 		process_death(data, philo_id, time);
+		sem_post(data->sem_death_report);
 	}
 	return (NULL);
 }

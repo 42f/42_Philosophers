@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:05 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 08:13:57 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 16:39:06 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int					process_arguments(t_gdata *data, const char **av)
 		i++;
 		arg_i++;
 	}
+	if (data->param[NB_PHILO] > 200)
+		return (FAILURE);
 	convert_from_msec_to_usec(&data->param[T_TO_EAT]);
 	convert_from_msec_to_usec(&data->param[T_TO_SLEEP]);
 	return (SUCCESS);

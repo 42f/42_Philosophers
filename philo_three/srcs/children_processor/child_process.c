@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 15:22:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 16:42:42 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 static void		duplicate_global_data(t_data *local_data, t_gdata *global_data)
 {
-	int 			i;
+	int 		i;
 
 	local_data->sem_forks_heap = global_data->sem_forks_heap;
 	local_data->sem_race_starter = global_data->sem_race_starter;
 	local_data->sem_stdout = global_data->sem_stdout;
-	local_data->sem_death_report = global_data->sem_death_report;
 	i = 0;
 	while (i < NB_OF_PARAM)
 	{
@@ -30,13 +29,14 @@ static void		duplicate_global_data(t_data *local_data, t_gdata *global_data)
 
 void			child_process(t_gdata *global_data, int philo_id)
 {
-	pthread_t		th_clock;
-	pthread_t		th_philo;
-	pthread_t		th_monitor;
-	t_data			local_data;
+	pthread_t	th_clock;
+	pthread_t	th_philo;
+	pthread_t	th_monitor;
+	t_data		local_data;
 
 	memset(&local_data, 0, sizeof(t_data));
 	duplicate_global_data(&local_data, global_data);
+	init_local_semaphore(&local_data, philo_id);
 	get_data(&local_data);
 	update_current_time(&local_data);
 	if (pthread_create(&th_clock, NULL, clock_routine, &philo_id) != 0)

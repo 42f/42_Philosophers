@@ -61,6 +61,7 @@ SRCS += timer.c
 SRCS += status_printer_str.c
 SRCS += status_printer.c
 SRCS += child_process.c
+SRCS += child_process_utils_sem.c
 SRCS += sem_utils.c
 SRCS += process_fork.c
 SRCS += monitor.c
