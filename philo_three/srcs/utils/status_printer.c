@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 15:47:19 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 16:58:06 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void		put_regular_status(t_data *data, const int philo_id,
 	}
 	else if (pid == FAILURE)
 		print_regular_status(data, philo_id, message_len, message);
-	else
-		return ;
+	usleep(500);
 }
 
 void		put_death_status(t_data *data, const int philo_id)
