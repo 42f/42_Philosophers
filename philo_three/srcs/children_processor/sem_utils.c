@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 17:32:41 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:55:22 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void		init_sem(t_gdata *gdata)
 	gdata->sem_stdout = safe_sem_open(SEM_NAME_STDOUT, 1);
 	gdata->sem_forks_heap = safe_sem_open(SEM_NAME_FORKS_HEAP,
 														gdata->param[NB_PHILO]);
-	gdata->sem_race_starter = safe_sem_open(SEM_NAME_RACE_STARTER, 1);
+	gdata->sem_race_starter = safe_sem_open(SEM_NAME_RACE_STARTER,
+														gdata->param[NB_PHILO]);
 	if (gdata->sem_stdout == SEM_FAILED
 		|| gdata->sem_race_starter == SEM_FAILED
 		|| gdata->sem_forks_heap == SEM_FAILED)

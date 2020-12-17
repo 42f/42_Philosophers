@@ -6,15 +6,24 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 17:39:39 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:47:36 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+static void		waiter(void)
+{
+	int		wstatus;
+	int		ret;
+
+	ret = SUCCESS;
+	while (ret != FAILURE)
+		ret = waitpid(EVERY_CHILDREN, &wstatus, NO_OPTIONS);
+}
+
 static void		process_death(t_data *data, int philo_id, unsigned long time)
 {
-	int				wstatus;
 	pid_t			pid;
 
 	data->death_report = true;
@@ -28,7 +37,7 @@ static void		process_death(t_data *data, int philo_id, unsigned long time)
 	}
 	else if (pid == FAILURE)
 		put_death_status(data, philo_id);
-	while(waitpid(EVERY_CHILDREN, &wstatus, NO_OPTIONS) != FAILURE);
+	waiter();
 	exit(CHILD_IS_DEAD);
 }
 

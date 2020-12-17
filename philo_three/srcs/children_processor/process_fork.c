@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/17 17:32:54 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 17:36:54 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:55:37 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,23 @@ static void		fork_loop(t_gdata *gdata)
 
 void			process_fork(t_gdata *global_data)
 {
+	int		i;
+
 	init_philo_pids(global_data);
 	init_sem(global_data);
-	sem_wait(global_data->sem_race_starter);
+	i = 0;
+	while (i < global_data->param[NB_PHILO])
+	{
+		sem_wait(global_data->sem_race_starter);
+		i++;
+	}
 	fork_loop(global_data);
-	sem_post(global_data->sem_race_starter);
+	i = 0;
+	while (i < global_data->param[NB_PHILO])
+	{
+		sem_post(global_data->sem_race_starter);
+		i++;
+	}
 	waiter(global_data);
 	safe_free(global_data->philo_pids);
 	destroy_sem(global_data);
