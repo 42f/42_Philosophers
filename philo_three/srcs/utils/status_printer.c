@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 16:58:06 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:11:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static void	print_regular_status(t_data *data, const int philo_id,
 	sem_wait(data->sem_stdout);
 	if (data->death_report == false)
 	{
-		ft_putnbr(STDOUT_FILENO, data->philo_state_time_stamp);
-		ft_putnbr(STDOUT_FILENO, (unsigned long)philo_id);
-		ft_put_message_fd(STDOUT_FILENO, (size_t)message_len, message);
+		ft_putnbr(STDERR_FILENO, data->philo_state_time_stamp);
+		ft_putnbr(STDERR_FILENO, (unsigned long)philo_id);
+		ft_put_message_fd(STDERR_FILENO, (size_t)message_len, message);
 	}
 	sem_post(data->sem_stdout);
 }

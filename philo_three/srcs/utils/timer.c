@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 15:39:07 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:09:06 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		update_current_time(t_data *data)
 	static unsigned long		current_time;
 	static struct timeval		time;
 
-	usleep(250);
+	// usleep(250);
 	gettimeofday(&time, NULL);
 	current_time = (unsigned long)(time.tv_sec * 1000)
 					+ (unsigned long)(time.tv_usec / 1000);
