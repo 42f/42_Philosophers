@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 09:31:17 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:17:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 void		aquire_forks(t_data *data, int philo_id)
 {
-	if (data->nb_meals_eaten == 0 && philo_id % 2 != 0)
+	if (data->nb_meals_eaten == 0 && philo_id % 2 == 0)
 		usleep(10 * 1000);
 	sem_wait(data->sem_forks_heap);
 	data->philo_state_time_stamp = data->current_clock;
 	put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
 	if (data->death_report == false && data->param[NB_PHILO] > 1)
 	{
+		if (data->nb_meals_eaten == 0 && philo_id % 2 == 0)
+			usleep(10 * 1000);
 		sem_wait(data->sem_forks_heap);
 		data->philo_state_time_stamp = data->current_clock;
 		put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
