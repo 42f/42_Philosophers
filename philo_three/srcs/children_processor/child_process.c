@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 09:48:18 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 11:18:02 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void		duplicate_global_data(t_data *local_data, t_gdata *global_data)
 	local_data->sem_forks_heap = global_data->sem_forks_heap;
 	local_data->sem_race_starter = global_data->sem_race_starter;
 	local_data->sem_stdout = global_data->sem_stdout;
+	local_data->sem_death_report = global_data->sem_death_report;
 	i = 0;
 	while (i < NB_OF_PARAM)
 	{
@@ -43,8 +44,8 @@ void			child_process(t_gdata *global_data, int philo_id)
 		exit_routine_childprocess(CODE_ERR_PTHREAD);
 	if (pthread_create(&th_philo, NULL, philo_state_machine, &philo_id) != 0)
 		exit_routine_childprocess(CODE_ERR_PTHREAD);
+	pthread_join(th_monitor, NULL);
 	pthread_join(th_philo, NULL);
 	pthread_join(th_clock, NULL);
-	pthread_join(th_monitor, NULL);
-	exit(0);
+	exit(2);
 }

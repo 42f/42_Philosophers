@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 09:46:56 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 11:23:24 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			main(const int ac, const char **av)
 	t_gdata	global_data;
 	int		ret;
 
-	memset(&global_data, 0, sizeof(t_data));
+	memset(&global_data, 0, sizeof(t_gdata));
 	ret = check_arguments(ac, av);
 	if (ret == SUCCESS)
 		ret = process_arguments(&global_data, av);

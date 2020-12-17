@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 09:50:27 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 13:41:42 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 # define FAILURE			-1
 
 # define CHILD_REACH_MEAL_NB	-1
-# define CHILD_IS_DEAD			-42
+# define CHILD_IS_DEAD			42
 # define NO_OPTIONS			0
 # define ANY_CHILD			-1
 # define EVERY_CHILDREN		0
@@ -53,6 +53,7 @@
 # define SEM_NAME_RACE_STARTER	"/philo_race_starter"
 # define SEM_NAME_STDOUT		"/philo_stdout"
 # define SEM_NAME_FORKS_HEAP	"/philo_forks_heap"
+# define SEM_NAME_DEATH_REPORT	"/philo_death_report"
 
 # define USAGE0	"Philo: Usage: > 1 value only\n"
 # define USAGE1	"number_of_philosopher time_to_die "
@@ -117,8 +118,10 @@ typedef struct	s_global_data
 	sem_t			*sem_race_starter;
 	sem_t			*sem_stdout;
 	sem_t			*sem_forks_heap;
+	sem_t			*sem_death_report;
 	int				param[NB_OF_PARAM];
 	char			padd_00[4];
+	pid_t			*philo_pids;
 }				t_gdata;
 
 typedef struct	s_data
@@ -134,6 +137,7 @@ typedef struct	s_data
 	sem_t			*sem_race_starter;
 	sem_t			*sem_stdout;
 	sem_t			*sem_forks_heap;
+	sem_t			*sem_death_report;
 	int				param[NB_OF_PARAM];
 	char			padd_01[4];
 }				t_data;
@@ -179,7 +183,7 @@ void			*clock_routine(void *data_arg);
 t_data			*get_data(t_data *mem);
 
 void			init_sem(t_gdata *data);
-void			destroy_sem();
+void			destroy_sem(t_gdata *data);
 void			safe_sem_close(sem_t *sem_to_close, const char* name);
 
 void			failed_init_arrays(pthread_t *th_philo,

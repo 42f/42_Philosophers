@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 09:49:53 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:32:48 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void			init_sem(t_gdata *gdata)
 	gdata->sem_forks_heap = safe_sem_open(gdata, SEM_NAME_FORKS_HEAP,
 														gdata->param[NB_PHILO]);
 	gdata->sem_race_starter = safe_sem_open(gdata, SEM_NAME_RACE_STARTER, 1);
+	gdata->sem_death_report = safe_sem_open(gdata, SEM_NAME_DEATH_REPORT, 1);		// 1 or 2 ?
 }
 
 void			destroy_sem(t_gdata *gdata)
@@ -49,4 +50,5 @@ void			destroy_sem(t_gdata *gdata)
 	safe_sem_close(gdata->sem_race_starter, SEM_NAME_RACE_STARTER);
 	safe_sem_close(gdata->sem_stdout, SEM_NAME_STDOUT);
 	safe_sem_close(gdata->sem_forks_heap, SEM_NAME_FORKS_HEAP);
+	safe_sem_close(gdata->sem_death_report, SEM_NAME_DEATH_REPORT);
 }
