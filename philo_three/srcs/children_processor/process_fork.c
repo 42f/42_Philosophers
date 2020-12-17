@@ -5,20 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17  by bv19alette         ###   ########.fr       */
+/*   Created: 2020/12/17 17:32:54 by bvalette          #+#    #+#             */
+/*   Updated: 2020/12/17 17:36:54 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static int		exit_status(int wstatus)
-{
-	if (WIFEXITED(wstatus) == true)
-		return (WEXITSTATUS(wstatus));
-	else
-		return (0);
-}
 
 static void		kill_all_philo(t_gdata *gdata, pid_t pid_already_dead_philo)
 {
@@ -50,9 +42,8 @@ static void		waiter(t_gdata *gdata)
 	{
 		exit_value = exit_status(wstatus);
 		if ((exit_value == CHILD_IS_DEAD || exit_value == CHILD_FAILURE)
-			 									&& is_the_first_death == true)
+												&& is_the_first_death == true)
 		{
-		// dprintf(STDERR_FILENO, "DEAD IS %d ---------------------+++++++-\n", pid );			// TODO: remove FOBIDDEN
 			kill_all_philo(gdata, pid);
 			is_the_first_death = false;
 		}
@@ -73,7 +64,7 @@ static void		fork_loop(t_gdata *gdata)
 			child_process(gdata, philo_id);
 		else if (pid == FAILURE)
 		{
-			kill(EVERY_CHILDREN, SIGTERM);									// KILL ?
+			kill(EVERY_CHILDREN, SIGTERM);
 			exit_routine_mainprocess(CODE_ERR_FORK, gdata);
 		}
 		else
@@ -82,17 +73,6 @@ static void		fork_loop(t_gdata *gdata)
 			philo_id++;
 		}
 	}
-}
-
-static void		init_philo_pids(t_gdata *gdata)
-{
-	size_t	malloc_len;
-
-	malloc_len = sizeof(pid_t) * (gdata->param[NB_PHILO] + 1);
-	gdata->philo_pids = malloc(malloc_len);
-	if (gdata->philo_pids == NULL)
-		exit_routine_mainprocess(CODE_ERR_MALLOC, gdata);
-	memset(gdata->philo_pids, 0, malloc_len);
 }
 
 void			process_fork(t_gdata *global_data)

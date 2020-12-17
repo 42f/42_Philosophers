@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 17:11:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:31:13 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	print_regular_status(t_data *data, const int philo_id,
 	}
 	sem_post(data->sem_stdout);
 }
+
 void		put_regular_status(t_data *data, const int philo_id,
 								const int message_len, const char *message)
 {
@@ -33,7 +34,7 @@ void		put_regular_status(t_data *data, const int philo_id,
 	if (pid == 0)
 	{
 		print_regular_status(data, philo_id, message_len, message);
-		exit (0);
+		exit(0);
 	}
 	else if (pid == FAILURE)
 		print_regular_status(data, philo_id, message_len, message);

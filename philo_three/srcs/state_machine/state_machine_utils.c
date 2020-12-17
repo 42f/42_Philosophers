@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 17:17:11 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:20:07 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,4 @@ void		aquire_forks(t_data *data, int philo_id)
 	}
 	if (data->param[NB_PHILO] == 1)
 		usleep(data->param[T_TO_DIE] * 1050);
-}
-
-void		report_nb_meals_reached_and_exit_thread(t_data *data, int philo_id)      // remove ?
-{
-	(void)philo_id;
-	data->done_report_flag = true;
-	pthread_exit(NULL);
 }

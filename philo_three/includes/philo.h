@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 16:43:32 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:35:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,8 +168,6 @@ t_state			sleep_and_think_handler(t_data *data, const int philo_id);
 
 int				get_right_philo_id(t_data *data, int philo_id);
 void			aquire_forks(t_data *data, int philo_id);
-void			report_nb_meals_reached_and_exit_thread(t_data *data,
-									int philo_id) __attribute__((noreturn));
 
 /*
 **	TIMER
@@ -188,21 +186,27 @@ void			init_sem(t_gdata *data);
 void			init_local_semaphore(t_data *local_data, int philo_id);
 void			destroy_sem(t_gdata *data);
 sem_t			*safe_sem_open(const char *name, int sem_value);
-void			safe_sem_close(sem_t *sem_to_close, const char* name);
+void			safe_sem_close(sem_t *sem_to_close, const char *name);
 
 void			failed_init_arrays(pthread_t *th_philo,
 					pthread_t *th_monitor, int *philo_id);
 void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id);
+int				exit_status(int wstatus);
+void			init_philo_pids(t_gdata *gdata);
+
+void			safe_free(void *mem);
+void			exit_routine_mainprocess(t_code_err err, t_gdata *gdata);
+void			exit_routine_childprocess(t_code_err err);
+
+/*
+**	MESSAGES
+*/
 
 int				ft_put_str_fd(int fd, const char *s);
 unsigned long	get_death_time(t_data *data);
 int				ft_put_message_fd(int fd, const size_t len, const char *str);
 int				ft_putnbr(int fd, unsigned long n);
-
-void			safe_free(void *mem);
-void			exit_routine_mainprocess(t_code_err err, t_gdata *gdata);
-void			exit_routine_childprocess(t_code_err err);
 
 /*
 **	ARGUMENTS

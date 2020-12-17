@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 16:42:42 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:31:38 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void		duplicate_global_data(t_data *local_data, t_gdata *global_data)
 {
-	int 		i;
+	int			i;
 
 	local_data->sem_forks_heap = global_data->sem_forks_heap;
 	local_data->sem_race_starter = global_data->sem_race_starter;

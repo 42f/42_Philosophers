@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 15:40:19 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:40:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void			*philo_state_machine(void *i_arg)
 {
+	int				wstatus;
 	int				philo_id;
 	t_data			*data;
 	t_state			state;
@@ -32,5 +33,6 @@ void			*philo_state_machine(void *i_arg)
 	}
 	if (state == reached_meals_nb_state)
 		data->done_report_flag = true;
+	while(waitpid(EVERY_CHILDREN, &wstatus, NO_OPTIONS) != FAILURE);
 	return (NULL);
 }

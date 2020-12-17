@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 16:47:39 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:39:39 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void		process_death(t_data *data, int philo_id, unsigned long time)
 {
+	int				wstatus;
 	pid_t			pid;
 
 	data->death_report = true;
@@ -23,10 +24,11 @@ static void		process_death(t_data *data, int philo_id, unsigned long time)
 	{
 		safe_sem_close(data->sem_death_report, SEM_NAME_DEATH_REPORT);
 		put_death_status(data, philo_id);
-		exit (0);
+		exit(0);
 	}
 	else if (pid == FAILURE)
 		put_death_status(data, philo_id);
+	while(waitpid(EVERY_CHILDREN, &wstatus, NO_OPTIONS) != FAILURE);
 	exit(CHILD_IS_DEAD);
 }
 
@@ -43,7 +45,7 @@ void			*philo_monitor(void *i_arg)
 	alive = false;
 	time = 0;
 	t_to_die = data->param[T_TO_DIE];
-	while ((alive =	(int)time - (int)data->last_meal <= t_to_die) == true
+	while ((alive = (int)time - (int)data->last_meal <= t_to_die) == true
 		&& data->done_report_flag == false)
 		time = data->current_clock;
 	if (alive == false && data->done_report_flag == false)

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 16:43:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:32:03 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void		init_name(t_data *local_data, int philo_id)
 	i = 0;
 	while (name[i] != '\0' && i < BUFF_SIZE)
 	{
-		local_data->sem_death_report_name_buff[i] = name [i];
+		local_data->sem_death_report_name_buff[i] = name[i];
 		i++;
 	}
 	ft_itoa(philo_id, local_data->sem_death_report_name_buff + i - 1);

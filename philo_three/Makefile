@@ -64,6 +64,7 @@ SRCS += child_process.c
 SRCS += child_process_utils_sem.c
 SRCS += sem_utils.c
 SRCS += process_fork.c
+SRCS += process_fork_utils.c
 SRCS += monitor.c
 SRCS += arguments_process.c
 
