@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 11:16:19 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 11:40:48 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void			*philo_monitor(void *i_arg)
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
 	alive = false;
-	time = 0;
+	update_current_time(data);
+	time = data->current_clock;
 	t_to_die = data->param[T_TO_DIE];
 	while ((alive = (int)time - (int)data->last_meal <= t_to_die) == true
 		&& data->done_report_flag == false)
