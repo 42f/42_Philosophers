@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 13:38:47 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 14:27:18 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,11 @@ t_state		take_forks_and_eat_handler(t_data *data, const int philo_id)
 	data->philo_state_time_stamp = data->current_clock;
 	if (data->death_report == false)
 	{
-		// sem_wait(data->sem_death_report);
-		// data->philo_state_time_stamp = data->last_meal;
+		sem_wait(data->sem_death_report);
 		put_regular_status(data, philo_id, LEN_IS_EATING, MESSAGE_EATING);
-		// sem_post(data->sem_death_report);
+		sem_post(data->sem_death_report);
 		while (is_done_eating(data) == false)
-			usleep(100);
+			usleep(1);
 		data->nb_meals_eaten++;
 	}
 	sem_post(data->sem_forks_heap);
@@ -65,8 +64,8 @@ t_state		sleep_and_think_handler(t_data *data, const int philo_id)
 	put_regular_status(data, philo_id, LEN_IS_SLEEPING, MESSAGE_SLEEPING);
 	fell_asleep_timestamp = data->philo_state_time_stamp;
 	while (is_done_sleeping(data, fell_asleep_timestamp) == false)
-		usleep(100);
+		usleep(1);
 	data->philo_state_time_stamp = data->current_clock;
 	put_regular_status(data, philo_id, LEN_IS_THINKING, MESSAGE_THINKING);
-	return (thinking_state);
+	return (take_forks_and_eat_handler(data, philo_id));
 }
