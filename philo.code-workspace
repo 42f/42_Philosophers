@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"__bit_reference": "c",
+			"__string": "c",
+			"cstring": "c",
+			"locale": "c",
+			"algorithm": "c",
+			"cstdlib": "c",
+			"__threading_support": "c",
+			"cerrno": "c"
+		}
+	}
+}
