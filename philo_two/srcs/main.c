@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 14:05:11 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 09:59:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,35 +36,36 @@ static int	check_arguments(const int ac, const char **av)
 	return (SUCCESS);
 }
 
-static void	init_philo_info_storage(t_data *data)
+static int	init_philo_info_storage(t_data *data)
 {
 	data->last_meal = (unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
 	data->nb_meals_eaten = (int *)malloc_and_set(sizeof(int), 0);
 	data->done_report_flag = (bool *)malloc_and_set(sizeof(bool), false);
 	data->philo_state_time_stamp =
 					(unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
+	if (data->last_meal == NULL || data->nb_meals_eaten == NULL
+	|| data->done_report_flag == NULL || data->philo_state_time_stamp == NULL)
+		return (cleanup_routine(CODE_ERR_MALLOC));
+	else
+		return (SUCCESS);
 }
 
 int			main(const int ac, const char **av)
 {
-	t_data	data;
 	int		ret;
+	t_data	data;
 
-	memset(&data, 0, sizeof(t_data));
 	get_data(&data);
+	memset(&data, 0, sizeof(t_data));
 	ret = check_arguments(ac, av);
 	if (ret == SUCCESS)
 		ret = process_arguments(&data, av);
-	if (ret == SUCCESS)
-	{
-		init_philo_info_storage(&data);
-		process_philo(&data);
-		free_data_struct_content(&data);
-	}
-	else
+	if (ret != SUCCESS)
 	{
 		put_usage();
 		return (FAILURE_RETURN);
 	}
-	return (SUCCESS_RETURN);
+	if (ret == SUCCESS && init_philo_info_storage(&data) == SUCCESS)
+		return (process_philo(&data));
+	return (FAILURE_RETURN);
 }

@@ -109,7 +109,7 @@ print_victim_last_meal (){
 }
 
 main (){
- ./philo_one $1 $2 $3 $4 &>/tmp/log
+ ./philo_* $1 $2 $3 $4 &>/tmp/log
 #   2>/tmp/err ;
  var="fork" ; echo -n $var"      = " ;  cat /tmp/log | grep $var | wc -l ;
  var="eating" ; echo -n $var"    = " ;  cat /tmp/log | grep $var | wc -l ;

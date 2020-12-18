@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Created: 2020/12/18 09:54:58 by bvalette          #+#    #+#             */
+/*   Updated: 2020/12/18 09:55:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	check_arguments(const int ac, const char **av)
 	return (SUCCESS);
 }
 
-static void	init_philo_info_storage(t_data *data)
+static int	init_philo_info_storage(t_data *data)
 {
 	data->last_meal = (unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
 	data->nb_meals_eaten = (int *)malloc_and_set(sizeof(int), 0);
@@ -46,6 +46,12 @@ static void	init_philo_info_storage(t_data *data)
 					(unsigned long *)malloc_and_set(sizeof(unsigned long), 0);
 	data->mutex_fork =
 				(pthread_mutex_t *)malloc_and_set(sizeof(pthread_mutex_t), 0);
+	if (data->last_meal == NULL || data->nb_meals_eaten == NULL
+	|| data->done_report_flag == NULL || data->philo_fork == NULL
+	|| data->philo_state_time_stamp == NULL || data->mutex_fork == NULL)
+		return (cleanup_routine(CODE_ERR_MALLOC));
+	else
+		return (SUCCESS);
 }
 
 int			main(const int ac, const char **av)
@@ -58,16 +64,12 @@ int			main(const int ac, const char **av)
 	ret = check_arguments(ac, av);
 	if (ret == SUCCESS)
 		ret = process_arguments(&data, av);
-	if (ret == SUCCESS)
-	{
-		init_philo_info_storage(&data);
-		process_philo(&data);
-		free_data_struct_content(&data);
-	}
-	else
+	if (ret != SUCCESS)
 	{
 		put_usage();
 		return (FAILURE_RETURN);
 	}
-	return (SUCCESS_RETURN);
+	if (ret == SUCCESS && init_philo_info_storage(&data) == SUCCESS)
+		return (process_philo(&data));
+	return (FAILURE_RETURN);
 }

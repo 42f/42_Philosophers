@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_routine.c                                     :+:      :+:    :+:   */
+/*   cleanup_routine.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/09 12:08:55 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 13:12:51 by bvalette         ###   ########.fr       */
+/*   Created: 2020/12/18 09:58:07 by bvalette          #+#    #+#             */
+/*   Updated: 2020/12/18 10:55:47 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	safe_free(void *mem)
 	}
 }
 
-void	exit_routine(t_code_err err)
+int		cleanup_routine(t_code_err err)
 {
 	t_data				*data;
 	static const char	*message[NB_ERR_CODE] =
@@ -30,10 +30,14 @@ void	exit_routine(t_code_err err)
 	data = get_data(GET);
 	if (data != NULL)
 	{
-		free_data_struct_content(data);
 		destroy_sem(data);
+		free_data_struct_content(data);
 	}
-	if (err < NB_ERR_CODE)
+	if (err != CODE_ERR_NORMAL_EXIT && err >= 0 && err < NB_ERR_CODE)
+	{
 		ft_put_str_fd(STDERR_FILENO, message[err]);
-	exit(FAILURE_RETURN);
+		return (FAILURE);
+	}
+	else
+		return (SUCCESS_RETURN);
 }
