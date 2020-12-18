@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 08:18:08 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/17 17:35:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <string.h>
-
+# include <sys/types.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <semaphore.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 # define BUFF_SIZE			32
 
@@ -39,29 +41,37 @@
 # define SUCCESS			1
 # define FAILURE			-1
 
+# define CHILD_FAILURE		1
+# define CHILD_IS_DEAD		42
+# define NO_OPTIONS			0
+# define ANY_CHILD			-1
+# define EVERY_CHILDREN		0
+# define CHILD_PROCESS_PID	0
+
 # define SUCCESS_RETURN		0
 # define FAILURE_RETURN		1
 
 # define SEM_NAME_RACE_STARTER	"/philo_race_starter"
-# define SEM_NAME_NB_PHILO_DONE	"/philo_nb_philo_done"
 # define SEM_NAME_STDOUT		"/philo_stdout"
-# define SEM_NAME_DEATH_REPORT	"/philo_death_report"
 # define SEM_NAME_FORKS_HEAP	"/philo_forks_heap"
+# define SEM_NAME_DEATH_REPORT	"/philo_death_report"
 
-# define USAGE0	"Philo: Usage: > 1 value only\n"
+# define USAGE0	"Philo: Usage: > 1 value only, no more than 200 philosophers\n"
 # define USAGE1	"number_of_philosopher time_to_die "
 # define USAGE2	"time_to_eat time_to_sleep\n"
 # define USAGE3	"[number_of_time_each_philosophers_must_eat]\n"
 
 # define ERR_MALLOC		"\nPhilo: error: malloc() failed\n"
+# define ERR_FORK		"\nPhilo: error: could not fork a sub process  \n"
 # define ERR_SEM		"\nPhilo: error: could not initialize semaphore\n"
 # define ERR_PTHREAD	"\nPhilo: error: pthread function failed\n"
 
-# define NB_ERR_CODE	3
+# define NB_ERR_CODE	4
 
 typedef enum	e_code_err
 {
 	CODE_ERR_MALLOC,
+	CODE_ERR_FORK,
 	CODE_ERR_SEM,
 	CODE_ERR_PTHREAD
 }				t_code_err;
@@ -104,26 +114,33 @@ typedef enum	e_state
 	dead_state,
 }				t_state;
 
+typedef struct	s_global_data
+{
+	sem_t			*sem_race_starter;
+	sem_t			*sem_stdout;
+	sem_t			*sem_forks_heap;
+	int				param[NB_OF_PARAM];
+	char			padd_00[4];
+	pid_t			*philo_pids;
+}				t_gdata;
+
 typedef struct	s_data
 {
-	bool			first_death_report;
-	char			padd_00[7];
-	int				nb_philo_done;
-	char			padd_01[4];
-	int				param[NB_OF_PARAM];
-	char			padd_02[4];
-	unsigned long	first_death_report_timestamp;
+	int				nb_meals_eaten;
+	bool			death_report;
+	bool			done_report_flag;
+	char			padd_00[6];
+	unsigned long	death_report_timestamp;
 	unsigned long	current_clock;
-	bool			*done_report_flag;
-	t_state			*philo_state;
-	unsigned long	*philo_state_time_stamp;
-	int				*nb_meals_eaten;
-	unsigned long	*last_meal;
+	unsigned long	philo_state_time_stamp;
+	unsigned long	last_meal;
 	sem_t			*sem_race_starter;
-	sem_t			*sem_nb_philo_done;
 	sem_t			*sem_stdout;
-	sem_t			*sem_death_report;
 	sem_t			*sem_forks_heap;
+	sem_t			*sem_death_report;
+	char			sem_death_report_name_buff[BUFF_SIZE];
+	int				param[NB_OF_PARAM];
+	char			padd_01[4];
 }				t_data;
 
 /*
@@ -136,8 +153,9 @@ void			*philo_monitor(void *i_arg);
 **	STATE_MACHINE
 */
 
+void			child_process(t_gdata *global_data, int philo_id);
 void			*philo_state_machine(void *i_arg);
-void			process_philo(t_data *data);
+void			process_fork(t_gdata *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 										const t_state current_state, int time);
 void			put_regular_status(t_data *data, const int philo_id,
@@ -150,8 +168,6 @@ t_state			sleep_and_think_handler(t_data *data, const int philo_id);
 
 int				get_right_philo_id(t_data *data, int philo_id);
 void			aquire_forks(t_data *data, int philo_id);
-void			report_nb_meals_reached_and_exit_thread(t_data *data,
-									int philo_id) __attribute__((noreturn));
 
 /*
 **	TIMER
@@ -164,9 +180,11 @@ void			*clock_routine(void *data_arg);
 */
 
 t_data			*get_data(t_data *mem);
+void			update_current_time(t_data *data);
 
-void			init_sem(t_data *data);
-void			destroy_sem(t_data *data);
+void			init_sem(t_gdata *data);
+void			init_local_semaphore(t_data *local_data, int philo_id);
+void			destroy_sem(t_gdata *data);
 sem_t			*safe_sem_open(const char *name, int sem_value);
 void			safe_sem_close(sem_t *sem_to_close, const char *name);
 
@@ -174,22 +192,27 @@ void			failed_init_arrays(pthread_t *th_philo,
 					pthread_t *th_monitor, int *philo_id);
 void			init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id);
+int				exit_status(int wstatus);
+void			init_philo_pids(t_gdata *gdata);
+
+void			safe_free(void *mem);
+void			exit_routine_mainprocess(t_code_err err, t_gdata *gdata);
+void			exit_routine_childprocess(t_code_err err);
+
+/*
+**	MESSAGES
+*/
 
 int				ft_put_str_fd(int fd, const char *s);
-unsigned long	get_death_time(t_data *data, int philo_id);
+unsigned long	get_death_time(t_data *data);
 int				ft_put_message_fd(int fd, const size_t len, const char *str);
 int				ft_putnbr(int fd, unsigned long n);
-
-void			*malloc_and_set(size_t size, int set_value);
-void			free_data_struct_content(t_data *data);
-void			safe_free(void *mem);
-void			exit_routine(t_code_err err) __attribute__((noreturn));
 
 /*
 **	ARGUMENTS
 */
 
 int				is_digit_only(const char *av);
-int				process_arguments(t_data *data, const char **av);
+int				process_arguments(t_gdata *data, const char **av);
 
 #endif

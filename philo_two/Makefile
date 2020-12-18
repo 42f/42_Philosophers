@@ -1,5 +1,6 @@
 NAME := $(lastword $(subst /, ,$(dir $(realpath $(lastword $(MAKEFILE_LIST))))))
 INCLUDES = ./includes/
+SRCS_DIR = ./srcs/
 CC = gcc
 OBJ_DIR = ../objs/$(NAME)/
 
@@ -98,6 +99,9 @@ fclean : clean
 
 re : fclean
 	$(MAKE)
+
+norme :
+	~/.norminette/norminette.rb $(SRCS_DIR) $(INCLUDES)
 
 f : all
 	./$(NAME)

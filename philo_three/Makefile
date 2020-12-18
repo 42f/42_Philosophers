@@ -52,26 +52,29 @@ endif
 HEADER += $(INCLUDES)philo.h
 
 SRCS += main.c
-SRCS += process_threads.c
-SRCS += process_threads_utils.c
-SRCS += general_utils.c
-SRCS += state_machine.c
-SRCS += state_machine_action_handlers.c
-SRCS += state_machine_fork_acquisition.c
 SRCS += state_machine_utils.c
-SRCS += monitor.c
-SRCS += status_printer.c
-SRCS += status_printer_str.c
-SRCS += status_printer_nbr.c
-SRCS += arguments_process.c
-SRCS += timer.c
+SRCS += state_machine_action_handlers.c
+SRCS += state_machine.c
+SRCS += general_utils.c
 SRCS += exit_routine.c
+SRCS += status_printer_nbr.c
+SRCS += timer.c
+SRCS += status_printer_str.c
+SRCS += status_printer.c
+SRCS += child_process.c
+SRCS += child_process_utils_sem.c
+SRCS += sem_utils.c
+SRCS += process_fork.c
+SRCS += process_fork_utils.c
+SRCS += monitor.c
+SRCS += arguments_process.c
+
 
 vpath %.c ./
 vpath %.c ./srcs
 vpath %.c ./srcs/monitor
 vpath %.c ./srcs/state_machine
-vpath %.c ./srcs/thread_processor
+vpath %.c ./srcs/children_processor
 vpath %.c ./srcs/utils
 
 OBJS = $(patsubst %.c, $(OBJ_DIR)%.o, $(SRCS))
