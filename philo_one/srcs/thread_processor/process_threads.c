@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/15 17:04:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 08:45:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,21 @@ void				process_philo(t_data *data)
 	int			*philo_id;
 	pthread_t	th_clock;
 
-	init_mutex(data);
-	init_threads_arr(&th_philo, &th_monitor, &philo_id);
-	pthread_mutex_lock(&data->mutex_race_starter);
-	if (pthread_create(&th_clock, NULL, clock_routine, data) != 0)
-		exit_routine(CODE_ERR_PTHREAD);
-	thread_creation_loop(data, th_philo, philo_state_machine, philo_id);
-	thread_creation_loop(data, th_monitor, philo_monitor, philo_id);
-	pthread_mutex_unlock(&data->mutex_race_starter);
-	thread_join_loop(data, th_philo);
-	thread_join_loop(data, th_monitor);
-	pthread_join(th_clock, NULL);
-	destroy_mutex(data);
-	safe_free(th_philo);
-	safe_free(th_monitor);
-	safe_free(philo_id);
+	if (init_mutex(data) == SUCCESS
+		&& init_threads_arr(&th_philo, &th_monitor, &philo_id) == SUCCESS)
+	{
+		pthread_mutex_lock(&data->mutex_race_starter);
+		if (pthread_create(&th_clock, NULL, clock_routine, data) != 0)
+			exit_routine(CODE_ERR_PTHREAD);
+		thread_creation_loop(data, th_philo, philo_state_machine, philo_id);
+		thread_creation_loop(data, th_monitor, philo_monitor, philo_id);
+		pthread_mutex_unlock(&data->mutex_race_starter);
+		thread_join_loop(data, th_philo);
+		thread_join_loop(data, th_monitor);
+		pthread_join(th_clock, NULL);
+		safe_free(th_philo);
+		safe_free(th_monitor);
+		safe_free(philo_id);
+		exit_routine(CODE_ERR_NORMAL_EXIT);
+	}
 }

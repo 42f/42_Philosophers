@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 13:49:07 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 08:48:45 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define SUCCESS_RETURN		0
 # define FAILURE_RETURN		1
 
-# define USAGE0	"Philo: Usage: > 1 value only\n"
+# define USAGE0	"Philo: Usage: > 1 value only, no more than 200 philosophers\n"
 # define USAGE1	"number_of_philosopher time_to_die "
 # define USAGE2	"time_to_eat time_to_sleep\n"
 # define USAGE3	"[number_of_time_each_philosophers_must_eat]\n"
@@ -46,13 +46,13 @@
 # define ERR_MUTEX		"\nPhilo: error: could not initialize mutex\n"
 # define ERR_PTHREAD	"\nPhilo: error: pthread function failed\n"
 
-# define NB_ERR_CODE	3
-
+# define NB_ERR_CODE			3
 typedef enum	e_code_err
 {
 	CODE_ERR_MALLOC,
 	CODE_ERR_MUTEX,
-	CODE_ERR_PTHREAD
+	CODE_ERR_PTHREAD,
+	CODE_ERR_NORMAL_EXIT = -1
 }				t_code_err;
 
 # define MESSAGE_HAS_FORK_L			"has LEFT    fork\n"
@@ -157,12 +157,12 @@ void			*clock_routine(void *data_arg);
 
 t_data			*get_data(t_data *mem);
 
-void			init_mutex(t_data *data);
+int				init_mutex(t_data *data);
 void			destroy_mutex(t_data *data);
 
 void			failed_init_arrays(pthread_t *th_philo,
 					pthread_t *th_monitor, int *philo_id);
-void			init_threads_arr(pthread_t **th_philo,
+int				init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id);
 
 int				ft_put_str_fd(int fd, const char *s);
@@ -173,7 +173,7 @@ int				ft_putnbr(int fd, unsigned long n);
 void			*malloc_and_set(size_t size, int set_value);
 void			free_data_struct_content(t_data *data);
 void			safe_free(void *mem);
-void			exit_routine(t_code_err err) __attribute__((noreturn));
+int				exit_routine(t_code_err err);
 
 /*
 **	ARGUMENTS
