@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 17:30:24 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 13:21:12 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void		update_current_time(t_data *data)
 	static unsigned long		current_time;
 	static struct timeval		time;
 
+	usleep(250);
 	gettimeofday(&time, NULL);
 	current_time = (unsigned long)(time.tv_sec * 1000)
 					+ (unsigned long)(time.tv_usec / 1000);
@@ -26,12 +27,11 @@ void		update_current_time(t_data *data)
 	data->current_clock = current_time - origin_time;
 }
 
-void		*clock_routine(void *i_arg)
+void		*clock_routine(void *data_arg)
 {
 	t_data						*data;
 
-	(void)i_arg;
-	data = get_data(GET);
+	data = (t_data *)data_arg;
 	while (data->done_report_flag == false && data->death_report == false)
 		update_current_time(data);
 	if (data->death_report == true)

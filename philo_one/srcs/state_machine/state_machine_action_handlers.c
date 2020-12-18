@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 11:59:09 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 14:03:07 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ t_state		take_forks_and_eat_handler(t_data *data, const int philo_id)
 	acquire_forks(data, philo_id);
 	if (data->first_death_report == false)
 	{
-		pthread_mutex_lock(&data->mutex_death_report);
+		// pthread_mutex_lock(&data->mutex_death_report);
 		if (data->first_death_report == false)
 		{
 			data->last_meal[philo_id] = data->current_clock;
 			data->philo_state_time_stamp[philo_id] = data->last_meal[philo_id];
 			put_regular_status(data, philo_id, LEN_IS_EATING, MESSAGE_EATING);
 		}
-		pthread_mutex_unlock(&data->mutex_death_report);
+		// pthread_mutex_unlock(&data->mutex_death_report);
 		while (is_done_eating(data, philo_id) == false)
 			usleep(100);
 		data->nb_meals_eaten[philo_id]++;

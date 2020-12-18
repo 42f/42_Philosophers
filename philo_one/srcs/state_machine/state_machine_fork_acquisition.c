@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 07:20:13 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 14:05:58 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void		acquire_forks(t_data *data, int philo_id)
 	{
 		if (data->nb_meals_eaten[philo_id] == 0 && philo_id % 2 != 0)
 		{
-			usleep(10 * 1000);
+			usleep(1 * 1000);
 			try_grab_fork(data, right_philo_id, philo_id, &right_hand);
 			try_grab_fork(data, philo_id, philo_id, &left_hand);
 		}
