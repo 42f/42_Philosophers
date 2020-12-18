@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 08:57:22 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 09:54:42 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@ int		init_mutex(t_data *data)
 	int	i;
 
 	if (pthread_mutex_init(&data->mutex_race_starter, NULL) != 0)
-		return (exit_routine(CODE_ERR_MUTEX));
+		return (cleanup_routine(CODE_ERR_MUTEX));
 	if (pthread_mutex_init(&data->mutex_nb_philo_done_counter, NULL) != 0)
-		return (exit_routine(CODE_ERR_MUTEX));
+		return (cleanup_routine(CODE_ERR_MUTEX));
 	if (pthread_mutex_init(&data->mutex_stdout, NULL) != 0)
-		return (exit_routine(CODE_ERR_MUTEX));
+		return (cleanup_routine(CODE_ERR_MUTEX));
 	if (pthread_mutex_init(&data->mutex_death_report, NULL) != 0)
-		return (exit_routine(CODE_ERR_MUTEX));
+		return (cleanup_routine(CODE_ERR_MUTEX));
 	i = 0;
 	while (i < data->param[NB_PHILO])
 	{
 		if (pthread_mutex_init(&data->mutex_fork[i], NULL) != 0)
-			return (exit_routine(CODE_ERR_MUTEX));
+			return (cleanup_routine(CODE_ERR_MUTEX));
 		i++;
 	}
 	return (SUCCESS);
@@ -43,7 +43,7 @@ int		init_threads_arr(pthread_t **th_philo,
 	if (*philo_id == NULL || *th_philo == NULL || *th_monitor == NULL)
 	{
 		failed_init_arrays(*th_philo, *th_monitor, *philo_id);
-		return(exit_routine(CODE_ERR_MALLOC));
+		return (cleanup_routine(CODE_ERR_MALLOC));
 	}
 	return (SUCCESS);
 }

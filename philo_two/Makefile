@@ -65,7 +65,7 @@ SRCS += status_printer_str.c
 SRCS += status_printer_nbr.c
 SRCS += arguments_process.c
 SRCS += timer.c
-SRCS += exit_routine.c
+SRCS += cleanup_routine.c
 
 vpath %.c ./
 vpath %.c ./srcs

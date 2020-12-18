@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 13:51:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 09:39:13 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void			*malloc_and_set(size_t size, int set_value)
 	nb_philo = (size_t)get_data(GET)->param[NB_PHILO];
 	new_mem = malloc(size * (nb_philo + 1));
 	if (new_mem == NULL)
-		exit_routine(CODE_ERR_MALLOC);
+		return (NULL);
 	return (memset(new_mem, set_value, size * (nb_philo + 1)));
 }
 

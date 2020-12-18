@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/09 12:09:07 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 08:40:24 bvalette         ###   ########.fr       */
+/*   Created: 2020/12/18 09:54:58 by bvalette          #+#    #+#             */
+/*   Updated: 2020/12/18 09:55:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static int	init_philo_info_storage(t_data *data)
 				(pthread_mutex_t *)malloc_and_set(sizeof(pthread_mutex_t), 0);
 	if (data->last_meal == NULL || data->nb_meals_eaten == NULL
 	|| data->done_report_flag == NULL || data->philo_fork == NULL
-	|| data->philo_state_time_stamp == NULL ||data->mutex_fork == NULL)
-		return (exit_routine(CODE_ERR_MALLOC));
+	|| data->philo_state_time_stamp == NULL || data->mutex_fork == NULL)
+		return (cleanup_routine(CODE_ERR_MALLOC));
 	else
 		return (SUCCESS);
 }
@@ -70,6 +70,6 @@ int			main(const int ac, const char **av)
 		return (FAILURE_RETURN);
 	}
 	if (ret == SUCCESS && init_philo_info_storage(&data) == SUCCESS)
-		process_philo(&data);
-	return (SUCCESS_RETURN);
+		return (process_philo(&data));
+	return (FAILURE_RETURN);
 }

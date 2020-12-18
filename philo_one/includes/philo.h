@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 08:48:45 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 09:55:32 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # define ERR_PTHREAD	"\nPhilo: error: pthread function failed\n"
 
 # define NB_ERR_CODE			3
+
 typedef enum	e_code_err
 {
 	CODE_ERR_MALLOC,
@@ -127,7 +128,7 @@ void			*philo_monitor(void *i_arg);
 */
 
 void			*philo_state_machine(void *i_arg);
-void			process_philo(t_data *data);
+int				process_philo(t_data *data);
 t_state			check_aliveness(t_data *data, int philo_id,
 										const t_state current_state, int time);
 void			put_regular_status(t_data *data, const int philo_id,
@@ -173,7 +174,7 @@ int				ft_putnbr(int fd, unsigned long n);
 void			*malloc_and_set(size_t size, int set_value);
 void			free_data_struct_content(t_data *data);
 void			safe_free(void *mem);
-int				exit_routine(t_code_err err);
+int				cleanup_routine(t_code_err err);
 
 /*
 **	ARGUMENTS

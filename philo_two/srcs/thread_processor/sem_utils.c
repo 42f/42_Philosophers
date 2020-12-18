@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:10 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 08:17:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 09:25:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ sem_t	*safe_sem_open(const char *name, int sem_value)
 		sem_unlink(name);
 		opened_semaphore = sem_open(name, O_CREAT | O_EXCL, 0644, sem_value);
 	}
-	if (opened_semaphore == SEM_FAILED)
-		exit_routine(CODE_ERR_SEM);
 	return (opened_semaphore);
 }
 
