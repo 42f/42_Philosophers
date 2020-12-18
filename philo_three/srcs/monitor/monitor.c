@@ -6,21 +6,11 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 11:40:48 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/18 12:02:08 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static void		waiter(void)
-{
-	int		wstatus;
-	int		ret;
-
-	ret = SUCCESS;
-	while (ret != FAILURE)
-		ret = waitpid(EVERY_CHILDREN, &wstatus, NO_OPTIONS);
-}
 
 static void		process_death(t_data *data, int philo_id, unsigned long time)
 {
@@ -37,7 +27,6 @@ static void		process_death(t_data *data, int philo_id, unsigned long time)
 	}
 	else if (pid == FAILURE)
 		put_death_status(data, philo_id);
-	waiter();
 	exit(CHILD_IS_DEAD);
 }
 
@@ -52,8 +41,9 @@ void			*philo_monitor(void *i_arg)
 	data = get_data(GET);
 	philo_id = *((int *)i_arg);
 	alive = false;
-	update_current_time(data);
-	time = data->current_clock;
+	// update_current_time(data);
+	// time = data->current_clock;
+	time = 0;
 	t_to_die = data->param[T_TO_DIE];
 	while ((alive = (int)time - (int)data->last_meal <= t_to_die) == true
 		&& data->done_report_flag == false)
