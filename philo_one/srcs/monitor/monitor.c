@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:04 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/19 11:06:50 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/19 11:40:37 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ void			*philo_monitor(void *i_arg)
 	}
 	if (data->first_death_report == false && alive == false)
 	{
-		// pthread_mutex_lock(&data->mutex_death_report);
+		pthread_mutex_lock(&data->mutex_death_report);
 		data->first_death_report = true;
 		data->first_death_report_timestamp = time;
 		put_death_status(data, philo_id);
-		// pthread_mutex_unlock(&data->mutex_death_report);
+		pthread_mutex_unlock(&data->mutex_death_report);
 	}
 	return (NULL);
 }

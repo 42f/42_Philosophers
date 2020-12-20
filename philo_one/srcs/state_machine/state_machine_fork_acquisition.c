@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:51 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/19 11:18:04 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/19 11:55:17 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,49 +20,28 @@ int			get_right_philo_id(t_data *data, int philo_id)
 		return (1);
 }
 
-static void	try_grab_left_then_right_fork(t_data *data,	int right_philo_id,
+static void	try_grab_left_then_right_fork(t_data *data, int right_philo_id,
 																int philo_id)
 {
-	unsigned long	time;
-
-
 	pthread_mutex_lock(&data->mutex_fork[philo_id]);
-	time = data->current_clock;
-	data->philo_fork[philo_id] = FORK_USED;
-	pthread_mutex_unlock(&data->mutex_fork[philo_id]);
-	data->philo_state_time_stamp[philo_id] = time;
+	data->philo_state_time_stamp[philo_id] = data->current_clock;
 	put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
-
 	pthread_mutex_lock(&data->mutex_fork[right_philo_id]);
-	time = data->current_clock;
-	data->philo_fork[right_philo_id] = FORK_USED;
-	pthread_mutex_unlock(&data->mutex_fork[right_philo_id]);
-	data->philo_state_time_stamp[philo_id] = time;
+	data->philo_state_time_stamp[philo_id] = data->current_clock;
 	put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
-
-	data->last_meal[philo_id] = data->current_clock;
+	data->last_meal[philo_id] = data->philo_state_time_stamp[philo_id];
 }
 
 static void	try_grab_right_then_left_fork(t_data *data, int right_philo_id,
 																int philo_id)
 {
-	unsigned long	time;
-
 	pthread_mutex_lock(&data->mutex_fork[right_philo_id]);
-	time = data->current_clock;
-	data->philo_fork[right_philo_id] = FORK_USED;
-	pthread_mutex_unlock(&data->mutex_fork[right_philo_id]);
-	data->philo_state_time_stamp[philo_id] = time;
+	data->philo_state_time_stamp[philo_id] = data->current_clock;
 	put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
-
 	pthread_mutex_lock(&data->mutex_fork[philo_id]);
-	time = data->current_clock;
-	data->philo_fork[philo_id] = FORK_USED;
-	pthread_mutex_unlock(&data->mutex_fork[philo_id]);
-	data->philo_state_time_stamp[philo_id] = time;
+	data->philo_state_time_stamp[philo_id] = data->current_clock;
 	put_regular_status(data, philo_id, LEN_HAS_FORK, MESSAGE_HAS_FORK);
-
-	data->last_meal[philo_id] = data->current_clock;
+	data->last_meal[philo_id] = data->philo_state_time_stamp[philo_id];
 }
 
 void		acquire_forks(t_data *data, int philo_id)

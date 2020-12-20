@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:07:56 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/19 08:19:37 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/19 11:55:27 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,3 @@ void			*philo_state_machine(void *i_arg)
 	return (NULL);
 	pthread_exit(NULL);
 }
-
-		// if (state == thinking_state || state == startup_state)
-		// 	state = take_forks_and_eat_handler(data, philo_id);
-		// else if (state == finished_meal_state)
-		// 	state = sleep_and_think_handler(data, philo_id);

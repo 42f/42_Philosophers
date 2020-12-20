@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:08:58 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/19 11:01:04 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/19 11:41:12 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,7 @@ void	put_death_status(t_data *data, const int philo_id)
 		if (already_reported_flag == false)
 		{
 			already_reported_flag = true;
-			// ft_putnbr(STDOUT_FILENO, get_death_time(data, philo_id));
-			ft_putnbr(STDOUT_FILENO, data->current_clock);
-			ft_putnbr(STDOUT_FILENO, data->first_death_report_timestamp);
-			ft_putnbr(STDOUT_FILENO, data->last_meal[philo_id]);
-			ft_putnbr(STDOUT_FILENO, data->first_death_report_timestamp - data->last_meal[philo_id]);
+			ft_putnbr(STDOUT_FILENO, get_death_time(data, philo_id));
 			ft_putnbr(STDOUT_FILENO, (unsigned long)philo_id);
 			ft_put_message_fd(STDOUT_FILENO, LEN_IS_DEAD, MESSAGE_DEAD);
 		}
