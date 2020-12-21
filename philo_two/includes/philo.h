@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/18 09:51:22 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/21 07:48:41 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@
 # define SEM_NAME_FORKS_HEAP	"/philo_forks_heap"
 
 # define USAGE0	"Philo: Usage: > 1 value only, no more than 200 philosophers\n"
-# define USAGE1	"number_of_philosopher time_to_die "
-# define USAGE2	"time_to_eat time_to_sleep\n"
-# define USAGE3	"[number_of_time_each_philosophers_must_eat]\n"
+# define USAGE1	"number_of_philosopher time_to_die time_to_eat time_to_sleep\n"
+# define USAGE2	"[number_of_time_each_philosophers_must_eat]\n"
+# define USAGE3	"Max philo number: 200, minimum times 60\n"
 
 # define ERR_MALLOC		"\nPhilo: error: malloc() failed\n"
 # define ERR_SEM		"\nPhilo: error: could not initialize semaphore\n"
