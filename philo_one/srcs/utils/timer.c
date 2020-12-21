@@ -6,35 +6,36 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:00 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/16 13:46:43 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/19 11:40:20 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <errno.h>
+#include <sys/time.h>
 
-static void		update_current_time(t_data *data)
+static unsigned long	gettime(void)
 {
-	static unsigned long		origin_time;
-	static unsigned long		current_time;
-	static struct timeval		time;
+	struct timeval	time;
 
-	usleep(250);
-	gettimeofday(&time, NULL);
-	current_time = (unsigned long)(time.tv_sec * 1000)
-					+ (unsigned long)(time.tv_usec / 1000);
-	if (origin_time == 0)
-		origin_time = current_time;
-	data->current_clock = current_time - origin_time;
+	if (gettimeofday(&time, NULL) == -1)
+		return (0);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void			*clock_routine(void *data_arg)
+void					*clock_routine(void *data_arg)
 {
 	t_data						*data;
 	int							nb_philo;
+	unsigned long int			start;
 
 	data = (t_data *)data_arg;
 	nb_philo = data->param[NB_PHILO];
+	start = gettime();
 	while (data->nb_philo_done < nb_philo)
-		update_current_time(data);
+	{
+		data->current_clock = gettime() - start;
+		usleep(250);
+	}
 	return (NULL);
 }
