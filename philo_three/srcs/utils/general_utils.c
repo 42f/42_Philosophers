@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:09:03 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/17 09:32:20 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/26 14:34:10 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,4 @@ int				is_digit_only(const char *av)
 		i++;
 	}
 	return (true);
-}
-
-unsigned long	get_death_time(t_data *data)
-{
-	unsigned long	death_time;
-
-	death_time = data->death_report_timestamp;
-	if (death_time - data->last_meal - data->param[T_TO_DIE] > 10)
-		return (data->last_meal + data->param[T_TO_DIE] + 1);
-	else
-		return (data->death_report_timestamp);
 }

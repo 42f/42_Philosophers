@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:12:45 by bvalette          #+#    #+#             */
-/*   Updated: 2020/12/21 07:48:18 by bvalette         ###   ########.fr       */
+/*   Updated: 2020/12/26 14:33:32 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,6 @@ int				init_threads_arr(pthread_t **th_philo,
 					pthread_t **th_monitor, int **philo_id);
 
 int				ft_put_str_fd(int fd, const char *s);
-unsigned long	get_death_time(t_data *data, int philo_id);
 int				ft_put_message_fd(int fd, const size_t len, const char *str);
 int				ft_putnbr(int fd, unsigned long n);
 
